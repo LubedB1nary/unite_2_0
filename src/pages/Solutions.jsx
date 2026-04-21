@@ -8,6 +8,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { PartnerMarquee } from '../components/shared/PartnerMarquee.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const SOLUTIONS = [
   {
@@ -122,6 +123,8 @@ export function Solutions() {
   const navigate = useNavigate();
   const [active, setActive] = useState('asc');
   const seg = useMemo(() => SOLUTIONS.find((s) => s.id === active), [active]);
+  const { isMobile, isTablet } = useViewport();
+  const padX = isMobile ? 20 : 40;
 
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
@@ -133,8 +136,8 @@ export function Solutions() {
           sub="Surgery centers, independent pharmacies, the VA, EMS, and regional distributors all run on different rules. We built the operating system that speaks each one fluently."
         />
 
-        <section style={{ padding: '24px 40px 0' }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12 }}>
+        <section style={{ padding: `24px ${padX}px 0` }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : isTablet ? 'repeat(3, 1fr)' : 'repeat(5, 1fr)', gap: isMobile ? 8 : 12 }}>
             {SOLUTIONS.map((s) => (
               <button
                 key={s.id}
@@ -159,7 +162,7 @@ export function Solutions() {
           </div>
         </section>
 
-        <section style={{ padding: '32px 40px 64px' }}>
+        <section style={{ padding: `32px ${padX}px 64px` }}>
           <div
             key={seg.id}
             className="um-fade-up"
@@ -171,15 +174,15 @@ export function Solutions() {
               borderRadius: 18,
               overflow: 'hidden',
               display: 'grid',
-              gridTemplateColumns: '1.1fr 1fr',
+              gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr',
             }}
           >
-            <div style={{ padding: 48 }}>
+            <div style={{ padding: isMobile ? 24 : 48 }}>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>{seg.eyebrow}</div>
-              <h2 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: '14px 0 0' }}>{seg.title}</h2>
+              <h2 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.2, lineHeight: 1.02, margin: '14px 0 0' }}>{seg.title}</h2>
               <p style={{ fontSize: 16, lineHeight: 1.6, color: D.ink2, marginTop: 18, maxWidth: 540 }}>{seg.long}</p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 28 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 14, marginTop: 28 }}>
                 {seg.features.map((f) => (
                   <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 13.5, color: D.ink, lineHeight: 1.4 }}>
                     <span style={{ color: D.plum, marginTop: 2, flexShrink: 0 }}><Icon.check /></span>
@@ -216,9 +219,9 @@ export function Solutions() {
                 ))}
               </div>
             </div>
-            <div style={{ background: D.paperAlt, padding: 24, display: 'flex', alignItems: 'stretch' }}>
+            <div style={{ background: D.paperAlt, padding: isMobile ? 16 : 24, display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1 }}>
-                <PhotoPlaceholder caption={seg.photo} height={520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
+                <PhotoPlaceholder caption={seg.photo} height={isMobile ? 240 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
               </div>
             </div>
           </div>
@@ -231,58 +234,60 @@ export function Solutions() {
           speed="slow"
         />
 
-        <section style={{ padding: '96px 40px', background: D.paper }}>
+        <section style={{ padding: `${isMobile ? 56 : 96}px ${padX}px`, background: D.paper }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 64, alignItems: 'end' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.4fr', gap: isMobile ? 22 : 64, alignItems: 'end' }}>
               <div>
-                <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 18 }}>HOW WE COMPARE</div>
-                <h2 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: 0 }}>
+                <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 14 }}>HOW WE COMPARE</div>
+                <h2 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.2, lineHeight: 1.02, margin: 0 }}>
                   Side-by-side<br />with the <Grad>Big 3</Grad>.
                 </h2>
               </div>
               <p style={{ fontSize: 16, lineHeight: 1.6, color: D.ink2, margin: 0, maxWidth: 520 }}>
-                The features below aren't add-ons or upgraded tiers. They're how we run, by default, for every customer. No quota minimums to hit them.
+                The features below aren&apos;t add-ons or upgraded tiers. They&apos;re how we run, by default, for every customer. No quota minimums to hit them.
               </p>
             </div>
 
-            <div style={{ marginTop: 40, border: `1px solid ${D.line}`, borderRadius: 16, overflow: 'hidden', background: D.card }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', background: D.paperAlt, fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.ink3, padding: '14px 24px' }}>
-                <div></div>
-                <div style={{ color: D.plum }}>UNITE MEDICAL</div>
-                <div>BIG-3 STANDARD</div>
-                <div>OTHER REGIONALS</div>
-              </div>
-              {COMPARE_ROWS.map((row, i) => (
-                <div
-                  key={row[0]}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1.4fr 1fr 1fr 1fr',
-                    padding: '18px 24px',
-                    borderTop: i === 0 ? 'none' : `1px solid ${D.line}`,
-                    fontSize: 14,
-                    alignItems: 'center',
-                  }}
-                >
-                  <div style={{ color: D.ink, fontWeight: 500 }}>{row[0]}</div>
-                  <div style={{ color: D.plum, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Icon.check /> {row[1]}
-                  </div>
-                  <div style={{ color: D.ink2 }}>{row[2]}</div>
-                  <div style={{ color: D.ink2 }}>{row[3]}</div>
+            <div className={isMobile ? 'um-scroll-x' : ''} style={{ marginTop: 32, border: `1px solid ${D.line}`, borderRadius: 16, overflow: isMobile ? 'auto' : 'hidden', background: D.card }}>
+              <div style={{ minWidth: isMobile ? 640 : 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', background: D.paperAlt, fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.ink3, padding: '14px 24px' }}>
+                  <div></div>
+                  <div style={{ color: D.plum }}>UNITE MEDICAL</div>
+                  <div>BIG-3 STANDARD</div>
+                  <div>OTHER REGIONALS</div>
                 </div>
-              ))}
+                {COMPARE_ROWS.map((row, i) => (
+                  <div
+                    key={row[0]}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1.4fr 1fr 1fr 1fr',
+                      padding: '18px 24px',
+                      borderTop: i === 0 ? 'none' : `1px solid ${D.line}`,
+                      fontSize: 14,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div style={{ color: D.ink, fontWeight: 500 }}>{row[0]}</div>
+                    <div style={{ color: D.plum, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Icon.check /> {row[1]}
+                    </div>
+                    <div style={{ color: D.ink2 }}>{row[2]}</div>
+                    <div style={{ color: D.ink2 }}>{row[3]}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        <section style={{ padding: '96px 40px', background: D.paperAlt, borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}` }}>
+        <section style={{ padding: `${isMobile ? 56 : 96}px ${padX}px`, background: D.paperAlt, borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
             <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>ONBOARDING · 14 DAYS</div>
-            <h2 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: '14px 0 40px' }}>
+            <h2 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.2, lineHeight: 1.02, margin: '14px 0 32px' }}>
               From first call to <Grad>first pallet</Grad>.
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 14 }}>
               {STAGES.map((st) => (
                 <div key={st.n} style={{ background: D.card, border: `1px solid ${D.line}`, borderRadius: 14, padding: 28 }}>
                   <div style={{ fontFamily: D.display, fontSize: 56, color: D.plum, letterSpacing: -1.2, lineHeight: 1 }}>{st.n}</div>
@@ -294,12 +299,12 @@ export function Solutions() {
           </div>
         </section>
 
-        <section style={{ padding: '96px 40px', background: D.paper }}>
+        <section style={{ padding: `${isMobile ? 56 : 96}px ${padX}px`, background: D.paper }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', marginBottom: 32, flexWrap: 'wrap', gap: 16, flexDirection: isMobile ? 'column' : 'row' }}>
               <div>
                 <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>PROOF</div>
-                <h2 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: '12px 0 0' }}>
+                <h2 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.2, lineHeight: 1.02, margin: '12px 0 0' }}>
                   Customers, in their <em>own</em> words.
                 </h2>
               </div>
@@ -308,7 +313,7 @@ export function Solutions() {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(3, 1fr)', gap: 14 }}>
               {[
                 {
                   q: 'Switched from Medline because the MOQs weren\u2019t working for a 4-OR center. Unite had our first order on the dock in 48 hours.',
@@ -344,9 +349,9 @@ export function Solutions() {
           </div>
         </section>
 
-        <section style={{ padding: '120px 40px', background: D.ink, color: D.paper }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 72, alignItems: 'center' }}>
-            <h2 style={{ fontFamily: D.display, fontSize: 72, fontWeight: 400, letterSpacing: -1.8, lineHeight: 1, margin: 0 }}>
+        <section style={{ padding: `${isMobile ? 72 : 120}px ${padX}px`, background: D.ink, color: D.paper }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: isMobile ? 28 : 72, alignItems: 'center' }}>
+            <h2 style={{ fontFamily: D.display, fontSize: 'clamp(40px, 7vw, 72px)', fontWeight: 400, letterSpacing: 'clamp(-1px, -0.19vw, -1.8px)', lineHeight: 1.0, margin: 0 }}>
               Don&apos;t see your<br /><Grad>front line?</Grad>
             </h2>
             <div>

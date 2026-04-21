@@ -9,9 +9,12 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 export function Catalog() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isMobile, isTablet } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const PRODUCTS = db.useTable('products');
   const inventory = db.useTable('inventory');
   const cats = useMemo(() => ['All', ...new Set(PRODUCTS.map((p) => p.category))], [PRODUCTS]);
@@ -62,11 +65,11 @@ export function Catalog() {
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <main id="main">
-      <div style={{ background: D.paperAlt, padding: '48px 40px', borderBottom: `1px solid ${D.line}` }}>
+      <div style={{ background: D.paperAlt, padding: `${isMobile ? 32 : 48}px ${padX}px`, borderBottom: `1px solid ${D.line}` }}>
         <div style={{ maxWidth: 1360, margin: '0 auto' }}>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CATALOG · 12,400 SKUS</div>
-          <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: 10 }}>
-            <h1 style={{ fontFamily: D.display, fontSize: 72, fontWeight: 400, letterSpacing: -1.8, margin: 0, lineHeight: 1 }}>
+          <div style={{ display: 'flex', alignItems: isMobile ? 'flex-start' : 'end', justifyContent: 'space-between', marginTop: 10, flexDirection: isMobile ? 'column' : 'row', gap: 8 }}>
+            <h1 style={{ fontFamily: D.display, fontSize: 'clamp(38px, 7.2vw, 72px)', fontWeight: 400, letterSpacing: 'clamp(-0.9px, -0.19vw, -1.8px)', margin: 0, lineHeight: 1.0 }}>
               {cat === 'All' ? <>Everything <Grad>in stock</Grad></> : cat}
             </h1>
             <div style={{ fontFamily: D.mono, fontSize: 12, color: D.ink2 }}>{filtered.length} results · updated 04 min ago</div>
@@ -92,43 +95,69 @@ export function Catalog() {
           </div>
         </div>
       </div>
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: 40 }}>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `32px ${padX}px 80px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '220px 1fr', gap: isMobile ? 20 : 40 }}>
         <div>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, marginBottom: 14 }}>TIER</div>
-          {tiers.map((t) => (
-            <label key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 14, color: D.ink2, cursor: 'pointer' }}>
-              <input type="checkbox" checked={tier.has(t)} onChange={() => toggle(t)} style={{ accentColor: D.plum }} /> {t}
-            </label>
-          ))}
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, margin: '28px 0 14px' }}>COMPLIANCE</div>
-          {['PDAC-approved', 'Berry compliant', 'TAA compliant', 'MSPV listed'].map((c) => (
-            <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 14, color: D.ink2, cursor: 'pointer' }}>
-              <input type="checkbox" style={{ accentColor: D.plum }} /> {c}
-            </label>
-          ))}
+          {isMobile ? (
+            <details style={{ background: D.card, border: `1px solid ${D.line}`, borderRadius: 12, padding: '12px 14px' }}>
+              <summary style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plum, cursor: 'pointer' }}>FILTERS · {tier.size} active</summary>
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${D.line}` }}>
+                <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, marginBottom: 8 }}>TIER</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                  {tiers.map((t) => (
+                    <label key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 14, color: D.ink2, cursor: 'pointer' }}>
+                      <input type="checkbox" checked={tier.has(t)} onChange={() => toggle(t)} style={{ accentColor: D.plum }} /> {t}
+                    </label>
+                  ))}
+                </div>
+                <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, margin: '18px 0 8px' }}>COMPLIANCE</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                  {['PDAC-approved', 'Berry compliant', 'TAA compliant', 'MSPV listed'].map((c) => (
+                    <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 13, color: D.ink2, cursor: 'pointer' }}>
+                      <input type="checkbox" style={{ accentColor: D.plum }} /> {c}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </details>
+          ) : (
+            <>
+              <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, marginBottom: 14 }}>TIER</div>
+              {tiers.map((t) => (
+                <label key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 14, color: D.ink2, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={tier.has(t)} onChange={() => toggle(t)} style={{ accentColor: D.plum }} /> {t}
+                </label>
+              ))}
+              <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, margin: '28px 0 14px' }}>COMPLIANCE</div>
+              {['PDAC-approved', 'Berry compliant', 'TAA compliant', 'MSPV listed'].map((c) => (
+                <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 14, color: D.ink2, cursor: 'pointer' }}>
+                  <input type="checkbox" style={{ accentColor: D.plum }} /> {c}
+                </label>
+              ))}
+            </>
+          )}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3,1fr)', gap: isMobile ? 12 : 18 }}>
           {filtered.map((p) => {
             const stock = stockBySku.get(p.sku) || 0;
             const isLow = stock < 200;
             return (
               <article key={p.sku} style={{ background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}`, display: 'flex', flexDirection: 'column' }}>
                 <Link to={`/products/${p.sku}`} style={{ display: 'block' }}>
-                  <PhotoPlaceholder caption={p.img} height={210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+                  <PhotoPlaceholder caption={p.img} height={isMobile ? 140 : 210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
                 </Link>
-                <div style={{ padding: 18, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: isMobile ? 14 : 18, flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, color: D.ink3 }}>
                     <span>{p.sku}</span>
                     <span style={{ color: !isLow ? '#3b8760' : D.terra }}><Icon.dot /> {!isLow ? 'IN STOCK' : 'LOW'}</span>
                   </div>
-                  <Link to={`/products/${p.sku}`} style={{ fontFamily: D.display, fontSize: 19, color: D.ink, marginTop: 10, lineHeight: 1.25, minHeight: 46 }}>{p.name}</Link>
-                  <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{p.category} · HCPCS {p.hcpcs}</div>
-                  <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: 16 }}>
+                  <Link to={`/products/${p.sku}`} style={{ fontFamily: D.display, fontSize: isMobile ? 16 : 19, color: D.ink, marginTop: 10, lineHeight: 1.25, minHeight: isMobile ? 40 : 46 }}>{p.name}</Link>
+                  <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{p.category}{!isMobile && ` · HCPCS ${p.hcpcs}`}</div>
+                  <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: 14 }}>
                     <div>
-                      <div style={{ fontFamily: D.display, fontSize: 24, color: D.plum, letterSpacing: -0.4 }}>{fmt.money(p.price)}</div>
+                      <div style={{ fontFamily: D.display, fontSize: isMobile ? 20 : 24, color: D.plum, letterSpacing: -0.4 }}>{fmt.money(p.price)}</div>
                       <div style={{ fontFamily: D.mono, fontSize: 10, color: D.ink3 }}>{p.pack_size} · MOQ {p.moq}</div>
                     </div>
-                    <button aria-label={`Add ${p.name} to cart`} onClick={() => cartStore.add(p.sku)} style={{ background: D.ink, color: D.paper, border: 'none', width: 40, height: 40, borderRadius: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button aria-label={`Add ${p.name} to cart`} onClick={() => cartStore.add(p.sku)} style={{ background: D.ink, color: D.paper, border: 'none', width: 40, height: 40, borderRadius: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Icon.plus />
                     </button>
                   </div>

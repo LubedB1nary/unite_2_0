@@ -5,8 +5,11 @@ import { AdminCard, Sparkline } from '../../components/layout/AdminCard.jsx';
 import { Icon } from '../../components/shared/Icon.jsx';
 import { db } from '../../lib/db.js';
 import { fmt } from '../../lib/format.js';
+import { useViewport } from '../../lib/viewport.js';
 
 export function AdminInventory() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const products = db.useTable('products');
   const inventory = db.useTable('inventory');
   const warehouses = db.useTable('warehouses');
@@ -30,27 +33,27 @@ export function AdminInventory() {
 
   return (
     <AdminShell active="inventory">
-      <div style={{ padding: '40px 40px 64px' }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 48 : 64}px` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>OPS · INVENTORY</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 28 }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Inventory.</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', marginBottom: 22, flexDirection: isMobile ? 'column' : 'row', gap: 8 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Inventory.</h1>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>SOURCE · CIN7 (SIM)</div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 14 }}>
           {[
             [fmt.number(products.length), 'Total SKUs', `${fmt.number(totalUnits)} units on hand`],
             [fmt.short(totalValue), 'Inventory value', 'at COGS'],
             [String(low), 'Low stock', 'needs reorder'],
             [String(out), 'Out of stock', 'critical'],
           ].map(([b, s, sub]) => (
-            <div key={s} style={{ padding: 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
+            <div key={s} style={{ padding: isMobile ? 16 : 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{s.toUpperCase()}</div>
-              <div style={{ fontFamily: D.display, fontSize: 36, color: D.ink, letterSpacing: -0.6, marginTop: 8 }}>{b}</div>
+              <div style={{ fontFamily: D.display, fontSize: isMobile ? 24 : 36, color: D.ink, letterSpacing: -0.6, marginTop: 8 }}>{b}</div>
               <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{sub}</div>
             </div>
           ))}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: 14, marginBottom: 14 }}>
           <AdminCard title="Movement · 30 days">
             <Sparkline points={[40,48,42,55,58,52,62,68,61,70,72,65,78,82,76,88,85,80,92,96,88,95,102,98,105,110,104,115,120,118]} dual />
             <div style={{ display: 'flex', gap: 20, marginTop: 18, fontSize: 12, color: D.ink2 }}>
@@ -73,7 +76,8 @@ export function AdminInventory() {
           </AdminCard>
         </div>
         <AdminCard title={`Inventory table · ${products.length} SKUs`}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <div className="um-scroll-x">
+          <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>
                 {['SKU', 'PRODUCT', 'CATEGORY', 'ON HAND', 'REORDER AT', 'STATUS', 'ACTIONS'].map((h) => <th key={h} style={{ padding: '10px 12px', textAlign: 'left', borderBottom: `1px solid ${D.line}` }}>{h}</th>)}
@@ -102,6 +106,7 @@ export function AdminInventory() {
               })}
             </tbody>
           </table>
+          </div>
         </AdminCard>
       </div>
     </AdminShell>

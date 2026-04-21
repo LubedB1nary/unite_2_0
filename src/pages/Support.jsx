@@ -4,6 +4,7 @@ import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const faqs = [
   ['Do you have minimum order quantities?', 'No. Every SKU in our catalog can be ordered in single units. Volume pricing kicks in at tier breaks but never as a hard floor.'],
@@ -15,6 +16,8 @@ const faqs = [
 ];
 
 export function Support() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const [open, setOpen] = useState(0);
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
@@ -22,10 +25,10 @@ export function Support() {
       <PageHead eyebrow="HELP CENTER"
         title={<>Answers, <Grad>not tickets</Grad>.</>}
         sub="Common questions, plain-language answers. If we can't resolve it here, your rep will." />
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '16px 40px 64px', display: 'grid', gridTemplateColumns: '260px 1fr', gap: 48 }}>
-        <div>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `16px ${padX}px ${isMobile ? 56 : 64}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '260px 1fr', gap: isMobile ? 18 : 48 }}>
+        <div className={isMobile ? 'um-scroll-x' : ''} style={isMobile ? { display: 'flex', gap: 6 } : undefined}>
           {['Ordering & MOQ', 'Shipping & freight', 'Billing & terms', 'Returns', 'Compliance', 'Integrations & EDI', 'Private label'].map((c, i) => (
-            <div key={c} style={{ padding: '11px 14px', borderRadius: 8, fontSize: 13, background: i === 0 ? D.plum : 'transparent', color: i === 0 ? D.paper : D.ink2, fontWeight: i === 0 ? 600 : 500, cursor: 'pointer', marginBottom: 2 }}>{c}</div>
+            <div key={c} style={{ padding: isMobile ? '8px 14px' : '11px 14px', borderRadius: isMobile ? 999 : 8, fontSize: 13, background: i === 0 ? D.plum : (isMobile ? D.card : 'transparent'), color: i === 0 ? D.paper : D.ink2, fontWeight: i === 0 ? 600 : 500, cursor: 'pointer', marginBottom: isMobile ? 0 : 2, border: isMobile ? `1px solid ${i === 0 ? D.plum : D.line}` : 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>{c}</div>
           ))}
         </div>
         <div>

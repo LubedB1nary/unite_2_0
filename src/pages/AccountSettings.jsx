@@ -7,12 +7,15 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { auth } from '../lib/auth.js';
 import { db } from '../lib/db.js';
 import { fmt, uid } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 const TABS = ['Profile', 'Team & access', 'Saved addresses', 'Billing & terms', 'Integrations', 'Audit log'];
 
 export function AccountSettings() {
   const navigate = useNavigate();
   const session = auth.use();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const orgId = session?.org_id || null;
   const profile = db.useRow('profiles', session?.user_id || '__none__');
   const org = db.useRow('organizations', orgId || '__none__');
@@ -64,17 +67,17 @@ export function AccountSettings() {
       <Nav />
       <main id="main">
         <PageHead eyebrow={`ACCOUNT · ${(org?.name || '').toUpperCase()}`} title="Settings" sub="Organization profile, team access, billing terms, and integrations — all in one pane." />
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '24px 40px 64px', display: 'grid', gridTemplateColumns: '240px 1fr', gap: 32 }}>
-          <nav aria-label="Settings sections">
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `24px ${padX}px ${isMobile ? 56 : 64}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '240px 1fr', gap: isMobile ? 18 : 32 }}>
+          <nav aria-label="Settings sections" className={isMobile ? 'um-scroll-x' : ''} style={isMobile ? { display: 'flex', gap: 6, paddingBottom: 6 } : undefined}>
             {TABS.map((s) => (
-              <button key={s} onClick={() => setTab(s)} aria-current={tab === s ? 'page' : undefined} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 14px', borderRadius: 8, fontSize: 13, background: tab === s ? D.plum : 'transparent', color: tab === s ? D.paper : D.ink2, fontWeight: tab === s ? 600 : 500, cursor: 'pointer', marginBottom: 2, border: 'none', fontFamily: D.sans }}>{s}</button>
+              <button key={s} onClick={() => setTab(s)} aria-current={tab === s ? 'page' : undefined} style={{ display: isMobile ? 'inline-block' : 'block', width: isMobile ? 'auto' : '100%', textAlign: 'left', padding: isMobile ? '8px 14px' : '11px 14px', borderRadius: isMobile ? 999 : 8, fontSize: 13, background: tab === s ? D.plum : (isMobile ? D.card : 'transparent'), color: tab === s ? D.paper : D.ink2, fontWeight: tab === s ? 600 : 500, cursor: 'pointer', marginBottom: isMobile ? 0 : 2, border: isMobile ? `1px solid ${tab === s ? D.plum : D.line}` : 'none', fontFamily: D.sans, whiteSpace: 'nowrap' }}>{s}</button>
             ))}
           </nav>
 
           <div style={{ display: 'grid', gap: 18 }}>
             {tab === 'Profile' && (
               <Card title="Your profile" action={editing ? <button onClick={saveProfile} style={{ background: D.plum, color: D.paper, border: 'none', padding: '8px 16px', borderRadius: 999, fontSize: 12, cursor: 'pointer' }}>Save</button> : <button onClick={() => setEditing(true)} style={{ background: 'transparent', color: D.plum, border: `1px solid ${D.plum}`, padding: '8px 16px', borderRadius: 999, fontSize: 12, cursor: 'pointer' }}>Edit</button>}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
                   <Cell label="Name">{editing ? <Input value={name} onChange={setName} /> : (profile?.name || '—')}</Cell>
                   <Cell label="Title">{editing ? <Input value={title} onChange={setTitle} /> : (profile?.title || '—')}</Cell>
                   <Cell label="Email">{profile?.email}</Cell>
@@ -85,7 +88,7 @@ export function AccountSettings() {
 
             {tab === 'Profile' && (
               <Card title="Organization">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
                   <Cell label="Legal name">{org?.name}</Cell>
                   <Cell label="Segment">{org?.segment?.toUpperCase()}</Cell>
                   <Cell label="Tier">{org?.tier}</Cell>
@@ -114,7 +117,7 @@ export function AccountSettings() {
 
             {tab === 'Saved addresses' && (
               <Card title="Addresses" action={<button onClick={addAddress} style={{ background: D.plum, color: D.paper, border: 'none', padding: '8px 16px', borderRadius: 999, fontSize: 12, cursor: 'pointer' }}>+ Add address</button>}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
                   {addresses.map((a) => (
                     <button key={a.id} onClick={() => setDefault(a.id)} style={{ padding: 18, background: D.paper, borderRadius: 10, border: `${a.is_default ? 2 : 1}px solid ${a.is_default ? D.plum : D.line}`, cursor: 'pointer', textAlign: 'left', fontFamily: D.sans, color: D.ink }}>
                       <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>{(a.label || '').toUpperCase()}{a.is_default ? ' · DEFAULT' : ''}</div>
@@ -128,7 +131,7 @@ export function AccountSettings() {
 
             {tab === 'Billing & terms' && (
               <Card title="Billing & terms">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
                   <Cell label="Payment terms">{(org?.terms || '').toUpperCase()}</Cell>
                   <Cell label="Credit limit">{fmt.money(org?.credit_limit || 0)}</Cell>
                   <Cell label="Method on file">ACH · CHASE 5421</Cell>

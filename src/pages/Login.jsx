@@ -4,9 +4,11 @@ import { D } from '../tokens.js';
 import { UMLogo } from '../components/shared/Logo.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { auth } from '../lib/auth.js';
+import { useViewport } from '../lib/viewport.js';
 
 export function Login() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
   const [email, setEmail] = useState('sarah@atlanta-surgical.com');
   const [password, setPassword] = useState('demo');
   const [submitting, setSubmitting] = useState(false);
@@ -26,12 +28,12 @@ export function Login() {
   }
 
   return (
-    <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-      <div style={{ padding: '64px 72px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-        <Link to="/"><UMLogo size={32} color={D.ink} weight={600} /></Link>
-        <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 24 }}>SIGN IN · B2B PORTAL</div>
-          <h1 style={{ fontFamily: D.display, fontSize: 68, fontWeight: 400, letterSpacing: -1.6, lineHeight: 0.98, margin: 0 }}>
+    <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr' }}>
+      <div style={{ padding: isMobile ? '32px 22px 56px' : '64px 72px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: isMobile ? 28 : 0 }}>
+        <Link to="/"><UMLogo size={isMobile ? 26 : 32} color={D.ink} weight={600} /></Link>
+        <form onSubmit={handleSubmit} style={{ maxWidth: 420, width: '100%' }}>
+          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 18 }}>SIGN IN · B2B PORTAL</div>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(40px, 8vw, 68px)', fontWeight: 400, letterSpacing: -1.6, lineHeight: 1.0, margin: 0 }}>
             Welcome <Grad>back</Grad>.
           </h1>
           <p style={{ fontSize: 15, color: D.ink2, marginTop: 18, lineHeight: 1.55 }}>
@@ -73,8 +75,9 @@ export function Login() {
             </div>
           </div>
         </form>
-        <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>FDA 3015727296 · VOSB · CAGE 8MK70</div>
+        {!isMobile && <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>FDA 3015727296 · VOSB · CAGE 8MK70</div>}
       </div>
+      {isMobile ? null : (
       <div style={{ background: D.plum, color: D.paper, padding: 72, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
         <div />
         <div>
@@ -92,6 +95,7 @@ export function Login() {
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 }

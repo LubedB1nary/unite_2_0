@@ -5,11 +5,14 @@ import { AdminCard, Sparkline } from '../../components/layout/AdminCard.jsx';
 import { Icon } from '../../components/shared/Icon.jsx';
 import { db } from '../../lib/db.js';
 import { fmt } from '../../lib/format.js';
+import { useViewport } from '../../lib/viewport.js';
 
 const SEGMENT_LABEL = { asc: 'Ambulatory surgery', gov: 'Gov/VA', pharmacy: 'Pharmacy', distributors: 'Regional dealers', ems: 'EMS', hospital: 'Hospital' };
 const SEGMENT_COLOR = { asc: '#5e2963', gov: '#b8502c', pharmacy: '#3b8760', distributors: '#8f8490', ems: '#b8a04a', hospital: '#564b5c' };
 
 export function AdminAnalytics() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const orders = db.useTable('orders');
   const products = db.useTable('products');
   const orderItems = db.useTable('order_items');
@@ -67,13 +70,13 @@ export function AdminAnalytics() {
 
   return (
     <AdminShell active="analytics">
-      <div style={{ padding: '40px 40px 64px' }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 48 : 64}px` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>ANALYTICS · REVENUE & PERFORMANCE</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 28 }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Analytics.</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', marginBottom: 22, flexDirection: isMobile ? 'column' : 'row', gap: 8 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Analytics.</h1>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>FY26 · QBO LIVE</div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr', gap: 14, marginBottom: 14 }}>
           <AdminCard title={`Revenue · trailing 30 days · actual ${fmt.short(totalRev)} · target ${fmt.short(target)}`}>
             <Sparkline points={trail.length ? trail : [0]} tall />
             <div style={{ display: 'flex', gap: 20, marginTop: 18, fontSize: 12, color: D.ink2 }}>
@@ -97,7 +100,7 @@ export function AdminAnalytics() {
             </div>
           </AdminCard>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: 14 }}>
           <AdminCard title="Top SKUs · 90 days">
             {topSkus.map(([sku, val], i) => {
               const p = products.find((pr) => pr.sku === sku);

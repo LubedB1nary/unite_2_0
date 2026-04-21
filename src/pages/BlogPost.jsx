@@ -6,6 +6,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 function MarkdownLite({ text = '' }) {
   const lines = text.split(/\n/);
@@ -25,6 +26,8 @@ function MarkdownLite({ text = '' }) {
 export function BlogPost() {
   const navigate = useNavigate();
   const { slug } = useParams();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 22 : 40;
   const post = db.useRow('blog_posts', slug);
 
   useEffect(() => {
@@ -50,9 +53,9 @@ export function BlogPost() {
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <main id="main">
-        <div style={{ maxWidth: 760, margin: '0 auto', padding: '64px 40px 40px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto', padding: `${isMobile ? 36 : 64}px ${padX}px ${isMobile ? 28 : 40}px` }}>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>{post.category.toUpperCase()} · {fmt.date(post.posted_at, { year: true }).toUpperCase()} · {readTime} MIN READ</div>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.4, lineHeight: 1.05, margin: '20px 0 24px' }}>{post.title}</h1>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 6vw, 56px)', fontWeight: 400, letterSpacing: -1.4, lineHeight: 1.08, margin: '20px 0 24px' }}>{post.title}</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, paddingBottom: 24, borderBottom: `1px solid ${D.line}` }}>
             <div style={{ width: 44, height: 44, borderRadius: 22, background: D.plum }} />
             <div>
@@ -61,10 +64,10 @@ export function BlogPost() {
             </div>
           </div>
         </div>
-        <div style={{ maxWidth: 1180, margin: '0 auto 40px', padding: '0 40px' }}>
-          <PhotoPlaceholder caption={post.cover} height={420} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+        <div style={{ maxWidth: 1180, margin: `0 auto ${isMobile ? 28 : 40}px`, padding: `0 ${padX}px` }}>
+          <PhotoPlaceholder caption={post.cover} height={isMobile ? 220 : 420} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
         </div>
-        <article style={{ maxWidth: 720, margin: '0 auto', padding: '0 40px 80px', fontSize: 17, lineHeight: 1.7, color: D.ink }}>
+        <article style={{ maxWidth: 720, margin: '0 auto', padding: `0 ${padX}px ${isMobile ? 56 : 80}px`, fontSize: isMobile ? 16 : 17, lineHeight: 1.7, color: D.ink }}>
           <p style={{ fontFamily: D.display, fontSize: 22, fontStyle: 'italic', color: D.ink2, borderLeft: `3px solid ${D.plum}`, paddingLeft: 22, margin: '0 0 32px' }}>
             {post.excerpt}
           </p>

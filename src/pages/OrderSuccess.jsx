@@ -6,12 +6,15 @@ import { Icon } from '../components/shared/Icon.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 const FALLBACK_REP = { name: 'Miguel Vasquez', phone: '(678) 555-0180', email: 'miguel@unitemedical.com' };
 
 export function OrderSuccess() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const order = db.useRow('orders', id);
   const items = db.useTable('order_items', { where: { order_id: id } });
   const ship = db.useTable('shipments', { where: { order_id: id } })[0];
@@ -37,14 +40,14 @@ export function OrderSuccess() {
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
-      <main id="main" style={{ maxWidth: 1080, margin: '0 auto', padding: '72px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '64px 1fr', gap: 20, alignItems: 'center' }}>
-          <div style={{ width: 64, height: 64, borderRadius: 32, background: D.plum, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <main id="main" style={{ maxWidth: 1080, margin: '0 auto', padding: `${isMobile ? 40 : 72}px ${padX}px` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '52px 1fr' : '64px 1fr', gap: isMobile ? 14 : 20, alignItems: 'center' }}>
+          <div style={{ width: isMobile ? 52 : 64, height: isMobile ? 52 : 64, borderRadius: 32, background: D.plum, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Icon.check style={{ color: D.paper, width: 28, height: 28 }} />
           </div>
           <div>
-            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>ORDER #{order.id} · PLACED {fmt.dateTime(order.placed_at)}</div>
-            <h1 style={{ fontFamily: D.display, fontSize: 68, fontWeight: 400, letterSpacing: -1.5, lineHeight: 1, margin: '10px 0 0' }}>
+            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>ORDER #{order.id}</div>
+            <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 6.5vw, 68px)', fontWeight: 400, letterSpacing: 'clamp(-0.7px, -0.16vw, -1.5px)', lineHeight: 1.05, margin: '10px 0 0' }}>
               Order confirmed, <Grad>{(placedBy?.name || 'friend').split(' ')[0]}</Grad>.
             </h1>
           </div>
@@ -53,8 +56,8 @@ export function OrderSuccess() {
           We&apos;ve picked at the {db.get('warehouses', order.ship_from_warehouse)?.name || 'Atlanta DC'} and ShipStation has issued tracking. QuickBooks invoice {invoice?.id} is in the customer&apos;s queue.
         </p>
 
-        <div style={{ marginTop: 40, display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 24 }}>
-          <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: 32 }}>
+        <div style={{ marginTop: isMobile ? 28 : 40, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.3fr 1fr', gap: isMobile ? 18 : 24 }}>
+          <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: isMobile ? 22 : 32 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 22 }}>
               <div style={{ fontFamily: D.display, fontSize: 28, letterSpacing: -0.4 }}>In this order</div>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>{items.length} LINES · {items.reduce((a, b) => a + b.qty, 0)} UNITS</div>

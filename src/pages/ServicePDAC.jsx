@@ -4,16 +4,19 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 export function ServicePDAC() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <PageHead eyebrow="SERVICE · PDAC CONSULTING"
         title={<>Get your <Grad>L-codes</Grad> right the first time.</>}
         sub="PDAC approval isn't a formality — it's the difference between getting paid and eating the cost. We've done 180+ submissions; we know the patterns." />
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
-        <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: 32 }}>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `32px ${padX}px ${isMobile ? 56 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 22 : 32 }}>
+        <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: isMobile ? 22 : 32 }}>
           <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>WHAT'S INCLUDED</div>
           <div style={{ fontFamily: D.display, fontSize: 36, letterSpacing: -0.7, lineHeight: 1.1, marginTop: 10 }}>A 3-phase engagement.</div>
           {[
@@ -33,10 +36,10 @@ export function ServicePDAC() {
           ))}
         </div>
         <div>
-          <PhotoPlaceholder caption="PDAC letter, marked up" height={380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
-          <div style={{ marginTop: 18, padding: 28, background: D.plum, color: D.paper, borderRadius: 16 }}>
+          <PhotoPlaceholder caption="PDAC letter, marked up" height={isMobile ? 200 : 380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+          <div style={{ marginTop: 18, padding: isMobile ? 22 : 28, background: D.plum, color: D.paper, borderRadius: 16 }}>
             <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plumSoft }}>ENGAGEMENT FEE · FLAT</div>
-            <div style={{ fontFamily: D.display, fontSize: 72, letterSpacing: -1.6, marginTop: 10, lineHeight: 1 }}>$2,400</div>
+            <div style={{ fontFamily: D.display, fontSize: isMobile ? 52 : 72, letterSpacing: -1.6, marginTop: 10, lineHeight: 1 }}>$2,400</div>
             <div style={{ fontSize: 13, color: D.plumSoft, marginTop: 6 }}>per L-code · all phases · success-fee rebate on denied</div>
             <button style={{ marginTop: 20, width: '100%', background: D.paper, color: D.plum, border: 'none', padding: 14, borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Book a review</button>
           </div>

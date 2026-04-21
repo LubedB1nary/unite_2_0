@@ -8,10 +8,13 @@ import { auth } from '../lib/auth.js';
 import { db } from '../lib/db.js';
 import { qbo } from '../lib/services.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 export function Invoices() {
   const navigate = useNavigate();
   const session = auth.use();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const orgId = session?.org_id || 'org_atlsurgical';
   const invoices = db.useTable('invoices', { where: { customer_id: orgId }, orderBy: 'due_date', dir: 'desc' });
 
@@ -49,16 +52,16 @@ export function Invoices() {
       <Nav />
       <main id="main">
         <PageHead eyebrow="ACCOUNT · INVOICES" title="Invoices & billing" sub="Pay outstanding balances, export to your AP system, and reconcile against QBO automatically." />
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '24px 40px 64px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 24 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `24px ${padX}px ${isMobile ? 56 : 64}px` }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 20 }}>
             {[
               [fmt.money(stats.ar), 'Current AR'],
               [fmt.money(stats.past_due), 'Past due'],
               [fmt.money(stats.ytd), 'YTD spend'],
               [`${stats.avg_dpo} days`, 'Avg DPO'],
             ].map(([b, s], i) => (
-              <div key={s} style={{ padding: 24, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
-                <div style={{ fontFamily: D.display, fontSize: 36, color: i === 1 && stats.past_due === 0 ? D.ink3 : D.plum, letterSpacing: -0.8, lineHeight: 1 }}>{b}</div>
+              <div key={s} style={{ padding: isMobile ? 18 : 24, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
+                <div style={{ fontFamily: D.display, fontSize: isMobile ? 24 : 36, color: i === 1 && stats.past_due === 0 ? D.ink3 : D.plum, letterSpacing: -0.8, lineHeight: 1 }}>{b}</div>
                 <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3, marginTop: 10 }}>{s.toUpperCase()}</div>
               </div>
             ))}
@@ -75,7 +78,8 @@ export function Invoices() {
             </div>
             {invoices.length === 0 && <div style={{ padding: 32, textAlign: 'center', color: D.ink3 }}>No invoices yet.</div>}
             {invoices.length > 0 && (
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+              <div className={isMobile ? 'um-scroll-x' : ''}>
+              <table style={{ width: '100%', minWidth: isMobile ? 720 : 'auto', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: D.paperAlt, fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>
                     {['INVOICE #', 'ORDER', 'AMOUNT', 'TERMS', 'DUE', 'STATUS', ''].map((h) => <th key={h} style={{ padding: '12px 18px', textAlign: 'left' }}>{h}</th>)}
@@ -102,6 +106,7 @@ export function Invoices() {
                   })}
                 </tbody>
               </table>
+              </div>
             )}
           </div>
         </div>

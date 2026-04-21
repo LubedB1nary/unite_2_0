@@ -6,11 +6,14 @@ import { AdminCard, Sparkline } from '../../components/layout/AdminCard.jsx';
 import { Icon } from '../../components/shared/Icon.jsx';
 import { db } from '../../lib/db.js';
 import { fmt } from '../../lib/format.js';
+import { useViewport } from '../../lib/viewport.js';
 
 const STATUS_COLOR = { delivered: '#3b8760', in_transit: '#5e2963', shipped: '#5e2963', processing: '#b8502c', pending: '#b8502c' };
 
 export function AdminOverview() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const orders = db.useTable('orders', { orderBy: 'placed_at', dir: 'desc' });
   const leads = db.useTable('leads');
   const products = db.useTable('products');
@@ -38,27 +41,27 @@ export function AdminOverview() {
 
   return (
     <AdminShell active="overview">
-      <div style={{ padding: '40px 40px 64px' }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 48 : 64}px` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>OPERATIONS · OVERVIEW</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 28 }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Operations overview.</h1>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>SYNCED FROM QBO + SHIPSTATION + STRIPE</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', marginBottom: 22, flexDirection: isMobile ? 'column' : 'row', gap: 8 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Operations overview.</h1>
+          <div style={{ fontFamily: D.mono, fontSize: isMobile ? 10 : 11, letterSpacing: 1, color: D.ink3 }}>QBO · SHIPSTATION · STRIPE</div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 18 }}>
           {[
             [fmt.short(revenueMTD), 'Revenue MTD', `${monthOrders.length} orders`],
             [String(orders.length), 'Orders all-time', `${orders.filter((o) => o.status === 'in_transit').length} in transit`],
             [fmt.number(products.length), 'SKUs live', `${lowStock} below reorder`],
             [fmt.pct(fillRate), 'Fill rate', '48-hr median ship'],
           ].map(([b, s, sub]) => (
-            <div key={s} style={{ padding: 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
+            <div key={s} style={{ padding: isMobile ? 16 : 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{s.toUpperCase()}</div>
-              <div style={{ fontFamily: D.display, fontSize: 40, color: D.ink, letterSpacing: -0.8, marginTop: 8 }}>{b}</div>
+              <div style={{ fontFamily: D.display, fontSize: isMobile ? 24 : 40, color: D.ink, letterSpacing: -0.8, marginTop: 8 }}>{b}</div>
               <div style={{ fontSize: 12, color: '#3b8760', marginTop: 4 }}>{sub}</div>
             </div>
           ))}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: 14 }}>
           <AdminCard title="Revenue · trailing 30 days">
             <Sparkline points={sparkline} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', marginTop: 20, gap: 18 }}>
@@ -92,7 +95,8 @@ export function AdminOverview() {
         </div>
         <div style={{ marginTop: 14 }}>
           <AdminCard title="Recent orders">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <div className="um-scroll-x">
+            <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>
                   {['ORDER', 'CUSTOMER', 'SEGMENT', 'ITEMS', 'TOTAL', 'PAYMENT', 'STATUS'].map((h) => <th key={h} style={{ padding: '10px 12px', textAlign: 'left', borderBottom: `1px solid ${D.line}` }}>{h}</th>)}
@@ -118,6 +122,7 @@ export function AdminOverview() {
                 })}
               </tbody>
             </table>
+            </div>
           </AdminCard>
         </div>
       </div>

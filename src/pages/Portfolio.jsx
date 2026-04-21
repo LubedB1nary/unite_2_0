@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const CASES = [
   { customer: 'Atlanta Surgical Center', segment: 'ASC · 4 ORs', stat: '38%', stat_label: 'supply spend reduction', body: 'Switched from Medline in Q3 2025. We rebuilt their formulary around the seven CPT codes they actually run, and trimmed annual supply spend by $214K.' },
@@ -17,6 +18,8 @@ const CASES = [
 
 export function Portfolio() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
@@ -26,12 +29,12 @@ export function Portfolio() {
           title={<>Receipts.<br /><Grad>Real ones.</Grad></>}
           sub="Six accounts, six different problems, six different solves. The work, in plain numbers."
         />
-        <section style={{ padding: '24px 40px 96px' }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18 }}>
+        <section style={{ padding: `24px ${padX}px ${isMobile ? 56 : 96}px` }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 14 : 18 }}>
             {CASES.map((c) => (
               <article key={c.customer} style={{ background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, overflow: 'hidden' }}>
-                <PhotoPlaceholder caption={c.customer.toLowerCase()} height={220} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} radius={0} />
-                <div style={{ padding: 28 }}>
+                <PhotoPlaceholder caption={c.customer.toLowerCase()} height={isMobile ? 160 : 220} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} radius={0} />
+                <div style={{ padding: isMobile ? 22 : 28 }}>
                   <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>{c.segment.toUpperCase()}</div>
                   <h3 style={{ fontFamily: D.display, fontSize: 28, fontWeight: 400, letterSpacing: -0.6, lineHeight: 1.1, margin: '10px 0 0' }}>{c.customer}</h3>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 14 }}>

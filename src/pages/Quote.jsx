@@ -7,6 +7,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { runQuotingEngine, SAMPLE_VENDOR_SHEET } from '../lib/quoting.js';
 import { fmt } from '../lib/format.js';
 import { db } from '../lib/db.js';
+import { useViewport } from '../lib/viewport.js';
 
 const STEP_ICONS = {
   parse: Icon.upload,
@@ -18,6 +19,8 @@ const STEP_ICONS = {
 };
 
 export function Quote() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState([]);
   const [result, setResult] = useState(null);
@@ -56,9 +59,9 @@ export function Quote() {
       <Nav />
       <main id="main">
         <div style={{ background: D.paperAlt, borderBottom: `1px solid ${D.line}` }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', padding: '56px 40px' }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', padding: `${isMobile ? 36 : 56}px ${padX}px` }}>
             <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 14 }}>QUOTING ENGINE · CORE IP</div>
-            <h1 style={{ fontFamily: D.display, fontSize: 76, fontWeight: 400, letterSpacing: -1.8, margin: 0, lineHeight: 0.98 }}>
+            <h1 style={{ fontFamily: D.display, fontSize: 'clamp(38px, 7.6vw, 76px)', fontWeight: 400, letterSpacing: 'clamp(-1px, -0.19vw, -1.8px)', margin: 0, lineHeight: 1.0 }}>
               Vendor spreadsheet in.<br /><Grad>Customer PDF out.</Grad> Fourteen seconds.
             </h1>
             <p style={{ color: D.ink2, maxWidth: 640, fontSize: 16, lineHeight: 1.55, marginTop: 20 }}>
@@ -74,9 +77,9 @@ export function Quote() {
           </div>
         </div>
 
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '44px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 420px', gap: 36 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `${isMobile ? 28 : 44}px ${padX}px ${isMobile ? 56 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 420px', gap: isMobile ? 22 : 36 }}>
           <div>
-            <div style={{ background: D.card, borderRadius: 14, padding: 24, border: `1px solid ${D.line}`, display: 'flex', alignItems: 'center', gap: 18 }}>
+            <div style={{ background: D.card, borderRadius: 14, padding: isMobile ? 18 : 24, border: `1px solid ${D.line}`, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
               <div style={{ width: 52, height: 52, borderRadius: 14, background: D.plum, color: D.paper, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Icon.upload /></div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 16, fontWeight: 600 }}>{progress[0]?.label || 'product-sheet-q2-2026.xlsx'}</div>
@@ -87,7 +90,7 @@ export function Quote() {
               </div>
             </div>
 
-            <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
+            <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4,1fr)', gap: 12 }}>
               {cards.map(([n, v, key]) => {
                 const Icn = STEP_ICONS[key];
                 const active = stepFor(key);
@@ -104,12 +107,13 @@ export function Quote() {
             </div>
 
             <div style={{ marginTop: 16, background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}` }}>
-              <div style={{ padding: '18px 22px', borderBottom: `1px solid ${D.line}`, display: 'flex', alignItems: 'center' }}>
+              <div style={{ padding: '18px 22px', borderBottom: `1px solid ${D.line}`, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <div style={{ fontFamily: D.display, fontSize: 22 }}>Landed cost breakdown</div>
                 <div style={{ flex: 1 }} />
                 <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>60% MARGIN ENFORCED</div>
               </div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+              <div className="um-scroll-x">
+              <table style={{ width: '100%', minWidth: 640, borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: D.paperAlt, color: D.ink3, fontFamily: D.mono, fontSize: 10, letterSpacing: 1 }}>
                     {['PRODUCT', 'HTS', 'FOB', 'DUTY', 'LANDED', 'SELL', 'EXT'].map((h) => <th key={h} style={{ padding: '12px 16px', textAlign: 'left' }}>{h}</th>)}
@@ -129,6 +133,7 @@ export function Quote() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
 
             <div id="recent" style={{ marginTop: 32, background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}` }}>
@@ -149,8 +154,8 @@ export function Quote() {
           </div>
 
           <div>
-            <div style={{ position: 'sticky', top: 120 }}>
-              <div style={{ background: D.plum, color: D.paper, borderRadius: 16, padding: 28 }}>
+            <div style={{ position: isMobile ? 'static' : 'sticky', top: 120 }}>
+              <div style={{ background: D.plum, color: D.paper, borderRadius: 16, padding: isMobile ? 22 : 28 }}>
                 <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft }}>QUOTE {result?.quote.id || 'Q-26-00284'}</div>
                 <div style={{ fontFamily: D.display, fontSize: 56, letterSpacing: -1.6, marginTop: 14, lineHeight: 1 }}>
                   {fmt.money(result?.quote.total ?? SAMPLE_VENDOR_SHEET.lines.reduce((a, l) => a + l.fob * 2.5 * (l.target_qty || 1), 0))}

@@ -7,10 +7,13 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { db } from '../lib/db.js';
 import { hubspot, gmail } from '../lib/services.js';
 import { uid } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 const REASONS = ['New account', 'Quote · stocked SKU', 'Quote · non-stocked import', 'Government / VA', 'Dealer program', 'Support'];
 
 export function Contact() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const [form, setForm] = useState({ first: '', last: '', org: '', email: '', message: '', reason: 'New account', route_to_rep: true });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(null);
@@ -62,8 +65,8 @@ export function Contact() {
           title={<>Call us. <Grad>We answer.</Grad></>}
           sub="Every inbound routes to a human on first ring. No trees, no queues — just the rep assigned to your segment."
         />
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '24px 40px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
-          <form onSubmit={handleSubmit} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, padding: 32 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `24px ${padX}px ${isMobile ? 56 : 64}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 28 : 40 }}>
+          <form onSubmit={handleSubmit} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, padding: isMobile ? 22 : 32 }}>
             <div style={{ fontFamily: D.display, fontSize: 26, marginBottom: 18 }}>Send us a line</div>
             {submitted ? (
               <div style={{ padding: 24, background: D.paperAlt, borderRadius: 12 }}>

@@ -5,6 +5,7 @@ import { UMLogo } from '../components/shared/Logo.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { auth } from '../lib/auth.js';
 import { hubspot, gmail } from '../lib/services.js';
+import { useViewport } from '../lib/viewport.js';
 
 const SEGMENTS = [
   ['asc', 'Ambulatory Surgery Center'],
@@ -17,6 +18,8 @@ const SEGMENTS = [
 
 export function Register() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 22 : 40;
   const [form, setForm] = useState({
     org_name: 'Sunrise Ambulatory Surgery Center',
     website: 'sunrise-asc.com',
@@ -53,15 +56,15 @@ export function Register() {
 
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
-      <div style={{ padding: '32px 40px', borderBottom: `1px solid ${D.line}` }}>
-        <div style={{ maxWidth: 1360, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link to="/"><UMLogo size={28} color={D.ink} weight={600} /></Link>
+      <div style={{ padding: `24px ${padX}px`, borderBottom: `1px solid ${D.line}` }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <Link to="/"><UMLogo size={isMobile ? 24 : 28} color={D.ink} weight={600} /></Link>
           <div style={{ fontSize: 13, color: D.ink2 }}>Already have an account? <Link to="/login" style={{ color: D.plum, textDecoration: 'underline' }}>Sign in</Link></div>
         </div>
       </div>
-      <main id="main" style={{ maxWidth: 960, margin: '0 auto', padding: '72px 40px' }}>
-        <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 22 }}>REQUEST AN ACCOUNT · 2 MIN</div>
-        <h1 style={{ fontFamily: D.display, fontSize: 84, fontWeight: 400, letterSpacing: -2, lineHeight: 0.98, margin: 0, maxWidth: 720 }}>
+      <main id="main" style={{ maxWidth: 960, margin: '0 auto', padding: `${isMobile ? 44 : 72}px ${padX}px` }}>
+        <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 18 }}>REQUEST AN ACCOUNT · 2 MIN</div>
+        <h1 style={{ fontFamily: D.display, fontSize: 'clamp(40px, 8.5vw, 84px)', fontWeight: 400, letterSpacing: 'clamp(-1px, -0.22vw, -2px)', lineHeight: 1.0, margin: 0, maxWidth: 720 }}>
           Tell us about your <Grad>organization</Grad>.
         </h1>
         <p style={{ fontSize: 16, color: D.ink2, marginTop: 22, maxWidth: 600, lineHeight: 1.55 }}>
@@ -69,9 +72,9 @@ export function Register() {
         </p>
 
         <form onSubmit={handleSubmit} style={{ marginTop: 48, display: 'grid', gap: 20 }}>
-          <fieldset style={{ padding: 28, background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, margin: 0 }}>
+          <fieldset style={{ padding: isMobile ? 20 : 28, background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, margin: 0 }}>
             <legend style={{ padding: '0 8px', fontFamily: D.display, fontSize: 22, color: D.plum }}>01 · Organization</legend>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 14 }}>
               <Field label="Legal name" value={form.org_name} onChange={(v) => set('org_name', v)} required />
               <Field label="Website" value={form.website} onChange={(v) => set('website', v)} />
               <SelectField label="Segment" value={form.segment} onChange={(v) => set('segment', v)} options={SEGMENTS} />
@@ -79,9 +82,9 @@ export function Register() {
             </div>
           </fieldset>
 
-          <fieldset style={{ padding: 28, background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, margin: 0 }}>
+          <fieldset style={{ padding: isMobile ? 20 : 28, background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, margin: 0 }}>
             <legend style={{ padding: '0 8px', fontFamily: D.display, fontSize: 22, color: D.plum }}>02 · Primary contact</legend>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 14 }}>
               <Field label="Full name" value={form.name} onChange={(v) => set('name', v)} required />
               <Field label="Work email" value={form.email} onChange={(v) => set('email', v)} type="email" required />
               <Field label="Phone (optional)" value={form.phone} onChange={(v) => set('phone', v)} />

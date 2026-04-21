@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const FEATURES = [
   { t: 'Punch-out catalog (cXML, OCI)', s: 'Drop our catalog into your e-procurement suite — Coupa, Ariba, Workday, GSA Advantage. Carts return as fully formed POs.' },
@@ -19,6 +20,8 @@ const FEATURES = [
 
 export function Procurement() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
@@ -28,9 +31,9 @@ export function Procurement() {
           title={<>For buying teams who already <Grad>have a stack</Grad>.</>}
           sub="Punch-out, EDI, contract pricing, approval routing — all the boring infrastructure your sourcing team needs to swap us in without changing how anyone else works."
         />
-        <section style={{ padding: '24px 40px 96px' }}>
+        <section style={{ padding: `24px ${padX}px ${isMobile ? 56 : 96}px` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 14 }}>
               {FEATURES.map((f) => (
                 <div key={f.t} style={{ background: D.card, border: `1px solid ${D.line}`, borderRadius: 14, padding: 28, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 8, background: D.paperAlt, color: D.plum, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon.shield /></div>
@@ -42,8 +45,8 @@ export function Procurement() {
               ))}
             </div>
 
-            <div style={{ marginTop: 48, background: D.ink, color: D.paper, borderRadius: 16, padding: 40, display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 56, alignItems: 'center' }}>
-              <h2 style={{ fontFamily: D.display, fontSize: 44, fontWeight: 400, letterSpacing: -1, lineHeight: 1, margin: 0 }}>
+            <div style={{ marginTop: isMobile ? 32 : 48, background: D.ink, color: D.paper, borderRadius: 16, padding: isMobile ? 24 : 40, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: isMobile ? 18 : 56, alignItems: 'center' }}>
+              <h2 style={{ fontFamily: D.display, fontSize: 'clamp(28px, 4.8vw, 44px)', fontWeight: 400, letterSpacing: -1, lineHeight: 1.05, margin: 0 }}>
                 Get a punch-out demo on <Grad>your test environment</Grad>.
               </h2>
               <div>

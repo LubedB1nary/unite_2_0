@@ -7,6 +7,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 const PROGRESSION = [
   { status: 'label_created', label: 'Label printed', sub: 'ShipStation issued tracking' },
@@ -48,6 +49,8 @@ function useShipmentTicker(shipment) {
 export function TrackOrder() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const order = db.useRow('orders', id);
   const shipment = db.useTable('shipments', { where: { order_id: id } })[0];
   const items = db.useTable('order_items', { where: { order_id: id } });
@@ -86,9 +89,9 @@ export function TrackOrder() {
           }
         />
 
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '24px 40px 64px', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 32 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `24px ${padX}px ${isMobile ? 56 : 64}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 380px', gap: isMobile ? 22 : 32 }}>
           <div>
-            <div style={{ height: 220, borderRadius: 16, border: `1px solid ${D.line}`, background: D.paperAlt, position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
+            <div style={{ height: isMobile ? 160 : 220, borderRadius: 16, border: `1px solid ${D.line}`, background: D.paperAlt, position: 'relative', overflow: 'hidden', marginBottom: isMobile ? 18 : 24 }}>
               <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(45deg, transparent 0 18px, rgba(94,41,99,0.04) 18px 19px)' }} />
               <svg viewBox="0 0 400 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} preserveAspectRatio="none">
                 <path d="M 60 70 Q 180 20 320 40" fill="none" stroke={D.plum} strokeWidth="0.8" strokeDasharray="3,3" />
@@ -100,8 +103,8 @@ export function TrackOrder() {
               </div>
             </div>
 
-            <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: 32 }}>
-              <div style={{ fontFamily: D.display, fontSize: 30, letterSpacing: -0.5, marginBottom: 20 }}>Timeline</div>
+            <div style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, padding: isMobile ? 22 : 32 }}>
+              <div style={{ fontFamily: D.display, fontSize: isMobile ? 24 : 30, letterSpacing: -0.5, marginBottom: 20 }}>Timeline</div>
               {PROGRESSION.map((p, i) => {
                 const done = i <= completedIdx;
                 const now = i === completedIdx;

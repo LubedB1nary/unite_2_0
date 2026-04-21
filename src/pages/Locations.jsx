@@ -2,6 +2,7 @@ import { D } from '../tokens.js';
 import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const hubs = [
   { city: 'Atlanta, GA', type: 'HQ + main DC', skus: '12,400', sqft: '148,000', lat: 62, lng: 58 },
@@ -11,14 +12,16 @@ const hubs = [
 ];
 
 export function Locations() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <PageHead eyebrow="4 DOMESTIC WAREHOUSES · 3 COASTS"
         title={<>Close to <em>every</em> dock.</>}
         sub="Routed by proximity. 48-hr median delivery for 94% of US ZIP codes." />
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '24px 40px 64px', display: 'grid', gridTemplateColumns: '1fr 360px', gap: 28 }}>
-        <div style={{ background: D.paperAlt, borderRadius: 16, border: `1px solid ${D.line}`, position: 'relative', overflow: 'hidden', minHeight: 520 }}>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `24px ${padX}px ${isMobile ? 56 : 64}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 360px', gap: isMobile ? 18 : 28 }}>
+        <div style={{ background: D.paperAlt, borderRadius: 16, border: `1px solid ${D.line}`, position: 'relative', overflow: 'hidden', minHeight: isMobile ? 320 : 520 }}>
           <div style={{ position: 'absolute', inset: 0, background: `
             radial-gradient(circle at 30% 40%, ${D.paper} 0%, transparent 40%),
             radial-gradient(circle at 70% 50%, ${D.paper} 0%, transparent 35%),

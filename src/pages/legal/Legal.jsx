@@ -3,15 +3,18 @@ import { Nav } from '../../components/layout/Nav.jsx';
 import { Footer } from '../../components/layout/Footer.jsx';
 import { PageHead } from '../../components/layout/PageHead.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
+import { useViewport } from '../../lib/viewport.js';
 
 /** Shared layout for short-form legal/policy pages. */
 export function LegalShell({ eyebrow, title, lastUpdated, sections }) {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <main id="main">
         <PageHead eyebrow={eyebrow} title={title} sub={lastUpdated ? `Last updated ${lastUpdated}.` : undefined} />
-        <section style={{ padding: '32px 40px 96px' }}>
+        <section style={{ padding: `32px ${padX}px ${isMobile ? 56 : 96}px` }}>
           <div style={{ maxWidth: 880, margin: '0 auto' }}>
             {sections.map((s, i) => (
               <div key={s.title} style={{ marginTop: i === 0 ? 0 : 40 }}>

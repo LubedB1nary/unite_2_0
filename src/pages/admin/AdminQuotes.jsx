@@ -3,8 +3,11 @@ import { D } from '../../tokens.js';
 import { AdminShell } from '../../components/layout/AdminShell.jsx';
 import { db } from '../../lib/db.js';
 import { fmt } from '../../lib/format.js';
+import { useViewport } from '../../lib/viewport.js';
 
 export function AdminQuotes() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const quotes = db.useTable('quotes', { orderBy: 'created_at', dir: 'desc' });
   const [activeId, setActiveId] = useState(quotes[0]?.id);
   const active = db.useRow('quotes', activeId);
@@ -16,11 +19,11 @@ export function AdminQuotes() {
 
   return (
     <AdminShell active="quotes">
-      <div style={{ padding: '40px 40px 24px', borderBottom: `1px solid ${D.line}` }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 18 : 24}px`, borderBottom: `1px solid ${D.line}` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>SALES · QUOTES</div>
-        <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Quotes · {quotes.length}</h1>
+        <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Quotes · {quotes.length}</h1>
       </div>
-      <div style={{ padding: 32, display: 'grid', gridTemplateColumns: '360px 1fr', gap: 20 }}>
+      <div style={{ padding: isMobile ? 20 : 32, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '360px 1fr', gap: 20 }}>
         <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
           <div style={{ padding: '14px 16px', borderBottom: `1px solid ${D.line}`, fontFamily: D.display, fontSize: 18 }}>Recent</div>
           {quotes.length === 0 && <div style={{ padding: 16, color: D.ink3, fontSize: 13 }}>No quotes yet. Run the engine on /quote.</div>}
@@ -39,7 +42,7 @@ export function AdminQuotes() {
           ))}
         </div>
 
-        <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, padding: 28 }}>
+        <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, padding: isMobile ? 22 : 28 }}>
           {!active && <div style={{ color: D.ink3 }}>Select a quote.</div>}
           {active && (
             <>
@@ -55,7 +58,7 @@ export function AdminQuotes() {
                 </div>
               </div>
 
-              <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
+              <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12 }}>
                 {[
                   [fmt.money(active.total), 'Total quoted'],
                   [fmt.money(active.freight_total), 'Ocean freight'],
@@ -70,7 +73,8 @@ export function AdminQuotes() {
               </div>
 
               <div style={{ marginTop: 24, fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>LINES</div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginTop: 8 }}>
+              <div className="um-scroll-x">
+              <table style={{ width: '100%', minWidth: 640, borderCollapse: 'collapse', fontSize: 13, marginTop: 8 }}>
                 <thead>
                   <tr style={{ background: D.paperAlt, fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>
                     {['PRODUCT', 'HTS', 'QTY', 'FOB', 'LANDED', 'SELL', 'EXT'].map((h) => <th key={h} style={{ padding: '10px 12px', textAlign: 'left' }}>{h}</th>)}
@@ -90,6 +94,7 @@ export function AdminQuotes() {
                   ))}
                 </tbody>
               </table>
+              </div>
 
               <div style={{ marginTop: 24, padding: 20, background: D.paperAlt, borderRadius: 10 }}>
                 <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum, marginBottom: 10 }}>CLAUDE COVER LETTER (DRAFT)</div>

@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { D } from '../../tokens.js';
 import { UMLogo } from '../shared/Logo.jsx';
 import { Icon } from '../shared/Icon.jsx';
 import { useCart } from '../../store/cart.js';
+import { useViewport } from '../../lib/viewport.js';
+import { auth } from '../../lib/auth.js';
 
 const LINKS = [
   ['/catalog', 'Catalog'],
@@ -16,65 +19,162 @@ export function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
   const cart = useCart();
+  const session = auth.use();
   const cartCount = cart.items.reduce((a, b) => a + b.qty, 0);
+  const { isMobile } = useViewport();
+  const [open, setOpen] = useState(false);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    if (!open) return undefined;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   const isActive = (path) => {
     if (path === '/catalog') return location.pathname.startsWith('/catalog') || location.pathname.startsWith('/products');
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
+  const padX = isMobile ? 18 : 40;
+  const padY = isMobile ? 13 : 18;
+
   return (
-    <header style={{ background: D.paper, borderBottom: `1px solid ${D.line}`, position: 'sticky', top: 0, zIndex: 20 }}>
-      <div style={{ background: D.ink, color: D.paper, fontFamily: D.mono, fontSize: 11, letterSpacing: 0.8 }}>
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '7px 40px', display: 'flex', gap: 24, alignItems: 'center' }}>
-          <span>FDA · 3015727296</span>
-          <span style={{ opacity: .4 }}>/</span>
-          <span>MSPV BPA · 36C24123A0077</span>
-          <span style={{ opacity: .4 }}>/</span>
-          <span>Veteran-Owned · Lithia Springs, GA</span>
-          <span style={{ flex: 1 }} />
-          <a href="tel:+16785550142" style={{ opacity: .7, color: 'inherit' }}>Sales · (678) 555-0142</a>
+    <header style={{ background: D.paper, borderBottom: `1px solid ${D.line}`, position: 'sticky', top: 0, zIndex: 30 }}>
+      {!isMobile && (
+        <div style={{ background: D.ink, color: D.paper, fontFamily: D.mono, fontSize: 11, letterSpacing: 0.8 }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', padding: `7px ${padX}px`, display: 'flex', gap: 24, alignItems: 'center' }}>
+            <span>FDA · 3015727296</span>
+            <span style={{ opacity: .4 }}>/</span>
+            <span>MSPV BPA · 36C24123A0077</span>
+            <span style={{ opacity: .4 }}>/</span>
+            <span>Veteran-Owned · Lithia Springs, GA</span>
+            <span style={{ flex: 1 }} />
+            <a href="tel:+16785550142" style={{ opacity: .7, color: 'inherit' }}>Sales · (678) 555-0142</a>
+          </div>
         </div>
-      </div>
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '18px 40px', display: 'grid', gridTemplateColumns: 'auto 1fr auto', alignItems: 'center', gap: 48 }}>
+      )}
+      {isMobile && (
+        <div style={{ background: D.ink, color: D.paper, fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, textAlign: 'center', padding: '6px 12px' }}>
+          FDA-REGISTERED · VETERAN-OWNED · <a href="tel:+16785550142" style={{ color: 'inherit', textDecoration: 'underline' }}>(678) 555-0142</a>
+        </div>
+      )}
+
+      <div style={{
+        maxWidth: 1360, margin: '0 auto', padding: `${padY}px ${padX}px`,
+        display: 'grid',
+        gridTemplateColumns: isMobile ? 'auto 1fr auto' : 'auto 1fr auto',
+        alignItems: 'center', gap: isMobile ? 12 : 48,
+      }}>
         <Link to="/" aria-label="Unite Medical home" style={{ display: 'inline-flex' }}>
-          <UMLogo size={30} color={D.ink} weight={600} />
+          <UMLogo size={isMobile ? 26 : 30} color={D.ink} weight={600} />
         </Link>
-        <nav aria-label="Primary" style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-          {LINKS.map(([path, label]) => (
-            <Link
-              key={path}
-              to={path}
-              aria-current={isActive(path) ? 'page' : undefined}
-              style={{
-                background: isActive(path) ? D.plum : 'transparent',
-                color: isActive(path) ? D.paper : D.ink2,
-                padding: '9px 18px',
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: isActive(path) ? 600 : 500,
-                fontFamily: D.sans,
-                transition: 'background .15s, color .15s',
-              }}
+
+        {!isMobile && (
+          <nav aria-label="Primary" style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+            {LINKS.map(([path, label]) => (
+              <Link
+                key={path}
+                to={path}
+                aria-current={isActive(path) ? 'page' : undefined}
+                style={{
+                  background: isActive(path) ? D.plum : 'transparent',
+                  color: isActive(path) ? D.paper : D.ink2,
+                  padding: '9px 18px',
+                  borderRadius: 999,
+                  fontSize: 14,
+                  fontWeight: isActive(path) ? 600 : 500,
+                  fontFamily: D.sans,
+                  transition: 'background .15s, color .15s',
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+        )}
+        {isMobile && <span />}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 14, justifySelf: 'end' }}>
+          {!isMobile && (
+            <button
+              onClick={() => navigate('/catalog')}
+              aria-label="Search catalog"
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', border: `1px solid ${D.line}`, borderRadius: 999, color: D.ink3, fontSize: 13, width: 220, background: D.card, cursor: 'pointer' }}
             >
-              {label}
+              <Icon.search /> <span>Search 12,400 SKUs</span>
+            </button>
+          )}
+          {!isMobile && (
+            <Link to={session ? '/dashboard' : '/login'} style={{ background: 'none', color: D.ink, fontFamily: D.sans, fontSize: 13 }}>
+              {session ? 'Dashboard' : 'Sign in'}
             </Link>
-          ))}
-        </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button
-            onClick={() => navigate('/catalog')}
-            aria-label="Search catalog"
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', border: `1px solid ${D.line}`, borderRadius: 999, color: D.ink3, fontSize: 13, width: 220, background: D.card, cursor: 'pointer' }}
-          >
-            <Icon.search /> <span>Search 12,400 SKUs</span>
-          </button>
-          <Link to="/login" style={{ background: 'none', color: D.ink, fontFamily: D.sans, fontSize: 13 }}>Sign in</Link>
-          <Link to="/cart" style={{ display: 'flex', alignItems: 'center', gap: 7, background: D.ink, color: D.paper, padding: '10px 16px', borderRadius: 999, fontSize: 13, fontFamily: D.sans }}>
-            <Icon.cart /> {cartCount ? `Cart · ${cartCount}` : 'Cart'}
+          )}
+          <Link to="/cart" aria-label={`Cart, ${cartCount} items`} style={{ display: 'flex', alignItems: 'center', gap: 7, background: D.ink, color: D.paper, padding: isMobile ? '9px 12px' : '10px 16px', borderRadius: 999, fontSize: isMobile ? 12 : 13, fontFamily: D.sans }}>
+            <Icon.cart /> {cartCount ? cartCount : (isMobile ? '' : 'Cart')}
           </Link>
+          {isMobile && (
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={open}
+              style={{ background: 'transparent', color: D.ink, border: `1px solid ${D.line}`, borderRadius: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0 }}
+            >
+              <Icon.menu />
+            </button>
+          )}
         </div>
       </div>
+
+      {isMobile && open && (
+        <>
+          <div className="um-drawer-backdrop" onClick={() => setOpen(false)} aria-hidden="true" />
+          <aside className="um-drawer" role="dialog" aria-modal="true" aria-label="Navigation">
+            <div style={{ padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${D.line}` }}>
+              <UMLogo size={26} color={D.ink} weight={600} />
+              <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ background: 'transparent', color: D.ink, border: `1px solid ${D.line}`, borderRadius: 10, width: 40, height: 40, cursor: 'pointer' }}>
+                <Icon.close />
+              </button>
+            </div>
+            <nav aria-label="Primary mobile" style={{ padding: 14 }}>
+              {LINKS.map(([path, label]) => (
+                <Link key={path} to={path} style={{
+                  display: 'block', padding: '14px 14px',
+                  fontFamily: D.display, fontSize: 22, letterSpacing: -0.3,
+                  color: isActive(path) ? D.plum : D.ink,
+                  borderRadius: 10,
+                }}>{label}</Link>
+              ))}
+              <div style={{ height: 1, background: D.line, margin: '10px 14px' }} />
+              {[
+                ['/about', 'About'],
+                ['/contact', 'Contact'],
+                ['/locations', 'Locations'],
+                ['/blog', 'Field notes'],
+                ['/compliance', 'Compliance'],
+                ['/portfolio', 'Portfolio'],
+              ].map(([path, label]) => (
+                <Link key={path} to={path} style={{
+                  display: 'block', padding: '10px 14px',
+                  fontSize: 14, color: D.ink2,
+                }}>{label}</Link>
+              ))}
+            </nav>
+            <div style={{ padding: 18, marginTop: 8, borderTop: `1px solid ${D.line}`, display: 'grid', gap: 10 }}>
+              <Link to={session ? '/dashboard' : '/login'} style={{ background: D.plum, color: D.paper, padding: '12px 16px', borderRadius: 999, fontSize: 14, fontWeight: 600, textAlign: 'center' }}>
+                {session ? 'Open dashboard' : 'Sign in'}
+              </Link>
+              <Link to="/quote" style={{ background: 'transparent', color: D.ink, border: `1.5px solid ${D.ink}`, padding: '11px 16px', borderRadius: 999, fontSize: 14, fontWeight: 500, textAlign: 'center' }}>
+                Start a quote
+              </Link>
+              <a href="tel:+16785550142" style={{ marginTop: 6, fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3, textAlign: 'center' }}>
+                CALL · (678) 555-0142
+              </a>
+            </div>
+          </aside>
+        </>
+      )}
     </header>
   );
 }

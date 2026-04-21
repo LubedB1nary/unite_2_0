@@ -8,6 +8,7 @@ import { Icon } from '../components/shared/Icon.jsx';
 import { cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 function tierForQty(qty) {
   if (qty >= 250) return '250+';
@@ -19,6 +20,8 @@ function tierForQty(qty) {
 export function ProductDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const product = db.useRow('products', id);
   const inv = db.useTable('inventory', { where: { sku: id } });
   const stock = inv.reduce((a, b) => a + b.on_hand, 0);
@@ -45,17 +48,17 @@ export function ProductDetail() {
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <main id="main">
-        <nav aria-label="Breadcrumb" style={{ padding: '16px 40px', background: D.paperAlt, borderBottom: `1px solid ${D.line}`, fontFamily: D.mono, fontSize: 11, letterSpacing: 0.8, color: D.ink3 }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto' }}>
+        <nav aria-label="Breadcrumb" style={{ padding: `14px ${padX}px`, background: D.paperAlt, borderBottom: `1px solid ${D.line}`, fontFamily: D.mono, fontSize: 11, letterSpacing: 0.8, color: D.ink3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             Catalog / {product.category} / <span style={{ color: D.ink }}>{product.name}</span>
           </div>
         </nav>
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '40px 40px 80px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 56 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 56 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.3fr 1fr', gap: isMobile ? 28 : 56 }}>
           <div>
-            <PhotoPlaceholder caption={product.img} height={560} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+            <PhotoPlaceholder caption={product.img} height={isMobile ? 320 : 560} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 10 }}>
               {['front', 'back', 'detail', 'packaging'].map((c) => (
-                <PhotoPlaceholder key={c} caption={c} height={100} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+                <PhotoPlaceholder key={c} caption={c} height={isMobile ? 70 : 100} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
               ))}
             </div>
           </div>
@@ -63,14 +66,14 @@ export function ProductDetail() {
             <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>
               {product.sku} {product.hcpcs && product.hcpcs !== '—' ? `· HCPCS ${product.hcpcs}` : ''} {product.pdac_approved ? '· PDAC APPROVED' : ''}
             </div>
-            <h1 style={{ fontFamily: D.display, fontSize: 48, fontWeight: 400, letterSpacing: -1, lineHeight: 1.05, margin: '14px 0 0' }}>{product.name}</h1>
+            <h1 style={{ fontFamily: D.display, fontSize: 'clamp(30px, 5.4vw, 48px)', fontWeight: 400, letterSpacing: -1, lineHeight: 1.08, margin: '14px 0 0' }}>{product.name}</h1>
             <div style={{ display: 'flex', gap: 4, marginTop: 14, alignItems: 'center', color: D.plum }}>
               {[0, 1, 2, 3, 4].map((i) => <Icon.star key={i} />)}
               <div style={{ fontSize: 13, color: D.ink2, marginLeft: 10 }}>4.8 · 142 reviews · {db.count('orders')} orders this month</div>
             </div>
             <div style={{ marginTop: 28, padding: 24, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
-              <div style={{ display: 'flex', alignItems: 'end', gap: 14 }}>
-                <div style={{ fontFamily: D.display, fontSize: 56, color: D.plum, letterSpacing: -1, lineHeight: 1 }}>{fmt.money(price)}</div>
+              <div style={{ display: 'flex', alignItems: 'end', gap: 14, flexWrap: 'wrap' }}>
+                <div style={{ fontFamily: D.display, fontSize: isMobile ? 42 : 56, color: D.plum, letterSpacing: -1, lineHeight: 1 }}>{fmt.money(price)}</div>
                 <div style={{ color: D.ink3, fontSize: 13, paddingBottom: 8 }}>per unit · volume tier {tierLabel}</div>
               </div>
               <div style={{ marginTop: 20 }}>
@@ -94,17 +97,17 @@ export function ProductDetail() {
                   })}
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 10, marginTop: 22, alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 10, marginTop: 22, alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 2, border: `1px solid ${D.line}`, borderRadius: 999, padding: 4 }}>
                   <button aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))} style={{ background: 'none', border: 'none', padding: 8, cursor: 'pointer' }}><Icon.minus /></button>
                   <div style={{ minWidth: 40, textAlign: 'center', fontWeight: 600 }}>{qty}</div>
                   <button aria-label="Increase quantity" onClick={() => setQty(qty + 1)} style={{ background: 'none', border: 'none', padding: 8, cursor: 'pointer' }}><Icon.plus /></button>
                 </div>
-                <button onClick={() => { cartStore.add(product.sku, qty); navigate('/cart'); }} style={{ flex: 1, background: D.ink, color: D.paper, border: 'none', padding: '14px', borderRadius: 999, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}>Add to cart</button>
-                <button onClick={() => navigate('/quote')} style={{ background: 'transparent', color: D.ink, border: `1.5px solid ${D.ink}`, padding: '13px 18px', borderRadius: 999, cursor: 'pointer', fontSize: 14 }}>Request quote</button>
+                <button onClick={() => { cartStore.add(product.sku, qty); navigate('/cart'); }} style={{ flex: '1 1 160px', background: D.ink, color: D.paper, border: 'none', padding: '14px', borderRadius: 999, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}>Add to cart</button>
+                <button onClick={() => navigate('/quote')} style={{ background: 'transparent', color: D.ink, border: `1.5px solid ${D.ink}`, padding: '13px 18px', borderRadius: 999, cursor: 'pointer', fontSize: 14, flex: isMobile ? '1 1 160px' : '0 0 auto' }}>Request quote</button>
               </div>
             </div>
-            <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+            <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 12 }}>
               {[['In stock', `${stock.toLocaleString()} units`], ['Ships today', 'if ordered 3PM ET'], ['Free freight', 'orders $500+']].map(([a, b], i) => (
                 <div key={i} style={{ border: `1px solid ${D.line}`, padding: 14, borderRadius: 10 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: D.ink }}>{a}</div>

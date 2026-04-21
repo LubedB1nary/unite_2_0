@@ -3,8 +3,11 @@ import { D } from '../../tokens.js';
 import { AdminShell } from '../../components/layout/AdminShell.jsx';
 import { db } from '../../lib/db.js';
 import { fmt, uid } from '../../lib/format.js';
+import { useViewport } from '../../lib/viewport.js';
 
 export function AdminCMS() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const pages = db.useTable('cms_pages', { orderBy: 'updated_at', dir: 'desc' });
   const posts = db.useTable('blog_posts', { orderBy: 'posted_at', dir: 'desc' });
   const banners = db.useTable('banners');
@@ -45,21 +48,22 @@ export function AdminCMS() {
 
   return (
     <AdminShell active="cms">
-      <div style={{ padding: '40px 40px 32px', borderBottom: `1px solid ${D.line}` }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 24 : 32}px`, borderBottom: `1px solid ${D.line}` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>CONTENT · CMS</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Content & pages.</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', flexDirection: isMobile ? 'column' : 'row', gap: 14 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Content & pages.</h1>
           <div style={{ display: 'flex', gap: 10 }}>
             <button onClick={startNew} style={{ background: D.plum, color: D.paper, border: 'none', padding: '10px 18px', borderRadius: 999, fontSize: 13, cursor: 'pointer' }}>+ New blog post</button>
           </div>
         </div>
       </div>
-      <div style={{ padding: 32, display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 20 }}>
+      <div style={{ padding: isMobile ? 20 : 32, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1fr', gap: 20 }}>
         <div style={{ display: 'grid', gap: 18 }}>
           <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
             <div style={{ padding: '16px 20px', borderBottom: `1px solid ${D.line}`, fontFamily: D.display, fontSize: 20, letterSpacing: -0.3 }}>Static pages · {pages.length}</div>
+            <div className={isMobile ? 'um-scroll-x' : ''}>
             {pages.map((p, i) => (
-              <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 100px 80px', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
+              <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 100px 80px', minWidth: isMobile ? 600 : 'auto', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
                 <div>
                   <div style={{ fontWeight: 500 }}>{p.title}</div>
                   <div style={{ fontFamily: D.mono, fontSize: 11, color: D.ink3 }}>{p.slug}</div>
@@ -72,11 +76,13 @@ export function AdminCMS() {
                 <button onClick={() => togglePage(p)} style={{ background: 'transparent', color: D.ink2, border: 'none', cursor: 'pointer', fontFamily: D.mono, fontSize: 11, letterSpacing: 0.8 }}>TOGGLE</button>
               </div>
             ))}
+            </div>
           </div>
           <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
             <div style={{ padding: '16px 20px', borderBottom: `1px solid ${D.line}`, fontFamily: D.display, fontSize: 20, letterSpacing: -0.3 }}>Blog posts · {posts.length}</div>
+            <div className={isMobile ? 'um-scroll-x' : ''}>
             {posts.map((p, i) => (
-              <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 80px 80px', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
+              <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 80px 80px', minWidth: isMobile ? 640 : 'auto', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
                 <div>
                   <div style={{ fontWeight: 500 }}>{p.title}</div>
                   <div style={{ fontFamily: D.mono, fontSize: 11, color: D.ink3 }}>{p.category} · {p.author}</div>
@@ -90,11 +96,13 @@ export function AdminCMS() {
                 </div>
               </div>
             ))}
+            </div>
           </div>
           <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
             <div style={{ padding: '16px 20px', borderBottom: `1px solid ${D.line}`, fontFamily: D.display, fontSize: 20, letterSpacing: -0.3 }}>Marketing banners · {banners.length}</div>
+            <div className={isMobile ? 'um-scroll-x' : ''}>
             {banners.map((b, i) => (
-              <div key={b.id} style={{ display: 'grid', gridTemplateColumns: '1fr 120px 80px 80px', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
+              <div key={b.id} style={{ display: 'grid', gridTemplateColumns: '1fr 120px 80px 80px', minWidth: isMobile ? 540 : 'auto', padding: '12px 20px', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, fontSize: 13, alignItems: 'center' }}>
                 <div>
                   <div style={{ fontWeight: 500 }}>{b.headline}</div>
                   <div style={{ fontFamily: D.mono, fontSize: 11, color: D.ink3 }}>{b.placement}</div>
@@ -104,11 +112,12 @@ export function AdminCMS() {
                 <button onClick={() => toggleBanner(b)} style={{ background: 'transparent', color: D.plum, border: 'none', cursor: 'pointer', fontFamily: D.mono, fontSize: 11 }}>{b.active ? 'PAUSE' : 'ACTIVATE'}</button>
               </div>
             ))}
+            </div>
           </div>
         </div>
 
         <div>
-          <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, padding: 24, position: 'sticky', top: 24 }}>
+          <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, padding: isMobile ? 20 : 24, position: isMobile ? 'static' : 'sticky', top: 24 }}>
             <div style={{ fontFamily: D.display, fontSize: 22, letterSpacing: -0.3 }}>{editing === 'new' ? 'New post' : editing ? 'Edit post' : 'Editor'}</div>
             {!editing && <p style={{ color: D.ink2, fontSize: 13, marginTop: 12 }}>Click EDIT on a post or hit &quot;+ New&quot; to start.</p>}
             {editing && (

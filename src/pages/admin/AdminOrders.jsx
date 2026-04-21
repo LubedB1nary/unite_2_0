@@ -4,11 +4,14 @@ import { AdminShell } from '../../components/layout/AdminShell.jsx';
 import { db } from '../../lib/db.js';
 import { fmt } from '../../lib/format.js';
 import { shipstation, cin7 } from '../../lib/services.js';
+import { useViewport } from '../../lib/viewport.js';
 
 const FILTERS = ['All', 'net30', 'net60', 'card', 'mspv', 'wire'];
 const STATUS_COLOR = { picked: '#b8502c', label_created: '#5e2963', in_transit: '#2d6a4f', shipped: '#2d6a4f', delivered: '#8f8490', out_for_delivery: '#2d6a4f' };
 
 export function AdminOrders() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const allOrders = db.useTable('orders', { orderBy: 'placed_at', dir: 'desc' });
   const [filter, setFilter] = useState('All');
   const [selectedId, setSelectedId] = useState(allOrders[0]?.id);
@@ -32,17 +35,17 @@ export function AdminOrders() {
 
   return (
     <AdminShell active="orders">
-      <div style={{ padding: '40px 40px 32px', borderBottom: `1px solid ${D.line}` }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 24 : 32}px`, borderBottom: `1px solid ${D.line}` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>OPS · ORDERS & SHIPPING</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Orders.</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', flexDirection: isMobile ? 'column' : 'row', gap: 14 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>Orders.</h1>
           <div style={{ display: 'flex', gap: 10 }}>
             <button onClick={syncShipStation} disabled={syncing} style={{ background: 'transparent', color: D.ink, border: `1px solid ${D.line}`, padding: '10px 16px', borderRadius: 999, fontSize: 13, cursor: syncing ? 'wait' : 'pointer', opacity: syncing ? 0.6 : 1 }}>
               {syncing ? 'Syncing…' : 'Sync ShipStation + Cin7'}
             </button>
           </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 14, marginTop: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5,1fr)', gap: 12, marginTop: 22 }}>
           {[
             [String(today.length), 'Orders today'],
             [fmt.short(today.reduce((a, b) => a + b.total, 0)), 'Revenue today'],
@@ -57,15 +60,16 @@ export function AdminOrders() {
           ))}
         </div>
       </div>
-      <div style={{ padding: '0 40px 40px', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
-        <div style={{ marginTop: 24 }}>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+      <div style={{ padding: `0 ${padX}px ${isMobile ? 32 : 40}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: 20 }}>
+        <div style={{ marginTop: isMobile ? 18 : 24 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
             {FILTERS.map((f) => (
               <button key={f} onClick={() => setFilter(f)} style={{ background: filter === f ? D.plum : D.card, color: filter === f ? D.paper : D.ink2, border: `1px solid ${filter === f ? D.plum : D.line}`, padding: '6px 12px', borderRadius: 999, fontSize: 12, cursor: 'pointer' }}>{f.toUpperCase()}</button>
             ))}
           </div>
           <div style={{ background: D.card, borderRadius: 12, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+            <div className="um-scroll-x">
+            <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ background: D.paperAlt, fontFamily: D.mono, fontSize: 9, letterSpacing: 1, color: D.ink3 }}>
                   {['ORDER', 'CUSTOMER', 'DATE', 'AMOUNT', 'TERMS', 'STATUS', 'DC'].map((h) => <th key={h} style={{ padding: '10px 14px', textAlign: 'left' }}>{h}</th>)}
@@ -90,10 +94,11 @@ export function AdminOrders() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
         {selected && (
-          <div style={{ marginTop: 24, background: D.card, borderRadius: 12, border: `2px solid ${D.plum}`, padding: 24 }}>
+          <div style={{ marginTop: isMobile ? 8 : 24, background: D.card, borderRadius: 12, border: `2px solid ${D.plum}`, padding: isMobile ? 20 : 24 }}>
             <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>SELECTED · {selected.id}</div>
             <div style={{ fontFamily: D.display, fontSize: 30, letterSpacing: -0.5, marginTop: 6, lineHeight: 1.1 }}>{selected.customer_name}</div>
             <div style={{ fontSize: 12, color: D.ink2 }}>{selected.segment?.toUpperCase()} · {fmt.dateTime(selected.placed_at)}</div>

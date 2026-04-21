@@ -3,6 +3,7 @@ import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
+import { useViewport } from '../lib/viewport.js';
 
 const courses = [
   { name: 'Certified Fitter · Orthotic', ceu: '16 CEU', date: 'May 14-15', price: 890, online: false },
@@ -14,14 +15,16 @@ const courses = [
 ];
 
 export function ServiceEducation() {
+  const { isMobile, isTablet } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <PageHead eyebrow="SERVICE · EDUCATION"
         title={<>The <em>curriculum</em>.</>}
         sub="In-person labs in Atlanta, live online for everyone else. Every course is CEU-approved; every instructor has actually done the job." />
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `32px ${padX}px ${isMobile ? 56 : 80}px` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(3,1fr)', gap: 14 }}>
           {courses.map((c, i) => (
             <div key={i} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
               <PhotoPlaceholder caption={c.online ? 'live online' : 'Atlanta lab'} height={160} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />

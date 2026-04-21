@@ -6,6 +6,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { useCart, cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 function tierLabel(qty) {
   if (qty >= 250) return '250+';
@@ -16,6 +17,8 @@ function tierLabel(qty) {
 export function Cart() {
   const navigate = useNavigate();
   const cart = useCart();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const items = cart.items;
   const subtotal = cart.subtotal;
   const freight = subtotal > 500 ? 0 : 42;
@@ -26,15 +29,15 @@ export function Cart() {
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
-      <main id="main" style={{ background: D.paperAlt, padding: '52px 40px', borderBottom: `1px solid ${D.line}` }}>
+      <main id="main" style={{ background: D.paperAlt, padding: `${isMobile ? 32 : 52}px ${padX}px`, borderBottom: `1px solid ${D.line}` }}>
         <div style={{ maxWidth: 1360, margin: '0 auto' }}>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CART · {items.length} LINE ITEMS · {totalQty} UNITS</div>
-          <h1 style={{ fontFamily: D.display, fontSize: 72, fontWeight: 400, letterSpacing: -1.8, margin: '10px 0 0', lineHeight: 1 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(38px, 7.2vw, 72px)', fontWeight: 400, letterSpacing: 'clamp(-0.9px, -0.19vw, -1.8px)', margin: '10px 0 0', lineHeight: 1.0 }}>
             Your <Grad>next order</Grad>.
           </h1>
         </div>
       </main>
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '44px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 420px', gap: 36 }}>
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: `${isMobile ? 28 : 44}px ${padX}px ${isMobile ? 64 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 420px', gap: isMobile ? 22 : 36 }}>
         <div>
           {items.length === 0 && (
             <div style={{ background: D.card, border: `1px dashed ${D.line}`, borderRadius: 14, padding: 48, textAlign: 'center' }}>
@@ -46,19 +49,27 @@ export function Cart() {
           {items.length > 0 && (
             <div style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
               {items.map((it, i) => (
-                <div key={it.id} style={{ padding: 20, borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, display: 'grid', gridTemplateColumns: '88px 1fr auto auto auto', gap: 20, alignItems: 'center' }}>
-                  <div style={{ width: 88, height: 88, borderRadius: 8, background: 'repeating-linear-gradient(135deg,#ebe3d3 0 10px,#ddd1b7 10px 20px)' }} />
-                  <div>
+                <div key={it.id} style={{
+                  padding: isMobile ? 16 : 20,
+                  borderTop: i === 0 ? 'none' : `1px solid ${D.line}`,
+                  display: isMobile ? 'flex' : 'grid',
+                  flexWrap: isMobile ? 'wrap' : undefined,
+                  gridTemplateColumns: isMobile ? undefined : '88px 1fr auto auto auto',
+                  gap: isMobile ? 12 : 20,
+                  alignItems: 'center',
+                }}>
+                  <div style={{ width: isMobile ? 64 : 88, height: isMobile ? 64 : 88, borderRadius: 8, background: 'repeating-linear-gradient(135deg,#ebe3d3 0 10px,#ddd1b7 10px 20px)', flexShrink: 0 }} />
+                  <div style={{ flex: isMobile ? '1 1 60%' : 'auto', minWidth: 0 }}>
                     <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, color: D.ink3 }}>{it.sku}</div>
-                    <div style={{ fontFamily: D.display, fontSize: 18, marginTop: 6, lineHeight: 1.2 }}>{it.name}</div>
-                    <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>Ships from Atlanta · Net 30 eligible · tier {tierLabel(it.qty)}</div>
+                    <div style={{ fontFamily: D.display, fontSize: isMobile ? 16 : 18, marginTop: 6, lineHeight: 1.2 }}>{it.name}</div>
+                    <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>Tier {tierLabel(it.qty)} · {fmt.money(it.unit_price)}/ea</div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 2, border: `1px solid ${D.line}`, borderRadius: 999, padding: 2 }}>
                     <button aria-label={`Decrease ${it.name}`} onClick={() => cartStore.setQty(it.sku, it.qty - 1)} style={{ background: 'none', border: 'none', padding: 6, cursor: 'pointer' }}><Icon.minus /></button>
                     <div style={{ minWidth: 36, textAlign: 'center', fontWeight: 600, fontSize: 13 }}>{it.qty}</div>
                     <button aria-label={`Increase ${it.name}`} onClick={() => cartStore.setQty(it.sku, it.qty + 1)} style={{ background: 'none', border: 'none', padding: 6, cursor: 'pointer' }}><Icon.plus /></button>
                   </div>
-                  <div style={{ fontFamily: D.display, fontSize: 22, color: D.plum, letterSpacing: -0.3, minWidth: 100, textAlign: 'right' }}>{fmt.money(it.qty * it.unit_price)}</div>
+                  <div style={{ fontFamily: D.display, fontSize: isMobile ? 18 : 22, color: D.plum, letterSpacing: -0.3, minWidth: 80, textAlign: 'right', marginLeft: isMobile ? 'auto' : 0 }}>{fmt.money(it.qty * it.unit_price)}</div>
                   <button aria-label={`Remove ${it.name}`} onClick={() => cartStore.remove(it.sku)} style={{ background: 'none', border: 'none', color: D.ink3, cursor: 'pointer', padding: 8 }}><Icon.close /></button>
                 </div>
               ))}
@@ -67,7 +78,7 @@ export function Cart() {
           {suggestions.length > 0 && (
             <div style={{ marginTop: 24, padding: 22, border: `1px dashed ${D.line}`, borderRadius: 14, background: D.card }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum, marginBottom: 10 }}>REORDER SUGGESTIONS · FROM YOUR LAST 90 DAYS</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 12 }}>
                 {suggestions.map((p) => (
                   <div key={p.sku} style={{ padding: 14, background: D.paper, borderRadius: 10, border: `1px solid ${D.line}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
@@ -82,8 +93,8 @@ export function Cart() {
           )}
         </div>
         <div>
-          <div style={{ position: 'sticky', top: 120 }}>
-            <div style={{ background: D.plum, color: D.paper, borderRadius: 16, padding: 28 }}>
+          <div style={{ position: isMobile ? 'static' : 'sticky', top: 120 }}>
+            <div style={{ background: D.plum, color: D.paper, borderRadius: 16, padding: isMobile ? 22 : 28 }}>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft }}>ORDER SUMMARY</div>
               <div style={{ marginTop: 20, display: 'grid', gap: 10, fontSize: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: D.plumSoft }}>Subtotal</span><span>{fmt.money(subtotal)}</span></div>

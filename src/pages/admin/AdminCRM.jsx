@@ -5,11 +5,14 @@ import { AdminCard } from '../../components/layout/AdminCard.jsx';
 import { db } from '../../lib/db.js';
 import { fmt, uid } from '../../lib/format.js';
 import { fathom, gmail } from '../../lib/services.js';
+import { useViewport } from '../../lib/viewport.js';
 
 const STAGES = ['cold', 'warm', 'qualified', 'hot'];
 const STAGE_LABEL = { cold: 'Cold', warm: 'Warm', qualified: 'Qualified', hot: 'Hot' };
 
 export function AdminCRM() {
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 18 : 40;
   const leads = db.useTable('leads', { orderBy: 'created_at', dir: 'desc' });
   const orgs = db.useTable('organizations');
   const activities = db.useTable('activities', { orderBy: 'created_at', dir: 'desc', limit: 8 });
@@ -42,29 +45,30 @@ export function AdminCRM() {
 
   return (
     <AdminShell active="customers">
-      <div style={{ padding: '40px 40px 64px' }}>
+      <div style={{ padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 48 : 64}px` }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>SALES · CRM & PIPELINE</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 28 }}>
-          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>CRM · pipeline.</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'end', marginBottom: 22, flexDirection: isMobile ? 'column' : 'row', gap: 8 }}>
+          <h1 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.3, lineHeight: 1.02, margin: 0 }}>CRM · pipeline.</h1>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>HUBSPOT + FATHOM (SIM)</div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 12, marginBottom: 14 }}>
           {[
             [String(leads.length), 'Active leads', `${grouped.hot.length} hot`],
             [fmt.short(pipelineValue), 'Pipeline value', 'open opportunities'],
             [String(orgs.length), 'Organizations', `${orgs.filter((o) => o.tier === 'A').length} tier A`],
             ['11 min', 'Avg rep reply', `across ${new Set(leads.map((l) => l.owner)).size} reps`],
           ].map(([b, s, sub]) => (
-            <div key={s} style={{ padding: 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
+            <div key={s} style={{ padding: isMobile ? 16 : 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{s.toUpperCase()}</div>
-              <div style={{ fontFamily: D.display, fontSize: 36, color: D.ink, letterSpacing: -0.6, marginTop: 8 }}>{b}</div>
+              <div style={{ fontFamily: D.display, fontSize: isMobile ? 24 : 36, color: D.ink, letterSpacing: -0.6, marginTop: 8 }}>{b}</div>
               <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{sub}</div>
             </div>
           ))}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: 14 }}>
           <AdminCard title="Pipeline · click a lead to advance it">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+            <div className={isMobile ? 'um-scroll-x' : ''}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(4, 220px)' : 'repeat(4,1fr)', gap: 10 }}>
               {STAGES.map((stage) => (
                 <div key={stage} style={{ background: D.paperAlt, borderRadius: 10, padding: 14 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -86,6 +90,7 @@ export function AdminCRM() {
                   ))}
                 </div>
               ))}
+            </div>
             </div>
           </AdminCard>
           <AdminCard title="Today's activity">

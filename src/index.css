@@ -9,6 +9,7 @@ body {
   margin: 0;
   padding: 0;
   background: #f7f2ea;
+  overflow-x: hidden;
 }
 
 html {
@@ -23,25 +24,33 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button {
   font-family: inherit;
+  /* Reduce iOS tap-highlight flash but keep tap feedback elsewhere */
+  -webkit-tap-highlight-color: rgba(94, 41, 99, 0.18);
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  -webkit-tap-highlight-color: rgba(94, 41, 99, 0.18);
 }
 
+/* iOS Safari zooms in on focus when input font-size < 16px. Force >= 16px. */
 input,
 select,
 textarea {
   font-family: inherit;
+  font-size: max(16px, 1em);
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 img,
@@ -75,6 +84,21 @@ img {
 }
 .um-skip-link:focus {
   left: 16px;
+}
+
+/* Generic horizontal-scroll wrapper for wide tables on mobile. */
+.um-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Pad the scroll-shadow visual cue */
+  background:
+    linear-gradient(to right, #fbf7ef 30%, rgba(251, 247, 239, 0)) left center,
+    linear-gradient(to left, #fbf7ef 30%, rgba(251, 247, 239, 0)) right center,
+    radial-gradient(farthest-side at 0 50%, rgba(36, 26, 40, 0.12), transparent) left center,
+    radial-gradient(farthest-side at 100% 50%, rgba(36, 26, 40, 0.12), transparent) right center;
+  background-size: 24px 100%, 24px 100%, 12px 100%, 12px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
 }
 
 @keyframes umMarquee {
@@ -130,6 +154,45 @@ img {
 
 .um-fade-up {
   animation: umFadeUp 0.6s ease-out both;
+}
+
+/* Mobile drawer used by Nav + AdminShell */
+.um-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(36, 26, 40, 0.46);
+  backdrop-filter: blur(2px);
+  z-index: 60;
+  animation: umFadeIn 0.18s ease-out;
+}
+@keyframes umFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.um-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: min(86vw, 380px);
+  background: #f7f2ea;
+  z-index: 61;
+  overflow-y: auto;
+  box-shadow: -20px 0 60px -20px rgba(36, 26, 40, 0.4);
+  animation: umSlideIn 0.22s ease-out;
+}
+@keyframes umSlideIn {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

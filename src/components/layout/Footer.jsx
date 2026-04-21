@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { D } from '../../tokens.js';
 import { UMLogo } from '../shared/Logo.jsx';
+import { useViewport } from '../../lib/viewport.js';
 
 const linkStyle = {
   display: 'block',
@@ -76,7 +77,7 @@ const COLUMNS = [
     h: 'Company',
     links: [
       ['/about', 'About'],
-      ['/about', 'Veteran Owned'],
+      ['/about/veteran-owned', 'Veteran Owned'],
       ['/compliance', 'Compliance'],
       ['/locations', 'Locations'],
       ['/blog', 'Blog'],
@@ -87,23 +88,27 @@ const COLUMNS = [
 ];
 
 export function Footer() {
+  const { isMobile, isTablet } = useViewport();
+  const padX = isMobile ? 20 : 40;
+  const cols = isMobile ? '1fr' : isTablet ? '1fr 1fr' : '1.4fr 1fr 1fr 1fr 1fr';
+
   return (
-    <footer style={{ background: D.plum, color: D.paper, padding: '64px 40px 32px' }}>
+    <footer style={{ background: D.plum, color: D.paper, padding: `${isMobile ? 44 : 64}px ${padX}px ${isMobile ? 24 : 32}px` }}>
       <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr 1fr', gap: 48 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: cols, gap: isMobile ? 32 : 48 }}>
           <div>
             <Link to="/" aria-label="Unite Medical home">
               <UMLogo size={30} color={D.paper} weight={500} />
             </Link>
-            <p style={{ marginTop: 18, maxWidth: 320, fontSize: 14, lineHeight: 1.6, color: D.plumSoft }}>
+            <p style={{ marginTop: 18, maxWidth: 360, fontSize: 14, lineHeight: 1.6, color: D.plumSoft }}>
               Veteran-owned wholesale medical supply. Built for the channels the Big 3 can&apos;t serve well.
             </p>
-            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft, marginTop: 28, lineHeight: 1.7 }}>
+            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft, marginTop: 24, lineHeight: 1.7 }}>
               VOSB · FDA 3015727296<br />
               CAGE 8MK70 · DUNS 117553945
             </div>
 
-            <div style={{ marginTop: 24 }}>
+            <div style={{ marginTop: 22 }}>
               <Link
                 to="/quote"
                 style={{
@@ -131,7 +136,7 @@ export function Footer() {
                   fontFamily: D.display,
                   fontSize: 20,
                   letterSpacing: -0.3,
-                  marginBottom: 16,
+                  marginBottom: 14,
                 }}
               >
                 {col.h}
@@ -147,25 +152,27 @@ export function Footer() {
 
         <div
           style={{
-            marginTop: 48,
+            marginTop: isMobile ? 32 : 48,
             paddingTop: 20,
             borderTop: '1px solid rgba(255,255,255,.14)',
             fontFamily: D.mono,
             fontSize: 11,
             color: D.plumSoft,
             display: 'flex',
+            flexDirection: isMobile ? 'column-reverse' : 'row',
             flexWrap: 'wrap',
             gap: 16,
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: isMobile ? 'flex-start' : 'center',
           }}
         >
           <div>© 2026 Unite Medical Supply · 1487 Trae Lane · Lithia Springs, GA 30122</div>
-          <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: isMobile ? 14 : 22, flexWrap: 'wrap' }}>
             <Link to="/compliance" style={{ color: D.plumSoft }}>Compliance</Link>
             <Link to="/compliance#docs" style={{ color: D.plumSoft }}>Documents</Link>
+            <Link to="/privacy" style={{ color: D.plumSoft }}>Privacy</Link>
+            <Link to="/terms" style={{ color: D.plumSoft }}>Terms</Link>
             <Link to="/support" style={{ color: D.plumSoft }}>Support</Link>
-            <Link to="/locations" style={{ color: D.plumSoft }}>Locations</Link>
           </div>
         </div>
       </div>

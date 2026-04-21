@@ -7,6 +7,7 @@ import { auth } from '../lib/auth.js';
 import { db } from '../lib/db.js';
 import { placeOrder } from '../lib/orders.js';
 import { fmt } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 function Section({ title, children }) {
   return (
@@ -34,6 +35,8 @@ export function Checkout() {
   const navigate = useNavigate();
   const session = auth.use();
   const cart = useCart();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   const items = cart.items;
   const subtotal = cart.subtotal;
   const orgId = session?.org_id || 'org_atlsurgical';
@@ -98,27 +101,27 @@ export function Checkout() {
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
       <main id="main">
-        <div style={{ padding: '52px 40px 24px' }}>
+        <div style={{ padding: `${isMobile ? 32 : 52}px ${padX}px 24px` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
             <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CHECKOUT · {items.length} LINES · {cart.count} UNITS</div>
-            <h1 style={{ fontFamily: D.display, fontSize: 64, fontWeight: 400, letterSpacing: -1.5, margin: '10px 0 20px', lineHeight: 1 }}>
+            <h1 style={{ fontFamily: D.display, fontSize: 'clamp(36px, 6.5vw, 64px)', fontWeight: 400, letterSpacing: 'clamp(-0.8px, -0.16vw, -1.5px)', margin: '10px 0 20px', lineHeight: 1.0 }}>
               Almost <em>there</em>.
             </h1>
             <div style={{ display: 'flex', gap: 4 }}>
               {['Address', 'Shipping', 'Payment', 'Review'].map((s, i) => (
                 <div key={s} style={{ flex: 1 }}>
                   <div style={{ height: 3, background: i < stepActive ? D.plum : D.line, borderRadius: 2 }} />
-                  <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, marginTop: 10, color: i < stepActive ? D.plum : D.ink3 }}>{String(i + 1).padStart(2, '0')} · {s.toUpperCase()}</div>
+                  <div style={{ fontFamily: D.mono, fontSize: isMobile ? 9 : 10, letterSpacing: 1, marginTop: 10, color: i < stepActive ? D.plum : D.ink3 }}>{isMobile ? String(i + 1).padStart(2, '0') : `${String(i + 1).padStart(2, '0')} · ${s.toUpperCase()}`}</div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 36 }}>
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: `28px ${padX}px ${isMobile ? 64 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 380px', gap: isMobile ? 22 : 36 }}>
           <div style={{ display: 'grid', gap: 20 }}>
             <Section title="01 · Shipping address">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
                 {addresses.map((a) => (
                   <button key={a.id} onClick={() => setActiveAddrId(a.id)} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${activeAddrId === a.id ? D.plum : D.line}`, background: activeAddrId === a.id ? D.paperAlt : D.card, cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'start', gap: 10, fontFamily: D.sans, color: D.ink }}>
                     <div style={{ width: 16, height: 16, borderRadius: 8, border: `1.5px solid ${activeAddrId === a.id ? D.plum : D.ink3}`, marginTop: 3, background: activeAddrId === a.id ? D.plum : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: D.paper, fontSize: 10 }}>{activeAddrId === a.id ? '✓' : ''}</div>
@@ -145,7 +148,7 @@ export function Checkout() {
             </Section>
 
             <Section title="03 · Payment">
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: 10 }}>
                 {PAYMENT_OPTIONS.map((p) => (
                   <button key={p.id} onClick={() => setPaymentMethod(p.id)} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${paymentMethod === p.id ? D.plum : D.line}`, background: paymentMethod === p.id ? D.paperAlt : D.card, cursor: 'pointer', fontFamily: D.sans, textAlign: 'left', color: D.ink }}>
                     <div style={{ fontFamily: D.display, fontSize: 18, letterSpacing: -0.3 }}>{p.label}</div>
@@ -175,7 +178,7 @@ export function Checkout() {
           </div>
 
           <div>
-            <div style={{ position: 'sticky', top: 120, background: D.plum, color: D.paper, borderRadius: 16, padding: 28 }}>
+            <div style={{ position: isMobile ? 'static' : 'sticky', top: 120, background: D.plum, color: D.paper, borderRadius: 16, padding: isMobile ? 22 : 28 }}>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft }}>ORDER · {items.length} ITEMS</div>
               <div style={{ marginTop: 18, display: 'grid', gap: 12, fontSize: 13 }}>
                 {items.slice(0, 5).map((it) => (

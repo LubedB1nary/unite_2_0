@@ -9,6 +9,7 @@ import { Icon } from '../components/shared/Icon.jsx';
 import { db } from '../lib/db.js';
 import { gmail } from '../lib/services.js';
 import { uid } from '../lib/format.js';
+import { useViewport } from '../lib/viewport.js';
 
 const CREDENTIALS = [
   { label: 'FDA Registered', val: '3015727296', sub: 'Device distribution', anchor: 'fda' },
@@ -75,6 +76,8 @@ function DocLibrary() {
 
 export function Compliance() {
   const navigate = useNavigate();
+  const { isMobile } = useViewport();
+  const padX = isMobile ? 20 : 40;
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
@@ -85,9 +88,9 @@ export function Compliance() {
           sub="Distribution is a regulated business. Below are the certifications, policies, and audit trails that keep us trusted by VHA procurement, ASCs, and pharmacy boards across 38 states."
         />
 
-        <section id="credentials" style={{ padding: '24px 40px 80px' }}>
+        <section id="credentials" style={{ padding: `24px ${padX}px ${isMobile ? 56 : 80}px` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18 }}>
               {CREDENTIALS.map((c) => (
                 <div key={c.label} id={c.anchor} style={{ borderTop: `2px solid ${D.plum}`, padding: '20px 0' }}>
                   <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{c.label.toUpperCase()}</div>
@@ -99,13 +102,13 @@ export function Compliance() {
           </div>
         </section>
 
-        <section style={{ background: D.paperAlt, padding: '96px 40px', borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}` }}>
+        <section style={{ background: D.paperAlt, padding: `${isMobile ? 56 : 96}px ${padX}px`, borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 18 }}>POLICIES</div>
-            <h2 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: 0 }}>
+            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 14 }}>POLICIES</div>
+            <h2 style={{ fontFamily: D.display, fontSize: 'clamp(34px, 5.6vw, 56px)', fontWeight: 400, letterSpacing: -1.2, lineHeight: 1.02, margin: 0 }}>
               Documented. Auditable. <Grad>On request.</Grad>
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18, marginTop: 40 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 14, marginTop: 32 }}>
               {POLICIES.map((p) => (
                 <div key={p.t} style={{ background: D.card, border: `1px solid ${D.line}`, borderRadius: 14, padding: 28 }}>
                   <div style={{ fontFamily: D.display, fontSize: 24, letterSpacing: -0.4, color: D.ink }}>{p.t}</div>
@@ -116,8 +119,8 @@ export function Compliance() {
           </div>
         </section>
 
-        <section id="docs" style={{ padding: '96px 40px', background: D.paper }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 64, alignItems: 'start' }}>
+        <section id="docs" style={{ padding: `${isMobile ? 56 : 96}px ${padX}px`, background: D.paper }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.4fr', gap: isMobile ? 28 : 64, alignItems: 'start' }}>
             <div>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 18 }}>DOCUMENT REQUESTS</div>
               <h2 style={{ fontFamily: D.display, fontSize: 48, fontWeight: 400, letterSpacing: -1, lineHeight: 1.05, margin: 0 }}>
@@ -140,9 +143,9 @@ export function Compliance() {
           </div>
         </section>
 
-        <section style={{ padding: '80px 40px', background: D.plum, color: D.paper }}>
-          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 64, alignItems: 'center' }}>
-            <h2 style={{ fontFamily: D.display, fontSize: 48, fontWeight: 400, letterSpacing: -1, lineHeight: 1.05, margin: 0 }}>
+        <section style={{ padding: `${isMobile ? 56 : 80}px ${padX}px`, background: D.plum, color: D.paper }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1fr', gap: isMobile ? 22 : 64, alignItems: 'center' }}>
+            <h2 style={{ fontFamily: D.display, fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 400, letterSpacing: -1, lineHeight: 1.08, margin: 0 }}>
               Audit-ready. Inspector-friendly.
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: D.plumSoft, margin: 0 }}>
