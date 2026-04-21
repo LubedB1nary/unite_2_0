@@ -8,6 +8,7 @@ import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { BLOG_IMG } from '../lib/imageMap.js';
 
 export function Blog() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export function Blog() {
 
           {featured && (
             <article onClick={() => navigate(`/blog/${featured.slug}`)} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1fr', gap: isMobile ? 0 : 20, marginBottom: 28, background: D.card, border: `1px solid ${D.line}`, borderRadius: 16, overflow: 'hidden', cursor: 'pointer' }}>
-              <PhotoPlaceholder caption={featured.cover} height={isMobile ? 200 : 380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
+              <PhotoPlaceholder src={BLOG_IMG[featured.slug]} caption={featured.cover} height={isMobile ? 200 : 380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
               <div style={{ padding: isMobile ? 22 : 32, alignSelf: 'center' }}>
                 <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>{featured.category.toUpperCase()} · {fmt.date(featured.posted_at).toUpperCase()} · {Math.max(3, Math.round((featured.body || '').length / 800))} MIN READ</div>
                 <h2 style={{ fontFamily: D.display, fontSize: 'clamp(28px, 4.6vw, 44px)', fontWeight: 400, letterSpacing: -1, lineHeight: 1.08, marginTop: 14, color: D.ink }}>{featured.title}</h2>
@@ -51,7 +52,7 @@ export function Blog() {
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(3,1fr)', gap: 14 }}>
             {rest.map((p) => (
               <article key={p.slug} onClick={() => navigate(`/blog/${p.slug}`)} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, overflow: 'hidden', cursor: 'pointer' }}>
-                <PhotoPlaceholder caption={p.cover} height={isMobile ? 160 : 180} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
+                <PhotoPlaceholder src={BLOG_IMG[p.slug]} caption={p.cover} height={isMobile ? 160 : 180} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
                 <div style={{ padding: isMobile ? 18 : 22 }}>
                   <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>{p.category.toUpperCase()} · {fmt.date(p.posted_at).toUpperCase()}</div>
                   <h3 style={{ fontFamily: D.display, fontSize: 22, letterSpacing: -0.4, lineHeight: 1.2, marginTop: 10, minHeight: isMobile ? 0 : 76, fontWeight: 400, color: D.ink }}>{p.title}</h3>

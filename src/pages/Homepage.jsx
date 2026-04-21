@@ -9,6 +9,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { PartnerMarquee } from '../components/shared/PartnerMarquee.jsx';
 import { cartStore } from '../store/cart.js';
 import { PRODUCTS, SEGMENTS, TRUST_METRICS } from '../data/index.js';
+import { IMG, PRODUCT_IMG } from '../lib/imageMap.js';
 import { useViewport } from '../lib/viewport.js';
 
 function Hero() {
@@ -18,7 +19,7 @@ function Hero() {
   return (
     <section
       id="main"
-      style={{ background: D.paper, position: 'relative', overflow: 'hidden' }}
+      style={{ background: D.paper, position: 'relative' }}
     >
       <div style={{ padding: `${isMobile ? 36 : 80}px ${padX}px ${isMobile ? 32 : 48}px` }}>
         <div className="um-fade-up" style={{
@@ -36,9 +37,14 @@ function Hero() {
             <h1 style={{
               fontFamily: D.display, fontWeight: 400,
               fontSize: 'clamp(44px, 11vw, 104px)',
-              lineHeight: 0.94,
-              letterSpacing: 'clamp(-1.1px, -0.27vw, -2.6px)',
+              lineHeight: 1.08,
+              letterSpacing: 'clamp(-0.9px, -0.2vw, -2px)',
               color: D.ink, margin: 0,
+              // Explicit paint box: Fraunces italic ascenders/descenders
+              // (b, h, d, y, p) extend beyond the font's em-box, so reserve
+              // visual room here instead of relying on line-height alone.
+              paddingTop: '0.08em',
+              paddingBottom: '0.08em',
             }}>
               The supply chain <Grad>behind</Grad><br />American medicine.
             </h1>
@@ -56,6 +62,7 @@ function Hero() {
           </div>
           <div style={{ position: 'relative', marginTop: isMobile ? 0 : 0 }}>
             <PhotoPlaceholder
+              src={IMG.HOME_HERO}
               caption="warehouse floor, golden hour"
               height={isMobile ? 280 : 500}
               stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum}
@@ -190,7 +197,7 @@ function Featured() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: isMobile ? 12 : 18 }}>
           {picks.map((p) => (
             <article key={p.sku} style={{ background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}` }}>
-              <PhotoPlaceholder caption={p.img} height={isMobile ? 140 : 210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+              <PhotoPlaceholder src={PRODUCT_IMG[p.sku]} caption={p.img} height={isMobile ? 140 : 210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
               <div style={{ padding: isMobile ? 14 : 18 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, color: D.ink3 }}>
                   <span>{p.sku}</span>

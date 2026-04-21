@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { IMG } from '../lib/imageMap.js';
 
 export function ServiceDistribution() {
   const { isMobile } = useViewport();
@@ -24,7 +25,7 @@ export function ServiceDistribution() {
           ))}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.3fr 1fr', gap: isMobile ? 22 : 24 }}>
-          <PhotoPlaceholder caption="warehouse · pick path" height={isMobile ? 240 : 520} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+          <PhotoPlaceholder src={IMG.DIST_PICK_PATH} caption="warehouse · pick path" height={isMobile ? 240 : 520} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
           <div>
             <div style={{ fontFamily: D.display, fontSize: 'clamp(28px, 4.6vw, 40px)', letterSpacing: -0.8, lineHeight: 1.08 }}>How we ship to you.</div>
             {[

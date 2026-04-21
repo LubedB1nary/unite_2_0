@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { IMG } from '../lib/imageMap.js';
 
 export function About() {
   const { isMobile, isTablet } = useViewport();
@@ -26,7 +27,7 @@ export function About() {
       </div>
       <div style={{ padding: `${isMobile ? 24 : 40}px ${padX}px ${isMobile ? 56 : 96}px` }}>
         <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-          <PhotoPlaceholder caption="Damon Reed on the warehouse floor" height={isMobile ? 280 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
+          <PhotoPlaceholder src={IMG.ABOUT_FOUNDER} caption="Damon Reed on the warehouse floor" height={isMobile ? 280 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
         </div>
       </div>
       <div style={{ background: D.paperAlt, padding: `${isMobile ? 56 : 96}px ${padX}px`, borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}` }}>

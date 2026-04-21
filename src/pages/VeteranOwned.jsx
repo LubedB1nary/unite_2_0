@@ -7,6 +7,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { IMG } from '../lib/imageMap.js';
 
 const PILLARS = [
   { t: 'Service-Disabled Veteran-Owned', s: 'A registered SDVOSB. Verified through SAM.gov and the SBA Vetcert program. The CEO is a 22-year U.S. Army veteran (logistics).' },
@@ -29,7 +30,7 @@ export function VeteranOwned() {
         />
         <section style={{ padding: `24px ${padX}px ${isMobile ? 56 : 64}px` }}>
           <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 1fr', gap: isMobile ? 24 : 56, alignItems: 'start' }}>
-            <PhotoPlaceholder caption="Damon Reed, Lithia Springs warehouse" height={isMobile ? 280 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
+            <PhotoPlaceholder src={IMG.VET_FOUNDER} caption="Damon Reed, Lithia Springs warehouse" height={isMobile ? 280 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
             <div>
               <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>FOUNDER · DAMON REED</div>
               <h2 style={{ fontFamily: D.display, fontSize: 'clamp(30px, 5.4vw, 48px)', fontWeight: 400, letterSpacing: -1, lineHeight: 1.08, margin: '14px 0 18px' }}>22 years moving supplies. Now I do it for medicine.</h2>

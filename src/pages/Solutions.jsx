@@ -9,6 +9,7 @@ import { Icon } from '../components/shared/Icon.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { PartnerMarquee } from '../components/shared/PartnerMarquee.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { SEGMENT_IMG } from '../lib/imageMap.js';
 
 const SOLUTIONS = [
   {
@@ -221,7 +222,7 @@ export function Solutions() {
             </div>
             <div style={{ background: D.paperAlt, padding: isMobile ? 16 : 24, display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1 }}>
-                <PhotoPlaceholder caption={seg.photo} height={isMobile ? 240 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
+                <PhotoPlaceholder src={SEGMENT_IMG[seg.id]} caption={seg.photo} height={isMobile ? 240 : 520} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { PageHead } from '../../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { EMS_BUNDLE_IMG } from '../../lib/imageMap.js';
 
 export function SegmentEMS() {
   const { isMobile } = useViewport();
@@ -18,7 +19,7 @@ export function SegmentEMS() {
       <div style={{ maxWidth: 1360, margin: '0 auto', padding: `32px ${padX}px ${isMobile ? 56 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2,1fr)', gap: 14 }}>
         {[{ name: 'MARCH Algorithm Trauma Kit', spec: 'CoTCCC-compliant · IFAK form factor', items: 18, price: 312 }, { name: 'Mass Casualty Rapid Response', spec: '10-patient treatment · rolling case', items: 142, price: 4820 }, { name: 'EMS Truck Restock Bundle', spec: 'Monthly subscription · per-rig', items: 64, price: 980 }, { name: 'Fire Dept · EMS Ready Pack', spec: 'NFPA 1917 aligned', items: 48, price: 1420 }].map((b, i) => (
           <div key={i} style={{ background: D.card, borderRadius: 16, border: `1px solid ${D.line}`, overflow: 'hidden', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '200px 1fr' }}>
-            <PhotoPlaceholder caption={b.name.toLowerCase()} height={isMobile ? 140 : 200} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
+            <PhotoPlaceholder src={EMS_BUNDLE_IMG[i]} caption={b.name.toLowerCase()} height={isMobile ? 140 : 200} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
             <div style={{ padding: isMobile ? 20 : 24 }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>{b.items} SKUS</div>
               <div style={{ fontFamily: D.display, fontSize: 24, letterSpacing: -0.4, marginTop: 10, lineHeight: 1.15 }}>{b.name}</div>

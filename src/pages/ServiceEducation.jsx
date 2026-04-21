@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { IMG } from '../lib/imageMap.js';
 
 const courses = [
   { name: 'Certified Fitter · Orthotic', ceu: '16 CEU', date: 'May 14-15', price: 890, online: false },
@@ -27,7 +28,7 @@ export function ServiceEducation() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(3,1fr)', gap: 14 }}>
           {courses.map((c, i) => (
             <div key={i} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
-              <PhotoPlaceholder caption={c.online ? 'live online' : 'Atlanta lab'} height={160} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
+              <PhotoPlaceholder src={c.online ? IMG.EDU_ONLINE : IMG.EDU_IN_PERSON} caption={c.online ? 'live online' : 'Atlanta lab'} height={160} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
               <div style={{ padding: 22 }}>
                 <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plum }}>{c.ceu} · {c.online ? 'LIVE ONLINE' : 'IN-PERSON'}</div>
                 <div style={{ fontFamily: D.display, fontSize: 22, letterSpacing: -0.3, marginTop: 10, minHeight: 62, lineHeight: 1.2 }}>{c.name}</div>

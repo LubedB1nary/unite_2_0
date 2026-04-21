@@ -5,6 +5,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { IMG } from '../lib/imageMap.js';
 
 export function ServicePDAC() {
   const { isMobile } = useViewport();
@@ -36,7 +37,7 @@ export function ServicePDAC() {
           ))}
         </div>
         <div>
-          <PhotoPlaceholder caption="PDAC letter, marked up" height={isMobile ? 200 : 380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+          <PhotoPlaceholder src={IMG.PDAC_LETTER} caption="PDAC letter, marked up" height={isMobile ? 200 : 380} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
           <div style={{ marginTop: 18, padding: isMobile ? 22 : 28, background: D.plum, color: D.paper, borderRadius: 16 }}>
             <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plumSoft }}>ENGAGEMENT FEE · FLAT</div>
             <div style={{ fontFamily: D.display, fontSize: isMobile ? 52 : 72, letterSpacing: -1.6, marginTop: 10, lineHeight: 1 }}>$2,400</div>

@@ -1,0 +1,77 @@
+/* Maps content keys (SKUs, slugs, segment ids, etc.) to the v1 generated
+   imagery in /public/images/generated/. Source CSV: docs/imagery-prompts.csv. */
+
+const VARIANT = 'v1';
+const base = (id) => `/images/generated/${id}-${VARIANT}.png`;
+
+export const IMG = {
+  HOME_HERO:        base('HOME-01'),
+  ABOUT_FOUNDER:    base('ABOUT-01'),
+  VET_FOUNDER:      base('VET-01'),
+  PDAC_LETTER:      base('PDAC-01'),
+  DIST_PICK_PATH:   base('DIST-01'),
+  EDU_IN_PERSON:    base('EDU-01'),
+  EDU_ONLINE:       base('EDU-02'),
+};
+
+export const PRODUCT_IMG = {
+  'UM-ORTH-0412': base('PROD-01'),
+  'UM-DIAG-0077': base('PROD-02'),
+  'UM-PPE-1108':  base('PROD-03'),
+  'UM-WND-0231':  base('PROD-04'),
+  'UM-IV-5510':   base('PROD-05'),
+  'UM-ORTH-0556': base('PROD-06'),
+  'UM-DIAG-0240': base('PROD-07'),
+  'UM-CAP-9901':  base('PROD-08'),
+  'UM-ORTH-0701': base('PROD-09'),
+  'UM-PPE-1209':  base('PROD-10'),
+  'UM-WND-0455':  base('PROD-11'),
+  'UM-CAP-7720':  base('PROD-12'),
+  'UM-IV-5621':   base('PROD-13'),
+  'UM-DIAG-0341': base('PROD-14'),
+  'UM-ORTH-0892': base('PROD-15'),
+  'UM-PPE-1350':  base('PROD-16'),
+};
+
+export const SEGMENT_IMG = {
+  asc:          base('SOL-01'),
+  pharmacy:     base('SOL-02'),
+  gov:          base('SOL-03'),
+  ems:          base('SOL-04'),
+  distributors: base('SOL-05'),
+};
+
+export const BLOG_IMG = {
+  'mckesson-medsurg-spinoff': base('BLOG-01'),
+  'asc-procedure-bundles-101': base('BLOG-02'),
+  'va-mspv-bpa-explained':    base('BLOG-03'),
+  'tariff-volatility-q2-2026': base('BLOG-04'),
+};
+
+/* Portfolio cases — keyed by index in src/pages/Portfolio.jsx CASES array. */
+export const PORTFOLIO_IMG = [
+  base('PORT-01'),
+  base('PORT-02'),
+  base('PORT-03'),
+  base('PORT-04'),
+  base('PORT-05'),
+  base('PORT-06'),
+];
+
+/* SegmentASC procedure bundles — keyed by index in the inline list. */
+export const ASC_BUNDLE_IMG = [
+  base('ASC-01'),
+  base('ASC-02'),
+  base('ASC-03'),
+  base('ASC-04'),
+  base('ASC-05'),
+  base('ASC-06'),
+];
+
+/* SegmentEMS bundles — keyed by index. */
+export const EMS_BUNDLE_IMG = [
+  base('EMS-01'),
+  base('EMS-02'),
+  base('EMS-03'),
+  base('EMS-04'),
+];

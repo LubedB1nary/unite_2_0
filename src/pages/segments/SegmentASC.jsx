@@ -5,6 +5,7 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { ASC_BUNDLE_IMG } from '../../lib/imageMap.js';
 
 export function SegmentASC() {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ export function SegmentASC() {
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(3,1fr)', gap: 14 }}>
             {[{ name: 'Total knee arthroplasty', cpt: '27447', items: 34, price: 1840, rep: 'Meredith C.' }, { name: 'Cataract extraction + IOL', cpt: '66984', items: 18, price: 612, rep: 'Terrell J.' }, { name: 'Colonoscopy with biopsy', cpt: '45380', items: 22, price: 438, rep: 'Meredith C.' }, { name: 'Shoulder arthroscopy', cpt: '29827', items: 28, price: 1450, rep: 'Aidan P.' }, { name: 'Carpal tunnel release', cpt: '64721', items: 14, price: 298, rep: 'Aidan P.' }, { name: 'Cardiac catheterization', cpt: '93458', items: 41, price: 2910, rep: 'Terrell J.' }].map((b, i) => (
               <div key={i} style={{ background: D.card, borderRadius: 14, border: `1px solid ${D.line}`, overflow: 'hidden' }}>
-                <PhotoPlaceholder caption={`OR tray · ${b.name}`} height={190} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
+                <PhotoPlaceholder src={ASC_BUNDLE_IMG[i]} caption={`OR tray · ${b.name}`} height={190} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} radius={0} />
                 <div style={{ padding: 22 }}>
                   <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>CPT {b.cpt} · {b.items} SKUs</div>
                   <div style={{ fontFamily: D.display, fontSize: 26, letterSpacing: -0.5, marginTop: 10, lineHeight: 1.1 }}>{b.name}</div>
