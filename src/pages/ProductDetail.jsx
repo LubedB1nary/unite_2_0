@@ -5,6 +5,7 @@ import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
+import { Lightbox } from '../components/shared/Lightbox.jsx';
 import { cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
@@ -28,8 +29,26 @@ export function ProductDetail() {
   const stock = inv.reduce((a, b) => a + b.on_hand, 0);
   const tiers = useMemo(() => db.list('pricing', { where: { sku: id }, orderBy: 'min_qty' }), [id]);
   const [qty, setQty] = useState(1);
+  const [lightboxIdx, setLightboxIdx] = useState(-1);
   const tierLabel = tierForQty(qty);
   const activeTier = tiers.slice().reverse().find((t) => qty >= t.min_qty) || tiers[0];
+
+  const gallery = useMemo(() => {
+    const heroSrc = PRODUCT_IMG[id];
+    const thumbs = productThumbs(id);
+    const items = [];
+    if (heroSrc) items.push({ src: heroSrc, alt: product?.name || '', label: 'Hero' });
+    if (thumbs) {
+      ['front', 'back', 'detail', 'packaging'].forEach((angle) => {
+        items.push({
+          src: thumbs[angle],
+          alt: `${product?.name || ''} — ${angle}`,
+          label: angle,
+        });
+      });
+    }
+    return items;
+  }, [id, product?.name]);
 
   if (!product) {
     return (
@@ -56,24 +75,50 @@ export function ProductDetail() {
         </nav>
         <div style={{ maxWidth: 1360, margin: '0 auto', padding: `${isMobile ? 28 : 40}px ${padX}px ${isMobile ? 56 : 80}px`, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.3fr 1fr', gap: isMobile ? 28 : 56 }}>
           <div>
-            <PhotoPlaceholder src={PRODUCT_IMG[product.sku]} caption={product.img} height={isMobile ? 320 : 560} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 10 }}>
-              {(() => {
-                const thumbs = productThumbs(product.sku);
-                return ['front', 'back', 'detail', 'packaging'].map((c) => (
-                  <PhotoPlaceholder
-                    key={c}
-                    src={thumbs?.[c]}
-                    alt={`${product.name} — ${c}`}
-                    caption={c}
-                    height={isMobile ? 70 : 100}
-                    stripeFrom="#ebe3d3"
-                    stripeTo="#ddd1b7"
-                    textColor={D.plum}
-                  />
-                ));
-              })()}
-            </div>
+            <button
+              onClick={() => gallery.length && setLightboxIdx(0)}
+              aria-label={`Open ${product.name} gallery (${gallery.length} images)`}
+              disabled={gallery.length === 0}
+              style={{
+                position: 'relative',
+                display: 'block',
+                width: '100%',
+                padding: 0,
+                background: 'transparent',
+                border: 'none',
+                cursor: gallery.length ? 'zoom-in' : 'default',
+              }}
+            >
+              <PhotoPlaceholder
+                src={PRODUCT_IMG[product.sku]}
+                caption={product.img}
+                alt={product.name}
+                height={isMobile ? 320 : 560}
+                stripeFrom="#ebe3d3"
+                stripeTo="#ddd1b7"
+                textColor={D.plum}
+              />
+              {gallery.length > 1 && (
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    bottom: 14,
+                    right: 14,
+                    background: 'rgba(36, 26, 40, 0.78)',
+                    color: D.paper,
+                    fontFamily: D.mono,
+                    fontSize: 11,
+                    letterSpacing: 1.2,
+                    padding: '6px 12px',
+                    borderRadius: 999,
+                    backdropFilter: 'blur(6px)',
+                  }}
+                >
+                  + {gallery.length - 1} VIEWS
+                </span>
+              )}
+            </button>
           </div>
           <div>
             <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>
@@ -155,6 +200,12 @@ export function ProductDetail() {
         </div>
       </main>
       <Footer />
+      <Lightbox
+        open={lightboxIdx >= 0}
+        startIndex={Math.max(0, lightboxIdx)}
+        images={gallery}
+        onClose={() => setLightboxIdx(-1)}
+      />
     </div>
   );
 }
