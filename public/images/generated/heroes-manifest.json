@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-04-21T16:04:26-0700",
+  "model": "gpt-image-1",
+  "endpoint": "images.edit",
+  "ref_angle": "front",
+  "quality": "high",
+  "total": 15,
+  "ok": 15,
+  "failed": 0,
+  "duration_seconds": 92.1,
+  "rows": {
+    "PROD-02": {
+      "ok": true,
+      "file": "public/images/generated/PROD-02-v1.png",
+      "ref": "public/images/generated/PROD-02-thumb-front.png",
+      "error": null
+    },
+    "PROD-03": {
+      "ok": true,
+      "file": "public/images/generated/PROD-03-v1.png",
+      "ref": "public/images/generated/PROD-03-thumb-front.png",
+      "error": null
+    },
+    "PROD-04": {
+      "ok": true,
+      "file": "public/images/generated/PROD-04-v1.png",
+      "ref": "public/images/generated/PROD-04-thumb-front.png",
+      "error": null
+    },
+    "PROD-05": {
+      "ok": true,
+      "file": "public/images/generated/PROD-05-v1.png",
+      "ref": "public/images/generated/PROD-05-thumb-front.png",
+      "error": null
+    },
+    "PROD-06": {
+      "ok": true,
+      "file": "public/images/generated/PROD-06-v1.png",
+      "ref": "public/images/generated/PROD-06-thumb-front.png",
+      "error": null
+    },
+    "PROD-07": {
+      "ok": true,
+      "file": "public/images/generated/PROD-07-v1.png",
+      "ref": "public/images/generated/PROD-07-thumb-front.png",
+      "error": null
+    },
+    "PROD-08": {
+      "ok": true,
+      "file": "public/images/generated/PROD-08-v1.png",
+      "ref": "public/images/generated/PROD-08-thumb-front.png",
+      "error": null
+    },
+    "PROD-09": {
+      "ok": true,
+      "file": "public/images/generated/PROD-09-v1.png",
+      "ref": "public/images/generated/PROD-09-thumb-front.png",
+      "error": null
+    },
+    "PROD-10": {
+      "ok": true,
+      "file": "public/images/generated/PROD-10-v1.png",
+      "ref": "public/images/generated/PROD-10-thumb-front.png",
+      "error": null
+    },
+    "PROD-11": {
+      "ok": true,
+      "file": "public/images/generated/PROD-11-v1.png",
+      "ref": "public/images/generated/PROD-11-thumb-front.png",
+      "error": null
+    },
+    "PROD-12": {
+      "ok": true,
+      "file": "public/images/generated/PROD-12-v1.png",
+      "ref": "public/images/generated/PROD-12-thumb-front.png",
+      "error": null
+    },
+    "PROD-13": {
+      "ok": true,
+      "file": "public/images/generated/PROD-13-v1.png",
+      "ref": "public/images/generated/PROD-13-thumb-front.png",
+      "error": null
+    },
+    "PROD-14": {
+      "ok": true,
+      "file": "public/images/generated/PROD-14-v1.png",
+      "ref": "public/images/generated/PROD-14-thumb-front.png",
+      "error": null
+    },
+    "PROD-15": {
+      "ok": true,
+      "file": "public/images/generated/PROD-15-v1.png",
+      "ref": "public/images/generated/PROD-15-thumb-front.png",
+      "error": null
+    },
+    "PROD-16": {
+      "ok": true,
+      "file": "public/images/generated/PROD-16-v1.png",
+      "ref": "public/images/generated/PROD-16-thumb-front.png",
+      "error": null
+    }
+  }
+}
