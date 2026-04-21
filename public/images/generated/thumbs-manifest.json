@@ -1,36 +1,15 @@
 {
-  "generated_at": "2026-04-21T15:21:24-0700",
+  "generated_at": "2026-04-21T15:28:05-0700",
   "model": "gpt-image-1",
   "endpoint": "images.edit",
   "hero_version": "v1",
   "quality": "high",
-  "total": 60,
-  "ok": 60,
+  "total": 15,
+  "ok": 15,
   "failed": 0,
-  "duration_seconds": 323.5,
+  "duration_seconds": 98.7,
   "rows": {
     "PROD-01": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-01-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-01-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-01-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-01-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-01-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-01-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -41,27 +20,6 @@
     ],
     "PROD-03": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-03-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-03-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-03-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-03-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-03-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-03-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-03-thumb-packaging.png",
@@ -70,27 +28,6 @@
       }
     ],
     "PROD-04": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-04-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-04-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-04-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -101,27 +38,6 @@
     ],
     "PROD-05": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-05-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-05-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-05-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-05-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-05-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-05-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-05-thumb-packaging.png",
@@ -130,27 +46,6 @@
       }
     ],
     "PROD-06": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-06-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-06-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-06-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-06-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-06-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-06-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -161,27 +56,6 @@
     ],
     "PROD-07": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-07-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-07-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-07-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-07-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-07-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-07-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-07-thumb-packaging.png",
@@ -190,27 +64,6 @@
       }
     ],
     "PROD-08": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-08-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-08-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-08-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-08-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-08-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-08-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -221,27 +74,6 @@
     ],
     "PROD-09": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-09-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-09-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-09-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-09-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-09-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-09-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-09-thumb-packaging.png",
@@ -250,27 +82,6 @@
       }
     ],
     "PROD-10": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-10-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-10-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-10-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-10-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-10-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-10-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -281,27 +92,6 @@
     ],
     "PROD-11": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-11-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-11-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-11-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-11-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-11-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-11-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-11-thumb-packaging.png",
@@ -310,27 +100,6 @@
       }
     ],
     "PROD-12": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-12-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-12-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-12-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-12-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-12-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-12-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -341,27 +110,6 @@
     ],
     "PROD-13": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-13-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-13-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-13-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-13-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-13-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-13-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-13-thumb-packaging.png",
@@ -370,27 +118,6 @@
       }
     ],
     "PROD-14": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-14-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-14-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-14-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-14-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-14-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-14-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,
@@ -401,27 +128,6 @@
     ],
     "PROD-15": [
       {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-15-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-15-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-15-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-15-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-15-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-15-v1.png",
-        "error": null
-      },
-      {
         "angle": "packaging",
         "ok": true,
         "file": "public/images/generated/PROD-15-thumb-packaging.png",
@@ -430,27 +136,6 @@
       }
     ],
     "PROD-16": [
-      {
-        "angle": "front",
-        "ok": true,
-        "file": "public/images/generated/PROD-16-thumb-front.png",
-        "hero_ref": "public/images/generated/PROD-16-v1.png",
-        "error": null
-      },
-      {
-        "angle": "back",
-        "ok": true,
-        "file": "public/images/generated/PROD-16-thumb-back.png",
-        "hero_ref": "public/images/generated/PROD-16-v1.png",
-        "error": null
-      },
-      {
-        "angle": "detail",
-        "ok": true,
-        "file": "public/images/generated/PROD-16-thumb-detail.png",
-        "hero_ref": "public/images/generated/PROD-16-v1.png",
-        "error": null
-      },
       {
         "angle": "packaging",
         "ok": true,

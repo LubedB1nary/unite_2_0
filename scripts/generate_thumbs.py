@@ -47,6 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "docs" / "imagery-prompts.csv"
 OUT_DIR = ROOT / "public" / "images" / "generated"
 MANIFEST_PATH = OUT_DIR / "thumbs-manifest.json"
+LOGO_PATH = ROOT / "public" / "images" / "source" / "um-logo-mark.png"
 
 ANGLES = ("front", "back", "detail", "packaging")
 
@@ -107,6 +108,22 @@ def parse_angle_descriptions(prompt: str) -> Optional[dict[str, str]]:
     return out if found_any else None
 
 
+PACKAGING_BRAND_INSTRUCTION = (
+    "BRAND MARK ON PACKAGING. The SECOND reference image attached is the "
+    "Unite Medical logomark — an orange-to-magenta gradient rounded square "
+    "containing an abstract white 'UM' symbol. Render this exact logomark "
+    "subtly printed on the front face of the kraft retail box / outer "
+    "carton in the scene: small (about 12-18% of the carton's front face "
+    "width), positioned in the upper-left corner of the box, printed flat "
+    "(not embossed, not 3D), with realistic ink-on-cardboard texture. The "
+    "logomark must keep its exact gradient colors and the white UM glyph. "
+    "Do NOT add any wordmark text alongside it. Do NOT add any other "
+    "branding, slogans, or logos. The product itself stays unbranded as "
+    "before — the Unite Medical mark only appears on the kraft outer "
+    "packaging. "
+)
+
+
 @dataclass
 class Job:
     row_id: str
@@ -114,15 +131,18 @@ class Job:
     description: str  # what the angle should show
     hero_path: Path
     out_path: Path
+    extra_refs: list[Path]  # additional reference images beyond hero
 
     def prompt(self) -> str:
-        return (
-            BRAND_PREAMBLE
-            + f"Show the same product as the reference image, but framed as "
-            + f"the {self.angle.upper()} view: {self.description}. "
-            + "Square 1024x1024 thumbnail. Same warm cream seamless paper "
-            + "background, same lighting, same product identity."
+        body = (
+            f"Show the same product as the reference image, but framed as "
+            f"the {self.angle.upper()} view: {self.description}. "
+            f"Square 1024x1024 thumbnail. Same warm cream seamless paper "
+            f"background, same lighting, same product identity."
         )
+        if self.angle == "packaging":
+            body += " " + PACKAGING_BRAND_INSTRUCTION
+        return BRAND_PREAMBLE + body
 
 
 def load_jobs(hero_version: str, only: Optional[set[str]]) -> list[Job]:
@@ -150,6 +170,12 @@ def load_jobs(hero_version: str, only: Optional[set[str]]) -> list[Job]:
                 continue
 
             for angle in ANGLES:
+                # Packaging frames get the Unite Medical logomark as a 2nd
+                # reference image so the model can render brand identity on
+                # the kraft outer carton.
+                extra_refs: list[Path] = []
+                if angle == "packaging" and LOGO_PATH.exists():
+                    extra_refs.append(LOGO_PATH)
                 jobs.append(
                     Job(
                         row_id=rid,
@@ -157,6 +183,7 @@ def load_jobs(hero_version: str, only: Optional[set[str]]) -> list[Job]:
                         description=descriptions[angle],
                         hero_path=hero_path,
                         out_path=OUT_DIR / f"{rid}-thumb-{angle}.png",
+                        extra_refs=extra_refs,
                     )
                 )
 
@@ -193,17 +220,29 @@ async def generate_one(
             attempt += 1
             t0 = time.monotonic()
             try:
-                # Re-open the file each attempt so a retry doesn't read from a
-                # spent stream.
-                with job.hero_path.open("rb") as ref:
+                # Re-open files each attempt so a retry doesn't read from a
+                # spent stream. gpt-image-1 accepts a list of reference
+                # images; we use that to attach the brand logomark on
+                # packaging frames in addition to the product hero.
+                ref_handles = [job.hero_path.open("rb")]
+                for extra in job.extra_refs:
+                    ref_handles.append(extra.open("rb"))
+                try:
+                    image_arg = ref_handles[0] if len(ref_handles) == 1 else ref_handles
                     result = await client.images.edit(
                         model="gpt-image-1",
-                        image=ref,
+                        image=image_arg,
                         prompt=job.prompt(),
                         size="1024x1024",
                         quality=quality,
                         n=1,
                     )
+                finally:
+                    for h in ref_handles:
+                        try:
+                            h.close()
+                        except Exception:  # noqa: BLE001
+                            pass
                 b64 = result.data[0].b64_json
                 job.out_path.write_bytes(base64.b64decode(b64))
                 dur = time.monotonic() - t0
