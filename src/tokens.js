@@ -1,0 +1,17 @@
+export const D = {
+  paper: '#f7f2ea',
+  paperAlt: '#ede5d6',
+  card: '#fbf7ef',
+  ink: '#241a28',
+  ink2: '#564b5c',
+  ink3: '#8f8490',
+  line: '#e3dacd',
+  plum: '#5e2963',
+  plumSoft: '#c8a4cd',
+  terra: '#b8502c',
+  terraSoft: '#e6bfa8',
+  grad: 'linear-gradient(135deg, #f64f00 0%, #c23b6a 55%, #5e2963 100%)',
+  display: '"Fraunces", "Instrument Serif", Georgia, serif',
+  sans: '"Inter", -apple-system, sans-serif',
+  mono: '"IBM Plex Mono", monospace',
+};

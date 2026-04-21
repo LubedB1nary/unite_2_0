@@ -1,0 +1,46 @@
+import { useState } from 'react';
+import { D } from '../tokens.js';
+import { Nav } from '../components/layout/Nav.jsx';
+import { Footer } from '../components/layout/Footer.jsx';
+import { PageHead } from '../components/layout/PageHead.jsx';
+import { Grad } from '../components/shared/Grad.jsx';
+
+const faqs = [
+  ['Do you have minimum order quantities?', 'No. Every SKU in our catalog can be ordered in single units. Volume pricing kicks in at tier breaks but never as a hard floor.'],
+  ['How fast do you ship?', 'Median 48 hours to ASC customers. Orders placed by 3pm ET from Atlanta ship same day.'],
+  ['Do you bill net-30?', 'Yes. Net-30 is standard for approved B2B accounts; net-60 is available on request for public / government entities.'],
+  ['Can I get a quote on something not in your catalog?', "Yes — that's what our Quoting Engine is for. Upload a vendor product sheet and we'll deliver a landed-cost customer quote within a business day."],
+  ['Do you support EDI?', '850, 810, 856 — yes. Punch-out via cXML and OCI for VA / government procurement systems also supported.'],
+  ['How does PDAC approval work for orthotics?', 'All L-code orthotics in our catalog carry current PDAC approval letters. You can download the letter directly from the product page.'],
+];
+
+export function Support() {
+  const [open, setOpen] = useState(0);
+  return (
+    <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
+      <Nav />
+      <PageHead eyebrow="HELP CENTER"
+        title={<>Answers, <Grad>not tickets</Grad>.</>}
+        sub="Common questions, plain-language answers. If we can't resolve it here, your rep will." />
+      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '16px 40px 64px', display: 'grid', gridTemplateColumns: '260px 1fr', gap: 48 }}>
+        <div>
+          {['Ordering & MOQ', 'Shipping & freight', 'Billing & terms', 'Returns', 'Compliance', 'Integrations & EDI', 'Private label'].map((c, i) => (
+            <div key={c} style={{ padding: '11px 14px', borderRadius: 8, fontSize: 13, background: i === 0 ? D.plum : 'transparent', color: i === 0 ? D.paper : D.ink2, fontWeight: i === 0 ? 600 : 500, cursor: 'pointer', marginBottom: 2 }}>{c}</div>
+          ))}
+        </div>
+        <div>
+          {faqs.map(([q, a], i) => (
+            <div key={i} onClick={() => setOpen(open === i ? -1 : i)} style={{ borderTop: i === 0 ? `1px solid ${D.line}` : 'none', borderBottom: `1px solid ${D.line}`, padding: '22px 0', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                <div style={{ fontFamily: D.display, fontSize: 24, letterSpacing: -0.3, lineHeight: 1.2, color: D.ink, flex: 1 }}>{q}</div>
+                <div style={{ fontFamily: D.mono, fontSize: 18, color: D.plum, marginLeft: 24 }}>{open === i ? '−' : '+'}</div>
+              </div>
+              {open === i && <div style={{ fontSize: 15, lineHeight: 1.6, color: D.ink2, marginTop: 14, maxWidth: 760 }}>{a}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}

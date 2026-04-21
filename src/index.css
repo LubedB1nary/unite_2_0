@@ -1,0 +1,7 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f7f2ea; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #241a28; -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+input, select, textarea { font-family: inherit; }
+#root { min-height: 100vh; }
