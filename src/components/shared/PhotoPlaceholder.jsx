@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { D } from '../../tokens.js';
 
 export function PhotoPlaceholder({
@@ -12,7 +13,11 @@ export function PhotoPlaceholder({
   objectPosition = 'center',
   children,
 }) {
-  if (src) {
+  // If the provided src 404s, gracefully fall back to the stripe placeholder
+  // so missing thumbnails don't render a broken image icon.
+  const [errored, setErrored] = useState(false);
+
+  if (src && !errored) {
     return (
       <div
         style={{
@@ -27,6 +32,8 @@ export function PhotoPlaceholder({
           src={src}
           alt={alt || caption || ''}
           loading="lazy"
+          decoding="async"
+          onError={() => setErrored(true)}
           style={{
             width: '100%',
             height: '100%',

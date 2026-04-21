@@ -9,7 +9,7 @@ import { cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
-import { PRODUCT_IMG } from '../lib/imageMap.js';
+import { PRODUCT_IMG, productThumbs } from '../lib/imageMap.js';
 
 function tierForQty(qty) {
   if (qty >= 250) return '250+';
@@ -58,9 +58,21 @@ export function ProductDetail() {
           <div>
             <PhotoPlaceholder src={PRODUCT_IMG[product.sku]} caption={product.img} height={isMobile ? 320 : 560} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 10 }}>
-              {['front', 'back', 'detail', 'packaging'].map((c) => (
-                <PhotoPlaceholder key={c} caption={c} height={isMobile ? 70 : 100} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
-              ))}
+              {(() => {
+                const thumbs = productThumbs(product.sku);
+                return ['front', 'back', 'detail', 'packaging'].map((c) => (
+                  <PhotoPlaceholder
+                    key={c}
+                    src={thumbs?.[c]}
+                    alt={`${product.name} — ${c}`}
+                    caption={c}
+                    height={isMobile ? 70 : 100}
+                    stripeFrom="#ebe3d3"
+                    stripeTo="#ddd1b7"
+                    textColor={D.plum}
+                  />
+                ));
+              })()}
             </div>
           </div>
           <div>
