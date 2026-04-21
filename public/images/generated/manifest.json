@@ -1,769 +1,19 @@
 {
-  "generated_at": "2026-04-21T12:53:26-0700",
+  "generated_at": "2026-04-21T15:40:24-0700",
   "model": "gpt-image-2",
   "quality": "high",
-  "variations_per_row": 3,
-  "total": 144,
-  "ok": 144,
+  "variations_per_row": 1,
+  "total": 15,
+  "ok": 15,
   "failed": 0,
-  "duration_seconds": 704.8,
+  "duration_seconds": 118.8,
   "rows": {
-    "HOME-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/HOME-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/HOME-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/HOME-01-v3.png",
-        "error": null
-      }
-    ],
-    "ABOUT-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/ABOUT-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/ABOUT-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/ABOUT-01-v3.png",
-        "error": null
-      }
-    ],
-    "VET-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/VET-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/VET-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/VET-01-v3.png",
-        "error": null
-      }
-    ],
-    "SOL-01": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-01-v3.png",
-        "error": null
-      }
-    ],
-    "SOL-02": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-02-v3.png",
-        "error": null
-      }
-    ],
-    "SOL-03": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-03-v3.png",
-        "error": null
-      }
-    ],
-    "SOL-04": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-04-v3.png",
-        "error": null
-      }
-    ],
-    "SOL-05": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-05-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-05-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/SOL-05-v3.png",
-        "error": null
-      }
-    ],
-    "BLOG-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-01-v3.png",
-        "error": null
-      }
-    ],
-    "BLOG-02": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-02-v3.png",
-        "error": null
-      }
-    ],
-    "BLOG-03": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-03-v3.png",
-        "error": null
-      }
-    ],
-    "BLOG-04": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/BLOG-04-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-01-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-02": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-02-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-03": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-03-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-04": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-04-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-05": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-05-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-05-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-05-v3.png",
-        "error": null
-      }
-    ],
-    "PORT-06": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-06-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-06-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/PORT-06-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-01": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-01-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-02": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-02-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-03": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-03-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-04": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-04-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-05": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-05-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-05-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-05-v3.png",
-        "error": null
-      }
-    ],
-    "ASC-06": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-06-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-06-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/ASC-06-v3.png",
-        "error": null
-      }
-    ],
-    "EMS-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-01-v3.png",
-        "error": null
-      }
-    ],
-    "EMS-02": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-02-v3.png",
-        "error": null
-      }
-    ],
-    "EMS-03": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-03-v3.png",
-        "error": null
-      }
-    ],
-    "EMS-04": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EMS-04-v3.png",
-        "error": null
-      }
-    ],
-    "PDAC-01": [
-      {
-        "variation": 1,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/PDAC-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/PDAC-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1536",
-        "ok": true,
-        "file": "public/images/generated/PDAC-01-v3.png",
-        "error": null
-      }
-    ],
-    "EDU-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-01-v3.png",
-        "error": null
-      }
-    ],
-    "EDU-02": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-02-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/EDU-02-v3.png",
-        "error": null
-      }
-    ],
-    "DIST-01": [
-      {
-        "variation": 1,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/DIST-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/DIST-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1536x1024",
-        "ok": true,
-        "file": "public/images/generated/DIST-01-v3.png",
-        "error": null
-      }
-    ],
     "PROD-01": [
       {
         "variation": 1,
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-01-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-01-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-01-v3.png",
         "error": null
       }
     ],
@@ -774,20 +24,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-02-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-02-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-02-v3.png",
-        "error": null
       }
     ],
     "PROD-03": [
@@ -796,43 +32,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-03-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-03-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-03-v3.png",
-        "error": null
-      }
-    ],
-    "PROD-04": [
-      {
-        "variation": 1,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-04-v3.png",
         "error": null
       }
     ],
@@ -843,20 +42,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-05-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-05-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-05-v3.png",
-        "error": null
       }
     ],
     "PROD-06": [
@@ -865,20 +50,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-06-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-06-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-06-v3.png",
         "error": null
       }
     ],
@@ -889,20 +60,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-07-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-07-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-07-v3.png",
-        "error": null
       }
     ],
     "PROD-08": [
@@ -911,20 +68,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-08-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-08-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-08-v3.png",
         "error": null
       }
     ],
@@ -935,20 +78,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-09-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-09-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-09-v3.png",
-        "error": null
       }
     ],
     "PROD-10": [
@@ -957,20 +86,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-10-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-10-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-10-v3.png",
         "error": null
       }
     ],
@@ -981,20 +96,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-11-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-11-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-11-v3.png",
-        "error": null
       }
     ],
     "PROD-12": [
@@ -1003,20 +104,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-12-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-12-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-12-v3.png",
         "error": null
       }
     ],
@@ -1027,20 +114,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-13-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-13-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-13-v3.png",
-        "error": null
       }
     ],
     "PROD-14": [
@@ -1049,20 +122,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-14-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-14-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-14-v3.png",
         "error": null
       }
     ],
@@ -1073,20 +132,6 @@
         "ok": true,
         "file": "public/images/generated/PROD-15-v1.png",
         "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-15-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-15-v3.png",
-        "error": null
       }
     ],
     "PROD-16": [
@@ -1095,20 +140,6 @@
         "size": "1024x1024",
         "ok": true,
         "file": "public/images/generated/PROD-16-v1.png",
-        "error": null
-      },
-      {
-        "variation": 2,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-16-v2.png",
-        "error": null
-      },
-      {
-        "variation": 3,
-        "size": "1024x1024",
-        "ok": true,
-        "file": "public/images/generated/PROD-16-v3.png",
         "error": null
       }
     ]

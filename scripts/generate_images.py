@@ -90,6 +90,27 @@ SKIP_IDS = {
     "HOME-FEATURED-04",
 }
 
+# Strips the "Plus 4 alternate-angle thumbs..." instruction from PROD prompts
+# so the hero image renders the product alone (no contact-sheet composition).
+# The thumb angles are now generated separately by scripts/generate_thumbs.py
+# via the images.edit endpoint with the hero as a reference.
+THUMB_BLOCK_RE = re.compile(
+    # Lazy-match from "Plus 4 ..." (any flavor — "angle thumbs", "alternate
+    # angle thumbs", "alternate-angle frames", etc.) through the closing
+    # "4) packaging (...)." sentence. Handles every variant in the CSV.
+    r"\s*Plus\s+4\b[\s\S]*?\b4\)\s*packaging[^.]*\.\s*",
+    re.IGNORECASE,
+)
+
+
+def clean_hero_prompt(prompt: str) -> str:
+    """Remove the embedded thumbnail-strip instruction so the hero renders
+    as a standalone product shot."""
+    cleaned = THUMB_BLOCK_RE.sub(" ", prompt)
+    # Collapse the double-spaces left behind by the substitution.
+    cleaned = re.sub(r"  +", " ", cleaned).strip()
+    return cleaned
+
 
 @dataclass
 class Job:
@@ -113,7 +134,13 @@ def load_jobs(variations: int, only: Optional[set[str]]) -> list[Job]:
             if only and rid not in only:
                 continue
             size = parse_size(row["dimensions"])
-            full_prompt = BRAND_PREAMBLE + row["prompt"].strip()
+            scene_prompt = row["prompt"].strip()
+            # Strip the embedded thumbnail-strip instruction so PROD heroes
+            # render as standalone product shots (thumbs are generated
+            # separately via scripts/generate_thumbs.py).
+            if rid.startswith("PROD-"):
+                scene_prompt = clean_hero_prompt(scene_prompt)
+            full_prompt = BRAND_PREAMBLE + scene_prompt
             for v in range(1, variations + 1):
                 jobs.append(
                     Job(
