@@ -3,59 +3,54 @@ import { useNavigate } from 'react-router-dom';
 import { D } from '../tokens.js';
 import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
-import { UMLogo } from '../components/shared/Logo.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
-import { useCart, cartStore } from '../store/cart.js';
+import { PartnerMarquee } from '../components/shared/PartnerMarquee.jsx';
+import { cartStore } from '../store/cart.js';
 import { PRODUCTS, SEGMENTS, TRUST_METRICS } from '../data/index.js';
 
 function Hero() {
   const navigate = useNavigate();
   return (
-    <div style={{ padding: '80px 40px 48px', background: D.paper, position: 'relative', overflow: 'hidden' }}>
-      <div style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 64, alignItems: 'end' }}>
-        <div>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 8, height: 8, borderRadius: 4, background: D.plum }} />
-            FDA-REGISTERED · VETERAN-OWNED · EST. 2018
+    <section
+      id="main"
+      style={{ background: D.paper, position: 'relative', overflow: 'hidden' }}
+    >
+      <div style={{ padding: '80px 40px 48px' }}>
+        <div className="um-fade-up" style={{ maxWidth: 1360, margin: '0 auto', display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: 64, alignItems: 'end' }}>
+          <div>
+            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 8, height: 8, borderRadius: 4, background: D.plum }} />
+              FDA-REGISTERED · VETERAN-OWNED · EST. 2018
+            </div>
+            <h1 style={{ fontFamily: D.display, fontWeight: 400, fontSize: 104, lineHeight: 0.94, letterSpacing: -2.6, color: D.ink, margin: 0 }}>
+              The supply chain <Grad>behind</Grad><br />American medicine.
+            </h1>
+            <p style={{ fontSize: 18, lineHeight: 1.55, color: D.ink2, maxWidth: 540, marginTop: 28 }}>
+              We import, warehouse, and distribute for the people who keep the OR running — surgery centers, pharmacies, first responders, the VA. No minimum orders. Landed cost, transparent.
+            </p>
+            <div style={{ display: 'flex', gap: 10, marginTop: 36, flexWrap: 'wrap' }}>
+              <button onClick={() => navigate('/catalog')} style={{ background: D.plum, color: D.paper, border: 'none', padding: '15px 24px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: D.sans, display: 'flex', alignItems: 'center', gap: 10 }}>
+                Get pricing <Icon.arrow />
+              </button>
+              <button onClick={() => navigate('/quote')} style={{ background: 'transparent', color: D.ink, border: `1.5px solid ${D.ink}`, padding: '15px 24px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: D.sans }}>
+                Quote a non-stocked item
+              </button>
+            </div>
           </div>
-          <h1 style={{ fontFamily: D.display, fontWeight: 400, fontSize: 104, lineHeight: 0.94, letterSpacing: -2.6, color: D.ink, margin: 0 }}>
-            The supply chain <Grad>behind</Grad><br />American medicine.
-          </h1>
-          <div style={{ fontSize: 18, lineHeight: 1.55, color: D.ink2, maxWidth: 540, marginTop: 28 }}>
-            We import, warehouse, and distribute for the people who keep the OR running — surgery centers, pharmacies, first responders, the VA. No minimum orders. Landed cost, transparent.
-          </div>
-          <div style={{ display: 'flex', gap: 10, marginTop: 36 }}>
-            <button onClick={() => navigate('/catalog')} style={{ background: D.plum, color: D.paper, border: 'none', padding: '15px 24px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: D.sans, display: 'flex', alignItems: 'center', gap: 10 }}>
-              Get pricing <Icon.arrow />
-            </button>
-            <button onClick={() => navigate('/quote')} style={{ background: 'transparent', color: D.ink, border: `1.5px solid ${D.ink}`, padding: '15px 24px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: D.sans }}>
-              Quote a non-stocked item
-            </button>
-          </div>
-        </div>
-        <div style={{ position: 'relative' }}>
-          <PhotoPlaceholder caption="warehouse floor, golden hour" height={500} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
-          <div style={{ position: 'absolute', left: -32, bottom: 40, background: D.paper, border: `1px solid ${D.line}`, padding: 22, width: 300, boxShadow: '0 20px 40px -20px rgba(36,26,40,.25)' }}>
-            <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>LIVE INVENTORY</div>
-            <div style={{ fontFamily: D.display, fontSize: 44, lineHeight: 1, color: D.ink, marginTop: 8, letterSpacing: -0.8 }}>1.24M <span style={{ fontSize: 15, fontFamily: D.sans, color: D.ink2, letterSpacing: 0 }}>units</span></div>
-            <div style={{ fontSize: 12, color: D.ink2, marginTop: 6 }}>across Atlanta, Reno, Dallas</div>
+          <div style={{ position: 'relative' }}>
+            <PhotoPlaceholder caption="warehouse floor, golden hour" height={500} stripeFrom="#e8ddcd" stripeTo="#d9c8b0" textColor={D.plum} />
+            <div style={{ position: 'absolute', left: -32, bottom: 40, background: D.paper, border: `1px solid ${D.line}`, padding: 22, width: 300, boxShadow: '0 20px 40px -20px rgba(36,26,40,.25)' }}>
+              <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>LIVE INVENTORY</div>
+              <div style={{ fontFamily: D.display, fontSize: 44, lineHeight: 1, color: D.ink, marginTop: 8, letterSpacing: -0.8 }}>1.24M <span style={{ fontSize: 15, fontFamily: D.sans, color: D.ink2, letterSpacing: 0 }}>units</span></div>
+              <div style={{ fontSize: 12, color: D.ink2, marginTop: 6 }}>across Atlanta, Reno, Dallas</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Marquee() {
-  const partners = ['VA HEALTH', 'CVS', 'GOPUFF', 'AMAZON', 'PUBLIX', 'DEPT. OF VETERAN AFFAIRS', 'KAISER', 'ASCOA', 'SURGERY PARTNERS'];
-  return (
-    <div style={{ borderTop: `1px solid ${D.line}`, borderBottom: `1px solid ${D.line}`, background: D.paperAlt, padding: '22px 0', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', gap: 80, whiteSpace: 'nowrap', fontFamily: D.mono, fontSize: 13, letterSpacing: 3, color: D.ink2 }}>
-        {[...partners, ...partners].map((p, i) => <span key={i}>{p}</span>)}
-      </div>
-    </div>
+      <PartnerMarquee />
+    </section>
   );
 }
 
@@ -200,7 +195,6 @@ export function Homepage() {
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink }}>
       <Nav />
       <Hero />
-      <Marquee />
       <Metrics />
       <SegmentRouter />
       <Featured />

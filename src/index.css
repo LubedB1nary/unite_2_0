@@ -1,7 +1,151 @@
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: #f7f2ea; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #241a28; -webkit-font-smoothing: antialiased; }
-button { font-family: inherit; }
-a { text-decoration: none; color: inherit; }
-input, select, textarea { font-family: inherit; }
-#root { min-height: 100vh; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f7f2ea;
+}
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #241a28;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid #5e2963;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.um-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 9999;
+  background: #241a28;
+  color: #f7f2ea;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+}
+.um-skip-link:focus {
+  left: 16px;
+}
+
+@keyframes umMarquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.um-marquee {
+  display: flex;
+  width: max-content;
+  animation: umMarquee 38s linear infinite;
+  will-change: transform;
+}
+
+.um-marquee--reverse {
+  animation-direction: reverse;
+}
+
+.um-marquee--slow {
+  animation-duration: 60s;
+}
+
+.um-marquee-pause:hover .um-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes umPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+@keyframes umFadeUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.um-fade-up {
+  animation: umFadeUp 0.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .um-marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}

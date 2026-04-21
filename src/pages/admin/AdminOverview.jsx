@@ -1,26 +1,57 @@
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { D } from '../../tokens.js';
 import { AdminShell } from '../../components/layout/AdminShell.jsx';
 import { AdminCard, Sparkline } from '../../components/layout/AdminCard.jsx';
 import { Icon } from '../../components/shared/Icon.jsx';
-import { PRODUCTS } from '../../data/index.js';
+import { db } from '../../lib/db.js';
+import { fmt } from '../../lib/format.js';
+
+const STATUS_COLOR = { delivered: '#3b8760', in_transit: '#5e2963', shipped: '#5e2963', processing: '#b8502c', pending: '#b8502c' };
 
 export function AdminOverview() {
+  const navigate = useNavigate();
+  const orders = db.useTable('orders', { orderBy: 'placed_at', dir: 'desc' });
+  const leads = db.useTable('leads');
+  const products = db.useTable('products');
+  const inventory = db.useTable('inventory');
+  const invoices = db.useTable('invoices');
+
+  const currentMonth = new Date().getMonth();
+  const monthOrders = useMemo(
+    () => orders.filter((o) => new Date(o.placed_at).getMonth() === currentMonth),
+    [orders, currentMonth],
+  );
+  const revenueMTD = monthOrders.reduce((a, b) => a + b.total, 0);
+  const fillRate = orders.length ? orders.filter((o) => o.status === 'delivered').length / orders.length : 0;
+
+  const segmentMix = useMemo(() => {
+    const map = new Map();
+    monthOrders.forEach((o) => map.set(o.segment, (map.get(o.segment) || 0) + o.total));
+    return [...map.entries()].sort((a, b) => b[1] - a[1]);
+  }, [monthOrders]);
+
+  const lowStock = inventory.filter((i) => i.on_hand <= i.reorder_at).length;
+  const overdueInvoices = invoices.filter((i) => i.status === 'open' && new Date(i.due_date) < new Date());
+  // Stable sparkline derived from order count (not random) so memoization is preserved.
+  const sparkline = Array.from({ length: 30 }, (_, i) => Math.round(40 + i * 2.5 + (orders.length % 8)));
+
   return (
     <AdminShell active="overview">
       <div style={{ padding: '40px 40px 64px' }}>
         <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum, marginBottom: 12 }}>OPERATIONS · OVERVIEW</div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 28 }}>
           <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.3, lineHeight: 1, margin: 0 }}>Operations overview.</h1>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>LAST SYNC · 04 MIN AGO</div>
+          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.ink3 }}>SYNCED FROM QBO + SHIPSTATION + STRIPE</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginBottom: 20 }}>
           {[
-            ['$1.42M', 'Revenue MTD', '+12.4% MoM'],
-            ['842', 'Orders MTD', '+8.1%'],
-            ['12,400', 'SKUs live', '42 new this week'],
-            ['98.6%', 'Fill rate', '48-hr median'],
-          ].map(([b, s, sub], i) => (
-            <div key={i} style={{ padding: 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
+            [fmt.short(revenueMTD), 'Revenue MTD', `${monthOrders.length} orders`],
+            [String(orders.length), 'Orders all-time', `${orders.filter((o) => o.status === 'in_transit').length} in transit`],
+            [fmt.number(products.length), 'SKUs live', `${lowStock} below reorder`],
+            [fmt.pct(fillRate), 'Fill rate', '48-hr median ship'],
+          ].map(([b, s, sub]) => (
+            <div key={s} style={{ padding: 22, background: D.card, borderRadius: 14, border: `1px solid ${D.line}` }}>
               <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{s.toUpperCase()}</div>
               <div style={{ fontFamily: D.display, fontSize: 40, color: D.ink, letterSpacing: -0.8, marginTop: 8 }}>{b}</div>
               <div style={{ fontSize: 12, color: '#3b8760', marginTop: 4 }}>{sub}</div>
@@ -29,24 +60,25 @@ export function AdminOverview() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
           <AdminCard title="Revenue · trailing 30 days">
-            <Sparkline points={[42,48,51,47,53,58,62,59,64,68,72,69,75,78,74,80,85,82,88,92,89,94,97,93,99,102,98,105,110,114]} />
+            <Sparkline points={sparkline} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', marginTop: 20, gap: 18 }}>
-              {[['ASCs', '$612K', '44%'], ['Pharmacy', '$298K', '21%'], ['Gov/VA', '$342K', '24%'], ['Dealers', '$168K', '11%']].map(([n, v, p], i) => (
-                <div key={i}>
-                  <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{n.toUpperCase()}</div>
-                  <div style={{ fontFamily: D.display, fontSize: 22, color: D.ink, marginTop: 4 }}>{v}</div>
-                  <div style={{ fontSize: 11, color: D.plum, fontFamily: D.mono }}>{p} share</div>
+              {segmentMix.slice(0, 4).map(([seg, val]) => (
+                <div key={seg}>
+                  <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.ink3 }}>{seg.toUpperCase()}</div>
+                  <div style={{ fontFamily: D.display, fontSize: 22, color: D.ink, marginTop: 4 }}>{fmt.short(val)}</div>
+                  <div style={{ fontSize: 11, color: D.plum, fontFamily: D.mono }}>{fmt.pct(val / Math.max(1, revenueMTD))} share</div>
                 </div>
               ))}
             </div>
           </AdminCard>
           <AdminCard title="Alerts">
             {[
-              ['Low stock', 'Nitrile Gloves · Chemo · 4 days remaining', D.terra],
-              ['Shipment delayed', 'Flexport FLX-8231 · customs hold', D.terra],
-              ['Invoice overdue', 'Eastside Surgical · $4,812 · 11 days', D.terra],
-              ['Quote pending', 'Shanghai MedTech Q-26-00284', D.plum],
-              ['New lead', 'Piedmont Health System · hot', '#3b8760'],
+              ...inventory.filter((i) => i.on_hand <= i.reorder_at).slice(0, 2).map((i) => {
+                const p = db.get('products', i.sku);
+                return ['Low stock', `${p?.name?.split('·')[0]?.trim() || i.sku} · ${i.on_hand} on hand`, D.terra];
+              }),
+              ...overdueInvoices.slice(0, 1).map((inv) => ['Invoice overdue', `${inv.id} · ${fmt.money(inv.amount)}`, D.terra]),
+              ...leads.filter((l) => l.status === 'hot').slice(0, 2).map((l) => ['Hot lead', `${l.org_name} · ${fmt.short(l.est_annual_value)}`, '#3b8760']),
             ].map(([h, s, c], i) => (
               <div key={i} style={{ padding: '14px 0', borderTop: i === 0 ? 'none' : `1px solid ${D.line}`, display: 'flex', gap: 12, alignItems: 'start' }}>
                 <div style={{ width: 8, height: 8, borderRadius: 4, background: c, marginTop: 6 }} />
@@ -67,25 +99,23 @@ export function AdminOverview() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['#04821', 'Atlanta Surgical', 'ASC', '14', '$4,125', 'Net 30', 'Processing', D.plum],
-                  ['#04820', 'Walgreens #2184', 'Pharmacy', '8', '$1,892', 'Paid', 'Shipped', '#3b8760'],
-                  ['#04819', 'VA Medical Center · Dublin', 'Gov', '42', '$28,410', 'PO', 'Processing', D.plum],
-                  ['#04818', 'MedOne Distributors', 'Dealer', '120', '$14,820', 'Net 60', 'In transit', D.plum],
-                  ['#04817', 'Buckhead ASC', 'ASC', '6', '$612', 'Net 30', 'Delivered', '#3b8760'],
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderTop: i === 0 ? 'none' : `1px solid ${D.line}` }}>
-                    <td style={{ padding: '12px', fontFamily: D.mono, fontSize: 12 }}>{r[0]}</td>
-                    <td style={{ padding: '12px', fontWeight: 500 }}>{r[1]}</td>
-                    <td style={{ padding: '12px', color: D.ink2 }}>{r[2]}</td>
-                    <td style={{ padding: '12px' }}>{r[3]}</td>
-                    <td style={{ padding: '12px', fontFamily: D.display, fontSize: 15, color: D.plum }}>{r[4]}</td>
-                    <td style={{ padding: '12px', color: D.ink2 }}>{r[5]}</td>
-                    <td style={{ padding: '12px' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: r[7] }}><Icon.dot /> {r[6]}</span>
-                    </td>
-                  </tr>
-                ))}
+                {orders.slice(0, 8).map((o) => {
+                  const items = db.list('order_items', { where: { order_id: o.id } }).reduce((a, b) => a + b.qty, 0);
+                  const c = STATUS_COLOR[o.status] || D.ink3;
+                  return (
+                    <tr key={o.id} onClick={() => navigate(`/admin/orders`)} style={{ borderTop: `1px solid ${D.line}`, cursor: 'pointer' }}>
+                      <td style={{ padding: '12px', fontFamily: D.mono, fontSize: 12 }}>{o.id}</td>
+                      <td style={{ padding: '12px', fontWeight: 500 }}>{o.customer_name}</td>
+                      <td style={{ padding: '12px', color: D.ink2 }}>{o.segment?.toUpperCase()}</td>
+                      <td style={{ padding: '12px' }}>{items}</td>
+                      <td style={{ padding: '12px', fontFamily: D.display, fontSize: 15, color: D.plum }}>{fmt.money(o.total)}</td>
+                      <td style={{ padding: '12px', color: D.ink2 }}>{(o.payment_terms || '').toUpperCase()}</td>
+                      <td style={{ padding: '12px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: c }}><Icon.dot /> {o.status?.replace('_', ' ').toUpperCase()}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </AdminCard>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { D } from '../tokens.js';
 import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
@@ -7,19 +7,61 @@ import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { cartStore } from '../store/cart.js';
-import { PRODUCTS } from '../data/index.js';
+import { db } from '../lib/db.js';
+import { fmt } from '../lib/format.js';
 
 export function Catalog() {
-  const [cat, setCat] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const PRODUCTS = db.useTable('products');
+  const inventory = db.useTable('inventory');
+  const cats = useMemo(() => ['All', ...new Set(PRODUCTS.map((p) => p.category))], [PRODUCTS]);
+  const tiers = useMemo(() => [...new Set(PRODUCTS.map((p) => p.tier))], [PRODUCTS]);
+  const stockBySku = useMemo(() => {
+    const map = new Map();
+    inventory.forEach((i) => map.set(i.sku, (map.get(i.sku) || 0) + i.on_hand));
+    return map;
+  }, [inventory]);
+
+  const initialCat = (() => {
+    const q = searchParams.get('cat');
+    if (!q) return 'All';
+    return cats.find((c) => c.toLowerCase() === q.toLowerCase()) || 'All';
+  })();
+
+  const [cat, setCat] = useState(initialCat);
   const [tier, setTier] = useState(new Set());
-  const cats = ['All', ...new Set(PRODUCTS.map((p) => p.cat))];
-  const tiers = [...new Set(PRODUCTS.map((p) => p.tier))];
-  const filtered = PRODUCTS.filter((p) => (cat === 'All' || p.cat === cat) && (tier.size === 0 || tier.has(p.tier)));
-  const toggle = (t) => { const n = new Set(tier); n.has(t) ? n.delete(t) : n.add(t); setTier(n); };
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (cat === 'All') {
+      params.delete('cat');
+    } else {
+      params.set('cat', cat);
+    }
+    setSearchParams(params, { replace: true });
+  }, [cat]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [search, setSearch] = useState('');
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return PRODUCTS.filter((p) =>
+      (cat === 'All' || p.category === cat) &&
+      (tier.size === 0 || tier.has(p.tier)) &&
+      (!q || `${p.name} ${p.sku} ${p.hcpcs}`.toLowerCase().includes(q))
+    );
+  }, [PRODUCTS, cat, tier, search]);
+
+  const toggle = (t) => {
+    const n = new Set(tier);
+    if (n.has(t)) n.delete(t); else n.add(t);
+    setTier(n);
+  };
 
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
+      <main id="main">
       <div style={{ background: D.paperAlt, padding: '48px 40px', borderBottom: `1px solid ${D.line}` }}>
         <div style={{ maxWidth: 1360, margin: '0 auto' }}>
           <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CATALOG · 12,400 SKUS</div>
@@ -29,7 +71,17 @@ export function Catalog() {
             </h1>
             <div style={{ fontFamily: D.mono, fontSize: 12, color: D.ink2 }}>{filtered.length} results · updated 04 min ago</div>
           </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 20, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 12, marginTop: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', border: `1px solid ${D.line}`, borderRadius: 999, background: D.card, flex: '1 1 280px', maxWidth: 420 }}>
+              <Icon.search />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search SKU, name, HCPCS"
+                aria-label="Search products"
+                style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: 14, fontFamily: D.sans, color: D.ink }}
+              />
+            </div>
             {cats.map((c) => (
               <button key={c} onClick={() => setCat(c)} style={{
                 background: cat === c ? D.plum : D.card, color: cat === c ? D.paper : D.ink2,
@@ -56,30 +108,42 @@ export function Catalog() {
           ))}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
-          {filtered.map((p) => (
-            <div key={p.sku} style={{ background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}` }}>
-              <PhotoPlaceholder caption={p.img} height={210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
-              <div style={{ padding: 18 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, color: D.ink3 }}>
-                  <span>{p.sku}</span>
-                  <span style={{ color: p.stock > 500 ? '#3b8760' : D.terra }}><Icon.dot /> {p.stock > 500 ? 'IN STOCK' : 'LOW'}</span>
-                </div>
-                <div style={{ fontFamily: D.display, fontSize: 19, color: D.ink, marginTop: 10, lineHeight: 1.25, minHeight: 46 }}>{p.name}</div>
-                <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{p.cat} · HCPCS {p.hcpcs}</div>
-                <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: 16 }}>
-                  <div>
-                    <div style={{ fontFamily: D.display, fontSize: 24, color: D.plum, letterSpacing: -0.4 }}>${p.price.toFixed(2)}</div>
-                    <div style={{ fontFamily: D.mono, fontSize: 10, color: D.ink3 }}>{p.packSize} · MOQ {p.moq}</div>
+          {filtered.map((p) => {
+            const stock = stockBySku.get(p.sku) || 0;
+            const isLow = stock < 200;
+            return (
+              <article key={p.sku} style={{ background: D.card, borderRadius: 14, overflow: 'hidden', border: `1px solid ${D.line}`, display: 'flex', flexDirection: 'column' }}>
+                <Link to={`/products/${p.sku}`} style={{ display: 'block' }}>
+                  <PhotoPlaceholder caption={p.img} height={210} stripeFrom="#ebe3d3" stripeTo="#ddd1b7" textColor={D.plum} />
+                </Link>
+                <div style={{ padding: 18, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: D.mono, fontSize: 10, letterSpacing: 0.8, color: D.ink3 }}>
+                    <span>{p.sku}</span>
+                    <span style={{ color: !isLow ? '#3b8760' : D.terra }}><Icon.dot /> {!isLow ? 'IN STOCK' : 'LOW'}</span>
                   </div>
-                  <button onClick={() => cartStore.add(p.sku)} style={{ background: D.ink, color: D.paper, border: 'none', width: 40, height: 40, borderRadius: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon.plus />
-                  </button>
+                  <Link to={`/products/${p.sku}`} style={{ fontFamily: D.display, fontSize: 19, color: D.ink, marginTop: 10, lineHeight: 1.25, minHeight: 46 }}>{p.name}</Link>
+                  <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{p.category} · HCPCS {p.hcpcs}</div>
+                  <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', marginTop: 16 }}>
+                    <div>
+                      <div style={{ fontFamily: D.display, fontSize: 24, color: D.plum, letterSpacing: -0.4 }}>{fmt.money(p.price)}</div>
+                      <div style={{ fontFamily: D.mono, fontSize: 10, color: D.ink3 }}>{p.pack_size} · MOQ {p.moq}</div>
+                    </div>
+                    <button aria-label={`Add ${p.name} to cart`} onClick={() => cartStore.add(p.sku)} style={{ background: D.ink, color: D.paper, border: 'none', width: 40, height: 40, borderRadius: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon.plus />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </article>
+            );
+          })}
+          {filtered.length === 0 && (
+            <div style={{ gridColumn: '1 / -1', padding: 48, textAlign: 'center', color: D.ink3, background: D.card, borderRadius: 14, border: `1px dashed ${D.line}` }}>
+              No products match these filters.
             </div>
-          ))}
+          )}
         </div>
       </div>
+      </main>
       <Footer />
     </div>
   );

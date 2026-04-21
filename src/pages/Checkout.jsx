@@ -1,7 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { D } from '../tokens.js';
 import { Nav } from '../components/layout/Nav.jsx';
+import { useCart, cartStore } from '../store/cart.js';
+import { auth } from '../lib/auth.js';
+import { db } from '../lib/db.js';
+import { placeOrder } from '../lib/orders.js';
+import { fmt } from '../lib/format.js';
 
 function Section({ title, children }) {
   return (
@@ -12,91 +17,192 @@ function Section({ title, children }) {
   );
 }
 
+const SHIPPING_OPTIONS = [
+  { id: 'fedex_ground', label: 'Standard ground', sub: '3-5 business days', cost: 0 },
+  { id: 'fedex_2day', label: 'Expedited', sub: '2 business days', cost: 38 },
+  { id: 'fedex_overnight', label: 'Same-day (Atlanta metro)', sub: 'By 6pm today', cost: 95 },
+];
+
+const PAYMENT_OPTIONS = [
+  { id: 'net30', label: 'Net 30', sub: 'on file' },
+  { id: 'ach', label: 'ACH', sub: 'primary' },
+  { id: 'wire', label: 'Wire transfer', sub: '' },
+  { id: 'card', label: 'Credit card', sub: '**4412' },
+];
+
 export function Checkout() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(2);
-  const steps = ['Address', 'Shipping', 'Payment', 'Review'];
+  const session = auth.use();
+  const cart = useCart();
+  const items = cart.items;
+  const subtotal = cart.subtotal;
+  const orgId = session?.org_id || 'org_atlsurgical';
+  const addresses = useMemo(() => db.list('addresses', { where: { org_id: orgId } }), [orgId]);
+  const orgRow = useMemo(() => db.get('organizations', orgId), [orgId]);
+
+  const [activeAddrId, setActiveAddrId] = useState(addresses.find((a) => a.is_default)?.id || addresses[0]?.id);
+  const [shipMethod, setShipMethod] = useState('fedex_ground');
+  const [paymentMethod, setPaymentMethod] = useState(orgRow?.terms === 'card' ? 'card' : 'net30');
+  const [poNumber, setPoNumber] = useState('');
+  const [placing, setPlacing] = useState(false);
+  const [error, setError] = useState(null);
+
+  const ship = SHIPPING_OPTIONS.find((s) => s.id === shipMethod);
+  const freight = subtotal > 500 ? 0 : ship.cost || 42;
+  const total = +(subtotal + freight).toFixed(2);
+
+  const stepActive = items.length === 0 ? 1 : 4;
+
+  async function handlePlace() {
+    if (items.length === 0) return;
+    setError(null); setPlacing(true);
+    try {
+      const result = await placeOrder({
+        customer: {
+          user_id: session?.user_id || 'usr_demo',
+          org_id: orgId,
+          org_name: orgRow?.name || 'Atlanta Surgical Center',
+          segment: orgRow?.segment || 'asc',
+        },
+        address: addresses.find((a) => a.id === activeAddrId),
+        items: items.map((it) => ({ sku: it.sku, name: it.name, qty: it.qty, unit_price: it.unit_price })),
+        payment_terms: paymentMethod === 'card' ? 'card' : paymentMethod === 'wire' ? 'wire' : paymentMethod === 'ach' ? 'ach' : 'net30',
+        payment_method: paymentMethod,
+        po_number: poNumber || null,
+        ship_method: shipMethod,
+      });
+      cartStore.clear();
+      navigate(`/orders/${result.order.id}/confirmed`);
+    } catch (e) {
+      setError(e?.message || 'Could not place the order. Try again.');
+    } finally {
+      setPlacing(false);
+    }
+  }
+
+  if (items.length === 0) {
+    return (
+      <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
+        <Nav />
+        <main id="main" style={{ maxWidth: 640, margin: '0 auto', padding: '120px 24px', textAlign: 'center' }}>
+          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.4, color: D.plum }}>CHECKOUT</div>
+          <h1 style={{ fontFamily: D.display, fontSize: 56, fontWeight: 400, letterSpacing: -1.2, lineHeight: 1, margin: '12px 0 18px' }}>Cart is empty.</h1>
+          <p style={{ color: D.ink2 }}>Add a few items first — we&apos;ll be right here.</p>
+          <button onClick={() => navigate('/catalog')} style={{ marginTop: 18, background: D.plum, color: D.paper, border: 'none', padding: '13px 22px', borderRadius: 999, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}>Open the catalog</button>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />
-      <div style={{ padding: '52px 40px 24px' }}>
-        <div style={{ maxWidth: 1360, margin: '0 auto' }}>
-          <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CHECKOUT · ORDER #UM-2026-04821</div>
-          <h1 style={{ fontFamily: D.display, fontSize: 64, fontWeight: 400, letterSpacing: -1.5, margin: '10px 0 20px', lineHeight: 1 }}>
-            Almost <em>there</em>.
-          </h1>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {steps.map((s, i) => (
-              <div key={s} onClick={() => setStep(i + 1)} style={{ flex: 1, cursor: 'pointer' }}>
-                <div style={{ height: 3, background: i < step ? D.plum : D.line, borderRadius: 2 }} />
-                <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, marginTop: 10, color: i < step ? D.plum : D.ink3 }}>{String(i + 1).padStart(2, '0')} · {s.toUpperCase()}</div>
-              </div>
-            ))}
+      <main id="main">
+        <div style={{ padding: '52px 40px 24px' }}>
+          <div style={{ maxWidth: 1360, margin: '0 auto' }}>
+            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1.2, color: D.plum }}>CHECKOUT · {items.length} LINES · {cart.count} UNITS</div>
+            <h1 style={{ fontFamily: D.display, fontSize: 64, fontWeight: 400, letterSpacing: -1.5, margin: '10px 0 20px', lineHeight: 1 }}>
+              Almost <em>there</em>.
+            </h1>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {['Address', 'Shipping', 'Payment', 'Review'].map((s, i) => (
+                <div key={s} style={{ flex: 1 }}>
+                  <div style={{ height: 3, background: i < stepActive ? D.plum : D.line, borderRadius: 2 }} />
+                  <div style={{ fontFamily: D.mono, fontSize: 10, letterSpacing: 1, marginTop: 10, color: i < stepActive ? D.plum : D.ink3 }}>{String(i + 1).padStart(2, '0')} · {s.toUpperCase()}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 36 }}>
-        <div style={{ display: 'grid', gap: 20 }}>
-          <Section title="01 · Shipping address">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[['Atlanta Surgical Center · Main', '3320 Piedmont Rd NE, Atlanta GA 30305', true], ['Buckhead Surgery · Dock B', '4470 Lenox Ave, Atlanta GA 30326', false], ['Marietta ASC', '1020 Windy Hill Rd, Marietta GA 30080', false], ['+ Add new address', '', false]].map(([name, addr, active], i) => (
-                <div key={i} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${active ? D.plum : D.line}`, background: active ? D.paperAlt : D.card, cursor: 'pointer', display: 'flex', alignItems: 'start', gap: 10 }}>
-                  <div style={{ width: 16, height: 16, borderRadius: 8, border: `1.5px solid ${active ? D.plum : D.ink3}`, marginTop: 3, background: active ? D.plum : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: D.paper, fontSize: 10 }}>{active ? '✓' : ''}</div>
+
+        <div style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 40px 80px', display: 'grid', gridTemplateColumns: '1fr 380px', gap: 36 }}>
+          <div style={{ display: 'grid', gap: 20 }}>
+            <Section title="01 · Shipping address">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                {addresses.map((a) => (
+                  <button key={a.id} onClick={() => setActiveAddrId(a.id)} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${activeAddrId === a.id ? D.plum : D.line}`, background: activeAddrId === a.id ? D.paperAlt : D.card, cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'start', gap: 10, fontFamily: D.sans, color: D.ink }}>
+                    <div style={{ width: 16, height: 16, borderRadius: 8, border: `1.5px solid ${activeAddrId === a.id ? D.plum : D.ink3}`, marginTop: 3, background: activeAddrId === a.id ? D.plum : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: D.paper, fontSize: 10 }}>{activeAddrId === a.id ? '✓' : ''}</div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 14 }}>{a.label}</div>
+                      <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{a.line1} · {a.city}, {a.state} {a.zip}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="02 · Shipping method">
+              {SHIPPING_OPTIONS.map((s, i) => (
+                <button key={s.id} onClick={() => setShipMethod(s.id)} style={{ width: '100%', textAlign: 'left', background: 'transparent', border: 'none', padding: 16, borderBottom: i === SHIPPING_OPTIONS.length - 1 ? 'none' : `1px solid ${D.line}`, display: 'grid', gridTemplateColumns: '20px 1fr auto', gap: 14, alignItems: 'center', cursor: 'pointer', fontFamily: D.sans, color: D.ink }}>
+                  <div style={{ width: 16, height: 16, borderRadius: 8, border: `1.5px solid ${shipMethod === s.id ? D.plum : D.ink3}`, background: shipMethod === s.id ? D.plum : 'transparent' }} />
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 14 }}>{name}</div>
-                    {addr && <div style={{ fontSize: 12, color: D.ink2, marginTop: 4 }}>{addr}</div>}
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{s.label}</div>
+                    <div style={{ fontSize: 12, color: D.ink2, marginTop: 2 }}>{s.sub}</div>
                   </div>
-                </div>
+                  <div style={{ fontFamily: D.display, fontSize: 18, color: D.plum }}>{s.cost === 0 ? 'Free' : fmt.money(s.cost, { cents: false })}</div>
+                </button>
               ))}
-            </div>
-          </Section>
-          <Section title="02 · Shipping method">
-            {[['Standard ground', '3-5 business days', 'Free', true], ['Expedited', 'Next business day', '$38', false], ['Same-day (Atlanta metro)', 'By 6pm today', '$95', false]].map(([n, d, p, a], i) => (
-              <div key={i} style={{ padding: 16, borderBottom: i === 2 ? 'none' : `1px solid ${D.line}`, display: 'grid', gridTemplateColumns: '20px 1fr auto', gap: 14, alignItems: 'center' }}>
-                <div style={{ width: 16, height: 16, borderRadius: 8, border: `1.5px solid ${a ? D.plum : D.ink3}`, background: a ? D.plum : 'transparent' }} />
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 14 }}>{n}</div>
-                  <div style={{ fontSize: 12, color: D.ink2, marginTop: 2 }}>{d}</div>
-                </div>
-                <div style={{ fontFamily: D.display, fontSize: 18, color: D.plum }}>{p}</div>
+            </Section>
+
+            <Section title="03 · Payment">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+                {PAYMENT_OPTIONS.map((p) => (
+                  <button key={p.id} onClick={() => setPaymentMethod(p.id)} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${paymentMethod === p.id ? D.plum : D.line}`, background: paymentMethod === p.id ? D.paperAlt : D.card, cursor: 'pointer', fontFamily: D.sans, textAlign: 'left', color: D.ink }}>
+                    <div style={{ fontFamily: D.display, fontSize: 18, letterSpacing: -0.3 }}>{p.label}</div>
+                    <div style={{ fontSize: 11, color: D.ink3, fontFamily: D.mono, marginTop: 4, letterSpacing: 0.8 }}>{p.sub.toUpperCase()}</div>
+                  </button>
+                ))}
               </div>
-            ))}
-          </Section>
-          <Section title="03 · Payment">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
-              {[['Net 30', 'on file'], ['ACH', 'primary'], ['Wire transfer', ''], ['Credit card', '**4412']].map(([n, s], i) => (
-                <div key={i} style={{ padding: 16, borderRadius: 12, border: `1.5px solid ${i === 0 ? D.plum : D.line}`, background: i === 0 ? D.paperAlt : D.card, cursor: 'pointer' }}>
-                  <div style={{ fontFamily: D.display, fontSize: 18, letterSpacing: -0.3 }}>{n}</div>
-                  <div style={{ fontSize: 11, color: D.ink3, fontFamily: D.mono, marginTop: 4, letterSpacing: 0.8 }}>{s.toUpperCase()}</div>
-                </div>
-              ))}
+              <div style={{ marginTop: 16, padding: 14, borderRadius: 10, background: D.paperAlt, fontSize: 13, color: D.ink2 }}>
+                PO # (optional) — <input value={poNumber} onChange={(e) => setPoNumber(e.target.value)} placeholder="Enter customer PO" style={{ border: 'none', background: 'transparent', outline: 'none', fontFamily: D.sans, fontSize: 13, color: D.ink, minWidth: 200 }} />
+              </div>
+            </Section>
+
+            <Section title="04 · Review line items">
+              <div style={{ display: 'grid', gap: 8 }}>
+                {items.map((it) => (
+                  <div key={it.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: 16, padding: '8px 0', fontSize: 13, alignItems: 'center' }}>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{it.name}</div>
+                      <div style={{ fontFamily: D.mono, fontSize: 11, color: D.ink3 }}>{it.sku}</div>
+                    </div>
+                    <div style={{ color: D.ink2 }}>× {it.qty}</div>
+                    <div style={{ fontFamily: D.display, fontSize: 16, color: D.plum, minWidth: 80, textAlign: 'right' }}>{fmt.money(it.qty * it.unit_price)}</div>
+                  </div>
+                ))}
+              </div>
+            </Section>
+          </div>
+
+          <div>
+            <div style={{ position: 'sticky', top: 120, background: D.plum, color: D.paper, borderRadius: 16, padding: 28 }}>
+              <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft }}>ORDER · {items.length} ITEMS</div>
+              <div style={{ marginTop: 18, display: 'grid', gap: 12, fontSize: 13 }}>
+                {items.slice(0, 5).map((it) => (
+                  <div key={it.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: 12 }}>
+                    <span style={{ color: D.plumSoft, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.name.split('·')[0].trim()}</span>
+                    <span style={{ color: D.plumSoft }}>× {it.qty}</span>
+                    <span>{fmt.money(it.qty * it.unit_price)}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ height: 1, background: 'rgba(255,255,255,.18)', margin: '20px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: D.plumSoft }}>
+                <span>Freight</span><span>{freight === 0 ? 'Free' : fmt.money(freight)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginTop: 16 }}>
+                <div style={{ fontFamily: D.mono, fontSize: 11, color: D.plumSoft }}>TOTAL</div>
+                <div style={{ fontFamily: D.display, fontSize: 40, letterSpacing: -1 }}>{fmt.money(total)}</div>
+              </div>
+              {error && <div style={{ marginTop: 14, padding: 10, background: 'rgba(255,255,255,.12)', borderRadius: 8, fontSize: 12 }}>{error}</div>}
+              <button disabled={placing} onClick={handlePlace} style={{ marginTop: 20, width: '100%', background: D.paper, color: D.plum, border: 'none', padding: 14, borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: placing ? 'wait' : 'pointer', opacity: placing ? 0.7 : 1 }}>
+                {placing ? 'Placing order…' : 'Place order'}
+              </button>
+              <div style={{ marginTop: 12, fontFamily: D.mono, fontSize: 10, letterSpacing: 1, color: D.plumSoft, textAlign: 'center' }}>SYNCS TO QBO · SHIPSTATION · STRIPE</div>
             </div>
-            <div style={{ marginTop: 16, padding: 14, borderRadius: 10, background: D.paperAlt, fontSize: 13, color: D.ink2 }}>
-              PO # (optional) — <input placeholder="Enter customer PO" style={{ border: 'none', background: 'transparent', outline: 'none', fontFamily: D.sans, fontSize: 13, color: D.ink }} />
-            </div>
-          </Section>
-        </div>
-        <div>
-          <div style={{ position: 'sticky', top: 120, background: D.plum, color: D.paper, borderRadius: 16, padding: 28 }}>
-            <div style={{ fontFamily: D.mono, fontSize: 11, letterSpacing: 1, color: D.plumSoft }}>ORDER · 3 ITEMS</div>
-            <div style={{ marginTop: 18, display: 'grid', gap: 12, fontSize: 13 }}>
-              {[['Knee Brace · L-1832', '× 12', '$985.20'], ['Nitrile Gloves · Chemo', '× 40', '$420.00'], ['3-in-1 Test · Covid/Flu/RSV', '× 20', '$2,720.00']].map((r, i) => (
-                <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: 12 }}>
-                  <span style={{ color: D.plumSoft }}>{r[0]}</span>
-                  <span style={{ color: D.plumSoft }}>{r[1]}</span>
-                  <span>{r[2]}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ height: 1, background: 'rgba(255,255,255,.18)', margin: '20px 0' }} />
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-              <div style={{ fontFamily: D.mono, fontSize: 11, color: D.plumSoft }}>TOTAL</div>
-              <div style={{ fontFamily: D.display, fontSize: 40, letterSpacing: -1 }}>$4,125.20</div>
-            </div>
-            <button onClick={() => navigate('/orders/284712/confirmed')} style={{ marginTop: 20, width: '100%', background: D.paper, color: D.plum, border: 'none', padding: 14, borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Place order</button>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

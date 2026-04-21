@@ -1,102 +1,138 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { Homepage } from './pages/Homepage.jsx';
-import { Catalog } from './pages/Catalog.jsx';
-import { Quote } from './pages/Quote.jsx';
-import { ProductDetail } from './pages/ProductDetail.jsx';
-import { Cart } from './pages/Cart.jsx';
-import { Checkout } from './pages/Checkout.jsx';
-import { OrderSuccess } from './pages/OrderSuccess.jsx';
-import { TrackOrder } from './pages/TrackOrder.jsx';
-import { About } from './pages/About.jsx';
-import { Contact } from './pages/Contact.jsx';
-import { Support } from './pages/Support.jsx';
-import { Locations } from './pages/Locations.jsx';
-import { Blog } from './pages/Blog.jsx';
-import { BlogPost } from './pages/BlogPost.jsx';
-import { Resources } from './pages/Resources.jsx';
-import { Services } from './pages/Services.jsx';
-import { ServiceDistribution } from './pages/ServiceDistribution.jsx';
-import { ServicePDAC } from './pages/ServicePDAC.jsx';
-import { ServiceDealer } from './pages/ServiceDealer.jsx';
-import { ServiceEducation } from './pages/ServiceEducation.jsx';
-import { SegmentASC } from './pages/segments/SegmentASC.jsx';
-import { SegmentGov } from './pages/segments/SegmentGov.jsx';
-import { SegmentPharmacy } from './pages/segments/SegmentPharmacy.jsx';
-import { SegmentEMS } from './pages/segments/SegmentEMS.jsx';
-import { SegmentDealers } from './pages/segments/SegmentDealers.jsx';
-import { Login } from './pages/Login.jsx';
-import { Register } from './pages/Register.jsx';
-import { Dashboard } from './pages/Dashboard.jsx';
-import { AccountSettings } from './pages/AccountSettings.jsx';
-import { Invoices } from './pages/Invoices.jsx';
-import { AdminOverview } from './pages/admin/AdminOverview.jsx';
-import { AdminAnalytics } from './pages/admin/AdminAnalytics.jsx';
-import { AdminInventory } from './pages/admin/AdminInventory.jsx';
-import { AdminCRM } from './pages/admin/AdminCRM.jsx';
-import { AdminOrders } from './pages/admin/AdminOrders.jsx';
-import { AdminCMS } from './pages/admin/AdminCMS.jsx';
-import { AdminVendorApproval } from './pages/admin/AdminVendorApproval.jsx';
+import { ScrollToTop } from './components/layout/ScrollToTop.jsx';
+import { PageLoader } from './components/layout/PageLoader.jsx';
+import { Bootstrap } from './components/layout/Bootstrap.jsx';
+
+const Homepage = lazy(() => import('./pages/Homepage.jsx').then((m) => ({ default: m.Homepage })));
+const Catalog = lazy(() => import('./pages/Catalog.jsx').then((m) => ({ default: m.Catalog })));
+const Quote = lazy(() => import('./pages/Quote.jsx').then((m) => ({ default: m.Quote })));
+const ProductDetail = lazy(() => import('./pages/ProductDetail.jsx').then((m) => ({ default: m.ProductDetail })));
+const Cart = lazy(() => import('./pages/Cart.jsx').then((m) => ({ default: m.Cart })));
+const Checkout = lazy(() => import('./pages/Checkout.jsx').then((m) => ({ default: m.Checkout })));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess.jsx').then((m) => ({ default: m.OrderSuccess })));
+const TrackOrder = lazy(() => import('./pages/TrackOrder.jsx').then((m) => ({ default: m.TrackOrder })));
+const About = lazy(() => import('./pages/About.jsx').then((m) => ({ default: m.About })));
+const Contact = lazy(() => import('./pages/Contact.jsx').then((m) => ({ default: m.Contact })));
+const Support = lazy(() => import('./pages/Support.jsx').then((m) => ({ default: m.Support })));
+const Locations = lazy(() => import('./pages/Locations.jsx').then((m) => ({ default: m.Locations })));
+const Blog = lazy(() => import('./pages/Blog.jsx').then((m) => ({ default: m.Blog })));
+const BlogPost = lazy(() => import('./pages/BlogPost.jsx').then((m) => ({ default: m.BlogPost })));
+const Resources = lazy(() => import('./pages/Resources.jsx').then((m) => ({ default: m.Resources })));
+const Solutions = lazy(() => import('./pages/Solutions.jsx').then((m) => ({ default: m.Solutions })));
+const Compliance = lazy(() => import('./pages/Compliance.jsx').then((m) => ({ default: m.Compliance })));
+const VeteranOwned = lazy(() => import('./pages/VeteranOwned.jsx').then((m) => ({ default: m.VeteranOwned })));
+const Careers = lazy(() => import('./pages/Careers.jsx').then((m) => ({ default: m.Careers })));
+const Portfolio = lazy(() => import('./pages/Portfolio.jsx').then((m) => ({ default: m.Portfolio })));
+const Procurement = lazy(() => import('./pages/Procurement.jsx').then((m) => ({ default: m.Procurement })));
+const CodingResources = lazy(() => import('./pages/CodingResources.jsx').then((m) => ({ default: m.CodingResources })));
+const Privacy = lazy(() => import('./pages/legal/Legal.jsx').then((m) => ({ default: m.Privacy })));
+const Terms = lazy(() => import('./pages/legal/Legal.jsx').then((m) => ({ default: m.Terms })));
+const Returns = lazy(() => import('./pages/legal/Legal.jsx').then((m) => ({ default: m.Returns })));
+const ShippingPage = lazy(() => import('./pages/legal/Legal.jsx').then((m) => ({ default: m.Shipping })));
+const Services = lazy(() => import('./pages/Services.jsx').then((m) => ({ default: m.Services })));
+const ServiceDistribution = lazy(() => import('./pages/ServiceDistribution.jsx').then((m) => ({ default: m.ServiceDistribution })));
+const ServicePDAC = lazy(() => import('./pages/ServicePDAC.jsx').then((m) => ({ default: m.ServicePDAC })));
+const ServiceDealer = lazy(() => import('./pages/ServiceDealer.jsx').then((m) => ({ default: m.ServiceDealer })));
+const ServiceEducation = lazy(() => import('./pages/ServiceEducation.jsx').then((m) => ({ default: m.ServiceEducation })));
+const SegmentASC = lazy(() => import('./pages/segments/SegmentASC.jsx').then((m) => ({ default: m.SegmentASC })));
+const SegmentGov = lazy(() => import('./pages/segments/SegmentGov.jsx').then((m) => ({ default: m.SegmentGov })));
+const SegmentPharmacy = lazy(() => import('./pages/segments/SegmentPharmacy.jsx').then((m) => ({ default: m.SegmentPharmacy })));
+const SegmentEMS = lazy(() => import('./pages/segments/SegmentEMS.jsx').then((m) => ({ default: m.SegmentEMS })));
+const SegmentDealers = lazy(() => import('./pages/segments/SegmentDealers.jsx').then((m) => ({ default: m.SegmentDealers })));
+const Login = lazy(() => import('./pages/Login.jsx').then((m) => ({ default: m.Login })));
+const Register = lazy(() => import('./pages/Register.jsx').then((m) => ({ default: m.Register })));
+const Dashboard = lazy(() => import('./pages/Dashboard.jsx').then((m) => ({ default: m.Dashboard })));
+const AccountSettings = lazy(() => import('./pages/AccountSettings.jsx').then((m) => ({ default: m.AccountSettings })));
+const Invoices = lazy(() => import('./pages/Invoices.jsx').then((m) => ({ default: m.Invoices })));
+const AdminOverview = lazy(() => import('./pages/admin/AdminOverview.jsx').then((m) => ({ default: m.AdminOverview })));
+const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics.jsx').then((m) => ({ default: m.AdminAnalytics })));
+const AdminInventory = lazy(() => import('./pages/admin/AdminInventory.jsx').then((m) => ({ default: m.AdminInventory })));
+const AdminCRM = lazy(() => import('./pages/admin/AdminCRM.jsx').then((m) => ({ default: m.AdminCRM })));
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders.jsx').then((m) => ({ default: m.AdminOrders })));
+const AdminCMS = lazy(() => import('./pages/admin/AdminCMS.jsx').then((m) => ({ default: m.AdminCMS })));
+const AdminVendorApproval = lazy(() => import('./pages/admin/AdminVendorApproval.jsx').then((m) => ({ default: m.AdminVendorApproval })));
+const AdminQuotes = lazy(() => import('./pages/admin/AdminQuotes.jsx').then((m) => ({ default: m.AdminQuotes })));
+const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers.jsx').then((m) => ({ default: m.AdminCustomers })));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Storefront */}
-        <Route path="/" element={<Homepage />} />
-        <Route path="/catalog" element={<Catalog />} />
-        <Route path="/quote" element={<Quote />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
+      <a href="#main" className="um-skip-link">Skip to content</a>
+      <ScrollToTop />
+      <Bootstrap />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/quote" element={<Quote />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
 
-        {/* Shopping flow */}
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders/:id/confirmed" element={<OrderSuccess />} />
-        <Route path="/orders/:id/track" element={<TrackOrder />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders/:id/confirmed" element={<OrderSuccess />} />
+          <Route path="/orders/:id/track" element={<TrackOrder />} />
 
-        {/* Brand / about */}
-        <Route path="/about" element={<About />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/about/veteran-owned" element={<VeteranOwned />} />
+          <Route path="/compliance" element={<Compliance />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/procurement" element={<Procurement />} />
 
-        {/* Marketing */}
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/locations" element={<Locations />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/resources" element={<Resources />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/locations" element={<Locations />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/coding" element={<CodingResources />} />
 
-        {/* Services */}
-        <Route path="/services" element={<Services />} />
-        <Route path="/services/distribution" element={<ServiceDistribution />} />
-        <Route path="/services/pdac" element={<ServicePDAC />} />
-        <Route path="/services/dealer" element={<ServiceDealer />} />
-        <Route path="/services/education" element={<ServiceEducation />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/returns" element={<Returns />} />
+          <Route path="/shipping" element={<ShippingPage />} />
 
-        {/* Segments */}
-        <Route path="/segments/asc" element={<SegmentASC />} />
-        <Route path="/segments/gov" element={<SegmentGov />} />
-        <Route path="/segments/pharmacy" element={<SegmentPharmacy />} />
-        <Route path="/segments/ems" element={<SegmentEMS />} />
-        <Route path="/segments/distributors" element={<SegmentDealers />} />
+          <Route path="/solutions" element={<Solutions />} />
+          <Route path="/solutions/asc" element={<Navigate to="/segments/asc" replace />} />
+          <Route path="/solutions/pharmacy" element={<Navigate to="/segments/pharmacy" replace />} />
+          <Route path="/solutions/government" element={<Navigate to="/segments/gov" replace />} />
+          <Route path="/solutions/distributors" element={<Navigate to="/segments/distributors" replace />} />
+          <Route path="/solutions/ems" element={<Navigate to="/segments/ems" replace />} />
 
-        {/* Auth */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/distribution" element={<ServiceDistribution />} />
+          <Route path="/services/pdac" element={<ServicePDAC />} />
+          <Route path="/services/dealer" element={<ServiceDealer />} />
+          <Route path="/services/education" element={<ServiceEducation />} />
 
-        {/* Account */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/account/settings" element={<AccountSettings />} />
-        <Route path="/account/invoices" element={<Invoices />} />
+          <Route path="/segments/asc" element={<SegmentASC />} />
+          <Route path="/segments/gov" element={<SegmentGov />} />
+          <Route path="/segments/pharmacy" element={<SegmentPharmacy />} />
+          <Route path="/segments/ems" element={<SegmentEMS />} />
+          <Route path="/segments/distributors" element={<SegmentDealers />} />
 
-        {/* Admin */}
-        <Route path="/admin" element={<AdminOverview />} />
-        <Route path="/admin/analytics" element={<AdminAnalytics />} />
-        <Route path="/admin/inventory" element={<AdminInventory />} />
-        <Route path="/admin/crm" element={<AdminCRM />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
-        <Route path="/admin/cms" element={<AdminCMS />} />
-        <Route path="/admin/vendors" element={<AdminVendorApproval />} />
-      </Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/account/settings" element={<AccountSettings />} />
+          <Route path="/account/invoices" element={<Invoices />} />
+
+          <Route path="/admin" element={<AdminOverview />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+          <Route path="/admin/inventory" element={<AdminInventory />} />
+          <Route path="/admin/crm" element={<AdminCRM />} />
+          <Route path="/admin/customers" element={<AdminCustomers />} />
+          <Route path="/admin/quotes" element={<AdminQuotes />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/cms" element={<AdminCMS />} />
+          <Route path="/admin/vendors" element={<AdminVendorApproval />} />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
