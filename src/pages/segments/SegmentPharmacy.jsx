@@ -4,10 +4,17 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PageHead } from '../../components/layout/PageHead.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 
 export function SegmentPharmacy() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Independent Pharmacies — diversify past the DIR fee',
+    description:
+      'Private-label diagnostics, PDAC-approved DME, and Clyne Health telehealth integration for independent neighborhood pharmacies. Drop-ship to store or to patient.',
+    canonical: '/segments/pharmacy',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

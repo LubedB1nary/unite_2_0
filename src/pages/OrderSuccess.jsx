@@ -7,6 +7,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const FALLBACK_REP = { name: 'Miguel Vasquez', phone: '(678) 555-0180', email: 'miguel@unitemedical.com' };
 
@@ -15,6 +16,7 @@ export function OrderSuccess() {
   const { id } = useParams();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Order confirmed', noindex: true });
   const order = db.useRow('orders', id);
   const items = db.useTable('order_items', { where: { order_id: id } });
   const ship = db.useTable('shipments', { where: { order_id: id } })[0];

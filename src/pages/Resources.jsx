@@ -5,6 +5,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const codes = [
   ['L1832', 'Knee orthosis, adjustable knee joints, positional orthosis', 'Orthotics', 48],
@@ -20,6 +21,12 @@ const codes = [
 export function Resources() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Resources — HCPCS reference for medical supplies',
+    description:
+      'Searchable HCPCS Level II reference cross-linked to Unite Medical SKUs. Current through the latest CMS update.',
+    canonical: '/resources',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

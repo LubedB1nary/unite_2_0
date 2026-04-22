@@ -4,10 +4,17 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PageHead } from '../../components/layout/PageHead.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 
 export function SegmentDealers() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Regional Distributors — white-label, drop-ship, FDA-registered import',
+    description:
+      'Plug your catalog into our supply chain. White-label and private-label programs, EDI 850/855/856, transparent landed cost, FDA-registered import partner.',
+    canonical: '/segments/distributors',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -6,6 +6,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const CODES = [
   { code: 'L1832', cat: 'Orthotics · Knee', desc: 'Knee orthosis (KO), adjustable knee joints, positional orthosis, off-the-shelf.', billable: true, pdac: true, ours: 'UM-ORTH-0412' },
@@ -24,6 +25,12 @@ export function CodingResources() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
   const [q, setQ] = useState('');
+  useSEO({
+    title: 'HCPCS coding reference for Unite Medical SKUs',
+    description:
+      'Quick lookup of the HCPCS Level II codes Unite Medical products bill against. Search by code, name, or keyword. PDAC-approved L-codes flagged.',
+    canonical: '/resources/coding',
+  });
   const [cat, setCat] = useState('All');
   const cats = useMemo(() => ['All', ...new Set(CODES.map((c) => c.cat))], []);
 

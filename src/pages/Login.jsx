@@ -5,10 +5,12 @@ import { UMLogo } from '../components/shared/Logo.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { auth } from '../lib/auth.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 export function Login() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
+  useSEO({ title: 'Sign in', description: 'Sign in to your Unite Medical B2B account.', canonical: '/login', noindex: true });
   const [email, setEmail] = useState('sarah@atlanta-surgical.com');
   const [password, setPassword] = useState('demo');
   const [submitting, setSubmitting] = useState(false);

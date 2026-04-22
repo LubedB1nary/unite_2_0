@@ -7,6 +7,7 @@ import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO, articleSchema, breadcrumbSchema } from '../lib/seo.js';
 import { BLOG_IMG } from '../lib/imageMap.js';
 
 function MarkdownLite({ text = '' }) {
@@ -35,6 +36,20 @@ export function BlogPost() {
     if (post) db.update('blog_posts', post.id, { views: (post.views || 0) + 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  useSEO(post ? {
+    title: post.title,
+    description: post.excerpt,
+    canonical: `/blog/${post.slug}`,
+    type: 'article',
+    jsonLd: [
+      articleSchema(post),
+      breadcrumbSchema([
+        { name: 'Field notes', path: '/blog' },
+        { name: post.title, path: `/blog/${post.slug}` },
+      ]),
+    ],
+  } : { title: 'Post not found', noindex: true });
 
   if (!post) {
     return (

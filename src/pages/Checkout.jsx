@@ -8,6 +8,7 @@ import { db } from '../lib/db.js';
 import { placeOrder } from '../lib/orders.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 function Section({ title, children }) {
   return (
@@ -37,6 +38,7 @@ export function Checkout() {
   const cart = useCart();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Checkout', canonical: '/checkout', noindex: true });
   const items = cart.items;
   const subtotal = cart.subtotal;
   const orgId = session?.org_id || 'org_atlsurgical';

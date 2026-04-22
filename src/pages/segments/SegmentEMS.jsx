@@ -5,11 +5,18 @@ import { PageHead } from '../../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 import { EMS_BUNDLE_IMG } from '../../lib/imageMap.js';
 
 export function SegmentEMS() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'First Responders & EMS — trauma kits, NFPA-aligned restock',
+    description:
+      'CoTCCC-compliant IFAKs, mass-casualty rapid-response packs, monthly per-rig restock subscriptions. Built by an Army logistics officer for fire, EMS, and law enforcement.',
+    canonical: '/segments/ems',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

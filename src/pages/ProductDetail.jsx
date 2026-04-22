@@ -20,6 +20,7 @@ import {
   relatedProducts,
   productStockByWarehouse,
 } from '../lib/productCopy.js';
+import { useSEO, productSchema, breadcrumbSchema } from '../lib/seo.js';
 
 function tierForQty(qty) {
   if (qty >= 250) return '250+';
@@ -67,6 +68,22 @@ export function ProductDetail() {
   }, [id, product?.name]);
 
   const description = useMemo(() => (product ? productDescription(product) : []), [product]);
+
+  useSEO(product ? {
+    title: product.name,
+    description: `${product.name} — ${product.category}, ${product.pack_size}.${product.hcpcs && product.hcpcs !== '—' ? ` HCPCS ${product.hcpcs}.` : ''} ${stock.toLocaleString()} units in stock, 48-hour median ship.`,
+    canonical: `/products/${product.sku}`,
+    type: 'product',
+    ogImage: PRODUCT_IMG[product.sku],
+    jsonLd: [
+      productSchema(product, { stock, image: PRODUCT_IMG[product.sku] }),
+      breadcrumbSchema([
+        { name: 'Catalog', path: '/catalog' },
+        { name: product.category, path: `/catalog?cat=${encodeURIComponent(product.category)}` },
+        { name: product.name, path: `/products/${product.sku}` },
+      ]),
+    ],
+  } : { title: 'Product not found', noindex: true });
   const highlights = useMemo(() => (product ? productHighlights(product) : []), [product]);
   const compliance = useMemo(() => (product ? productCompliance(product) : []), [product]);
   const documents = useMemo(() => (product ? productDocuments(product) : []), [product]);

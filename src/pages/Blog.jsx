@@ -8,12 +8,19 @@ import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { BLOG_IMG } from '../lib/imageMap.js';
 
 export function Blog() {
   const navigate = useNavigate();
   const { isMobile, isTablet } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Field notes — market takes, compliance walkthroughs, ops notes',
+    description:
+      'Procurement intelligence, ASC operations, government contracting walkthroughs, and policy commentary from the people running an FDA-registered medical-supply distributor.',
+    canonical: '/blog',
+  });
   const allPosts = db.useTable('blog_posts', { where: { published: true }, orderBy: 'posted_at', dir: 'desc' });
   const cats = useMemo(() => ['All', ...new Set(allPosts.map((p) => p.category))], [allPosts]);
   const [cat, setCat] = useState('All');

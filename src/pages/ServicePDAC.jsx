@@ -5,11 +5,18 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { IMG } from '../lib/imageMap.js';
 
 export function ServicePDAC() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'PDAC consulting — get your L-codes right the first time',
+    description:
+      'Three-phase PDAC engagement: audit, submission, appeal. 180+ submissions across orthotic bracing and DME. 84% first-appeal success. Flat $2,400 per L-code.',
+    canonical: '/services/pdac',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -10,6 +10,7 @@ import { cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { PRODUCT_IMG } from '../lib/imageMap.js';
 
 export function Catalog() {
@@ -46,6 +47,16 @@ export function Catalog() {
   }, [cat]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [search, setSearch] = useState('');
+
+  useSEO({
+    title: cat === 'All'
+      ? 'Catalog · 12,400 medical-supply SKUs'
+      : `${cat} · Catalog`,
+    description: cat === 'All'
+      ? 'Search 12,400 in-stock medical supply SKUs across orthotics, diagnostics, PPE, wound care, equipment, and pharmaceuticals. Veteran-owned, FDA-registered. No MOQs.'
+      : `${cat} from Unite Medical — in-stock, no MOQs, 48-hour median ship. Veteran-owned, FDA-registered, MSPV-listed catalog.`,
+    canonical: cat === 'All' ? '/catalog' : `/catalog?cat=${encodeURIComponent(cat)}`,
+  });
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();

@@ -4,10 +4,17 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PageHead } from '../../components/layout/PageHead.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 
 export function SegmentGov() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Government & VA — MSPV BPA, Berry compliant, SDVOSB',
+    description:
+      'MSPV BPA 36C24123A0077 holder. CAGE 8MK70. Berry-compliant Medava PPE. SDVOSB-verified. Punch-out (cXML/OCI), GSA Advantage, set-asides honored.',
+    canonical: '/segments/gov',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

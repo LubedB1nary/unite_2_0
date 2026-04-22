@@ -8,6 +8,7 @@ import { auth } from '../lib/auth.js';
 import { db } from '../lib/db.js';
 import { fmt, uid } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const TABS = ['Profile', 'Team & access', 'Saved addresses', 'Billing & terms', 'Integrations', 'Audit log'];
 
@@ -16,6 +17,7 @@ export function AccountSettings() {
   const session = auth.use();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Account settings', noindex: true });
   const orgId = session?.org_id || null;
   const profile = db.useRow('profiles', session?.user_id || '__none__');
   const org = db.useRow('organizations', orgId || '__none__');

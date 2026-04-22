@@ -8,12 +8,19 @@ import { db } from '../lib/db.js';
 import { hubspot, gmail } from '../lib/services.js';
 import { uid } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const REASONS = ['New account', 'Quote · stocked SKU', 'Quote · non-stocked import', 'Government / VA', 'Dealer program', 'Support'];
 
 export function Contact() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Contact — call us, we answer',
+    description:
+      'Talk to a Unite Medical rep on first ring. Sales (678) 555-0142, customer service (678) 555-0180, government desk (678) 555-0219, dealer program (678) 555-0255. Mon–Fri 7a–7p ET.',
+    canonical: '/contact',
+  });
   const [form, setForm] = useState({ first: '', last: '', org: '', email: '', message: '', reason: 'New account', route_to_rep: true });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(null);

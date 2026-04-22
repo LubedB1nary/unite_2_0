@@ -11,6 +11,7 @@ import { cartStore } from '../store/cart.js';
 import { PRODUCTS, SEGMENTS, TRUST_METRICS } from '../data/index.js';
 import { IMG, PRODUCT_IMG } from '../lib/imageMap.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO, organizationSchema, websiteSchema } from '../lib/seo.js';
 
 function Hero() {
   const navigate = useNavigate();
@@ -248,6 +249,14 @@ function CTA() {
 }
 
 export function Homepage() {
+  useSEO({
+    title: 'The supply chain behind American medicine',
+    description:
+      'Veteran-owned, FDA-registered wholesale medical supply for ASCs, pharmacies, government, EMS, and regional distributors. 12,400 SKUs, no MOQs, 48-hour median ship from Atlanta · Reno · Dallas.',
+    canonical: '/',
+    type: 'website',
+    jsonLd: [organizationSchema(), websiteSchema()],
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink }}>
       <Nav />

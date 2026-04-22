@@ -4,6 +4,7 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PageHead } from '../../components/layout/PageHead.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 
 /** Shared layout for short-form legal/policy pages. */
 export function LegalShell({ eyebrow, title, lastUpdated, sections }) {
@@ -38,6 +39,11 @@ export function LegalShell({ eyebrow, title, lastUpdated, sections }) {
 }
 
 export function Privacy() {
+  useSEO({
+    title: 'Privacy Policy',
+    description: 'How Unite Medical collects, uses, stores, and shares your information. SOC 2 Type II environments. No PHI without a signed BAA.',
+    canonical: '/privacy',
+  });
   return (
     <LegalShell
       eyebrow="LEGAL · PRIVACY"
@@ -57,6 +63,11 @@ export function Privacy() {
 }
 
 export function Terms() {
+  useSEO({
+    title: 'Terms of Service',
+    description: 'Terms of Service for Unite Medical wholesale supply customers. Net-30/60 terms, cancellation, returns, warranty, governing law.',
+    canonical: '/terms',
+  });
   return (
     <LegalShell
       eyebrow="LEGAL · TERMS OF SERVICE"
@@ -76,6 +87,11 @@ export function Terms() {
 }
 
 export function Returns() {
+  useSEO({
+    title: 'Returns policy',
+    description: '30-day returns on unopened, original packaging. Sterile/single-use items excepted. Damaged-on-arrival replaced free within 72 hours.',
+    canonical: '/returns',
+  });
   return (
     <LegalShell
       eyebrow="POLICIES · RETURNS"
@@ -96,6 +112,11 @@ export function Returns() {
 }
 
 export function Shipping() {
+  useSEO({
+    title: 'Shipping policy',
+    description: 'Free standard ground on orders over $500. Expedited from $38, overnight from $95, same-day available in Atlanta metro. Drop-ship and international options.',
+    canonical: '/shipping',
+  });
   return (
     <LegalShell
       eyebrow="POLICIES · SHIPPING"

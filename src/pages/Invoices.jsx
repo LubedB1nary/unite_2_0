@@ -9,12 +9,14 @@ import { db } from '../lib/db.js';
 import { qbo } from '../lib/services.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 export function Invoices() {
   const navigate = useNavigate();
   const session = auth.use();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Invoices', noindex: true });
   const orgId = session?.org_id || 'org_atlsurgical';
   const invoices = db.useTable('invoices', { where: { customer_id: orgId }, orderBy: 'due_date', dir: 'desc' });
 

@@ -6,6 +6,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const FEATURES = [
   { t: 'Punch-out catalog (cXML, OCI)', s: 'Drop our catalog into your e-procurement suite — Coupa, Ariba, Workday, GSA Advantage. Carts return as fully formed POs.' },
@@ -22,6 +23,12 @@ export function Procurement() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Procurement — punch-out, EDI, contract pricing, approvals',
+    description:
+      'Coupa / Ariba / Workday / GSA Advantage punch-out. EDI 850/855/856/810 standard. Customer-specific contract pricing, multi-level approval workflows, audit-ready exports.',
+    canonical: '/procurement',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -6,6 +6,7 @@ import { auth } from '../lib/auth.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const STATUS_COLOR = { delivered: '#3b8760', in_transit: '#5e2963', shipped: '#5e2963', processing: '#b8502c', pending: '#b8502c' };
 
@@ -14,6 +15,7 @@ export function Dashboard() {
   const session = auth.use();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Dashboard', noindex: true });
   const orgId = session?.org_id || 'org_atlsurgical';
   const userId = session?.user_id || 'usr_demo';
 

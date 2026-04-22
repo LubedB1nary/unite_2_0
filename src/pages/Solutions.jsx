@@ -9,6 +9,7 @@ import { Icon } from '../components/shared/Icon.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { PartnerMarquee } from '../components/shared/PartnerMarquee.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { SEGMENT_IMG } from '../lib/imageMap.js';
 
 const SOLUTIONS = [
@@ -126,6 +127,13 @@ export function Solutions() {
   const seg = useMemo(() => SOLUTIONS.find((s) => s.id === active), [active]);
   const { isMobile, isTablet } = useViewport();
   const padX = isMobile ? 20 : 40;
+
+  useSEO({
+    title: 'Solutions for ASCs, pharmacies, government, EMS, and distributors',
+    description:
+      'One supply chain, five front lines. Procedure bundles for ASCs, private-label diagnostics for pharmacies, MSPV for the VA, CoTCCC kits for EMS, and white-label drop-ship for regional distributors.',
+    canonical: '/solutions',
+  });
 
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>

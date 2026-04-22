@@ -7,6 +7,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { IMG } from '../lib/imageMap.js';
 
 const PILLARS = [
@@ -19,6 +20,12 @@ export function VeteranOwned() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Veteran-owned · SDVOSB · MSPV BPA holder',
+    description:
+      'Service-Disabled Veteran-Owned Small Business. SAM.gov verified. MSPV BPA 36C24123A0077. CAGE 8MK70. Founded by a 22-year U.S. Army logistics officer.',
+    canonical: '/about/veteran-owned',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -7,6 +7,7 @@ import { useCart, cartStore } from '../store/cart.js';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 function tierLabel(qty) {
   if (qty >= 250) return '250+';
@@ -19,6 +20,12 @@ export function Cart() {
   const cart = useCart();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Your cart',
+    description: 'Review the items in your cart before checkout.',
+    canonical: '/cart',
+    noindex: true,
+  });
   const items = cart.items;
   const subtotal = cart.subtotal;
   const freight = subtotal > 500 ? 0 : 42;

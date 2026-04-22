@@ -8,6 +8,7 @@ import { runQuotingEngine, SAMPLE_VENDOR_SHEET } from '../lib/quoting.js';
 import { fmt } from '../lib/format.js';
 import { db } from '../lib/db.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const STEP_ICONS = {
   parse: Icon.upload,
@@ -21,6 +22,12 @@ const STEP_ICONS = {
 export function Quote() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Quoting Engine — vendor sheet in, customer PDF out',
+    description:
+      'Upload a foreign-vendor product sheet. We validate every FDA code, pull today\'s USITC duty rate, call Flexport for ocean freight, and land it on your customer\'s desk as a PDF in about fourteen seconds.',
+    canonical: '/quote',
+  });
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState([]);
   const [result, setResult] = useState(null);

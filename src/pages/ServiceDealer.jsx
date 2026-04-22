@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const tiers = [
   {
@@ -24,6 +25,12 @@ const tiers = [
 export function ServiceDealer() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Dealer program — partner, private label, import co-pilot',
+    description:
+      'Three-tier dealer partnership: drop-ship at wholesale, private-label with custom packaging, or import co-pilot with FDA + GS1 + HTS validation and Flexport freight.',
+    canonical: '/services/dealer',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

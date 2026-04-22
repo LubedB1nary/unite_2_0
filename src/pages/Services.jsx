@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const services = [
   { name: 'Nationwide Distribution', sub: '48-hr median ship · 4 DCs · 94% ZIP coverage', cta: 'See coverage', path: '/services/distribution' },
@@ -19,6 +20,12 @@ export function Services() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Services — distribution, PDAC consulting, dealer program, education',
+    description:
+      'Beyond the catalog: nationwide distribution, Medicare PDAC consulting, white-label dealer program, certification courses, government contracting via Medava.',
+    canonical: '/services',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

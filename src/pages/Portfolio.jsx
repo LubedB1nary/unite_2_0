@@ -6,6 +6,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { PORTFOLIO_IMG } from '../lib/imageMap.js';
 
 const CASES = [
@@ -21,6 +22,12 @@ export function Portfolio() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Portfolio — case studies',
+    description:
+      'Real numbers from real customers: 38% spend reduction at a 4-OR ASC, $420K new revenue at an independent pharmacy, 14-day VA onboarding, $1.2M new GMV from a regional distributor.',
+    canonical: '/portfolio',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -5,12 +5,19 @@ import { Footer } from '../../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../../components/shared/Grad.jsx';
 import { useViewport } from '../../lib/viewport.js';
+import { useSEO } from '../../lib/seo.js';
 import { ASC_BUNDLE_IMG } from '../../lib/imageMap.js';
 
 export function SegmentASC() {
   const navigate = useNavigate();
   const { isMobile, isTablet } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Ambulatory Surgery Centers — procedure bundles, no MOQs',
+    description:
+      'Procedure-specific case carts for 60+ CPT codes. Same-day ship from Atlanta, dedicated rep, no MOQs. Built for 2-OR through 8-OR ambulatory surgery centers.',
+    canonical: '/segments/asc',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

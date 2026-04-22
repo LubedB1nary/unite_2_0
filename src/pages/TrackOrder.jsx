@@ -8,6 +8,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { db } from '../lib/db.js';
 import { fmt } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const PROGRESSION = [
   { status: 'label_created', label: 'Label printed', sub: 'ShipStation issued tracking' },
@@ -51,6 +52,7 @@ export function TrackOrder() {
   const { id } = useParams();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({ title: 'Track order', noindex: true });
   const order = db.useRow('orders', id);
   const shipment = db.useTable('shipments', { where: { order_id: id } })[0];
   const items = db.useTable('order_items', { where: { order_id: id } });

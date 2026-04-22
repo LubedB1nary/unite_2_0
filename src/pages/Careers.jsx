@@ -6,6 +6,7 @@ import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { Icon } from '../components/shared/Icon.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const ROLES = [
   { title: 'Senior Backend Engineer · Quoting Engine', dept: 'Engineering', loc: 'Lithia Springs, GA · or remote', type: 'Full-time' },
@@ -20,6 +21,12 @@ export function Careers() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Careers — build with us',
+    description:
+      'Open roles at Unite Medical: engineering, sales, ops, compliance, government capture, design. Veteran-owned, remote-friendly, SDVOSB.',
+    canonical: '/careers',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

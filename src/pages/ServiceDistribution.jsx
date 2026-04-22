@@ -4,11 +4,18 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { IMG } from '../lib/imageMap.js';
 
 export function ServiceDistribution() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Distribution — 4 DCs, 48-hour median ship, 94% ZIP coverage',
+    description:
+      'Atlanta · Reno · Dallas · Lithia Springs. Routed by proximity, picked within 2 hours of order, tracking returned to your portal automatically.',
+    canonical: '/services/distribution',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

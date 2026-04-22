@@ -4,11 +4,18 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { IMG } from '../lib/imageMap.js';
 
 export function About() {
   const { isMobile, isTablet } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'About · Built by a soldier, run like one',
+    description:
+      "Unite Medical was founded in 2018 by a 22-year U.S. Army logistics veteran. Lithia Springs, Georgia. FDA-registered, MSPV BPA holder, CAGE 8MK70. 500M+ items distributed.",
+    canonical: '/about',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

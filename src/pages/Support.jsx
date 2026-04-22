@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { Grad } from '../components/shared/Grad.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const faqs = [
   ['Do you have minimum order quantities?', 'No. Every SKU in our catalog can be ordered in single units. Volume pricing kicks in at tier breaks but never as a hard floor.'],
@@ -19,6 +20,12 @@ export function Support() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
   const [open, setOpen] = useState(0);
+  useSEO({
+    title: 'Support — answers, not tickets',
+    description:
+      'Plain-language answers to the most common questions about ordering from Unite Medical: MOQs, shipping, billing, returns, EDI, PDAC.',
+    canonical: '/support',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

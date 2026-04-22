@@ -3,6 +3,7 @@ import { Nav } from '../components/layout/Nav.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const hubs = [
   { city: 'Atlanta, GA', type: 'HQ + main DC', skus: '12,400', sqft: '148,000', lat: 62, lng: 58 },
@@ -14,6 +15,12 @@ const hubs = [
 export function Locations() {
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Locations — 4 US distribution centers',
+    description:
+      'Atlanta · Reno · Dallas · Lithia Springs. Routed by proximity for 48-hour median delivery covering 94% of US ZIP codes.',
+    canonical: '/locations',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

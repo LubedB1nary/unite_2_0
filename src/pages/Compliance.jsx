@@ -10,6 +10,7 @@ import { db } from '../lib/db.js';
 import { gmail } from '../lib/services.js';
 import { uid } from '../lib/format.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const CREDENTIALS = [
   { label: 'FDA Registered', val: '3015727296', sub: 'Device distribution', anchor: 'fda' },
@@ -78,6 +79,12 @@ export function Compliance() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Compliance — FDA, MSPV BPA, CAGE, DUNS, TAA, Berry, PDAC',
+    description:
+      'FDA Establishment Registration #3015727296. MSPV BPA 36C24123A0077. CAGE 8MK70. DUNS 117553945. SDVOSB-verified. TAA, Berry, and PDAC documentation on request.',
+    canonical: '/compliance',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.jsx';
 import { PageHead } from '../components/layout/PageHead.jsx';
 import { PhotoPlaceholder } from '../components/shared/PhotoPlaceholder.jsx';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 import { IMG } from '../lib/imageMap.js';
 
 const courses = [
@@ -18,6 +19,12 @@ const courses = [
 export function ServiceEducation() {
   const { isMobile, isTablet } = useViewport();
   const padX = isMobile ? 20 : 40;
+  useSEO({
+    title: 'Education — fitter certification, HCPCS coding, PDAC masterclass',
+    description:
+      'CEU-approved courses in orthotic fitting, HCPCS Level II coding, PDAC submission, and ASC materials management. In-person at Atlanta or live online.',
+    canonical: '/services/education',
+  });
   return (
     <div style={{ background: D.paper, fontFamily: D.sans, color: D.ink, minHeight: '100vh' }}>
       <Nav />

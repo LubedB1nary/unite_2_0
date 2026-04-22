@@ -6,6 +6,7 @@ import { Grad } from '../components/shared/Grad.jsx';
 import { auth } from '../lib/auth.js';
 import { hubspot, gmail } from '../lib/services.js';
 import { useViewport } from '../lib/viewport.js';
+import { useSEO } from '../lib/seo.js';
 
 const SEGMENTS = [
   ['asc', 'Ambulatory Surgery Center'],
@@ -20,6 +21,12 @@ export function Register() {
   const navigate = useNavigate();
   const { isMobile } = useViewport();
   const padX = isMobile ? 22 : 40;
+  useSEO({
+    title: 'Request a B2B account',
+    description:
+      'Open a Unite Medical wholesale account in two minutes. Approved within one business day. Wholesale pricing, net-30 terms, dedicated rep.',
+    canonical: '/register',
+  });
   const [form, setForm] = useState({
     org_name: 'Sunrise Ambulatory Surgery Center',
     website: 'sunrise-asc.com',
